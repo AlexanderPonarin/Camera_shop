@@ -25,7 +25,6 @@ function CatalogFilterForm(): JSX.Element {
               <input
                 type="checkbox"
                 name="photocamera"
-                checked
               />
               <span className="custom-checkbox__icon"></span>
               <span className="custom-checkbox__label">Фотокамера</span>
@@ -46,7 +45,7 @@ function CatalogFilterForm(): JSX.Element {
           <legend className="title title--h5">Тип камеры</legend>
           <div className="custom-checkbox catalog-filter__item">
             <label>
-              <input type="checkbox" name="digital" checked/><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
+              <input type="checkbox" name="digital"/><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Цифровая</span>
             </label>
           </div>
           <div className="custom-checkbox catalog-filter__item">
@@ -69,7 +68,7 @@ function CatalogFilterForm(): JSX.Element {
           <legend className="title title--h5">Уровень</legend>
           <div className="custom-checkbox catalog-filter__item">
             <label>
-              <input type="checkbox" name="zero" checked/><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
+              <input type="checkbox" name="zero" /><span className="custom-checkbox__icon"></span><span className="custom-checkbox__label">Нулевой</span>
             </label>
           </div>
           <div className="custom-checkbox catalog-filter__item">

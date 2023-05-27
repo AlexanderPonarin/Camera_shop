@@ -1,8 +1,13 @@
 import Footer from '../../components/footer/footer';
 import HeaderLogo from '../../components/header-logo/header-logo';
 import Header from '../../components/header/header';
+import { Product } from '../../types/products';
 
-function ProductScreen(): JSX.Element {
+type ProductScreenProps = {
+  product: Product;
+};
+
+function ProductScreen({product}: ProductScreenProps): JSX.Element {
   return (
     <>
       <HeaderLogo />

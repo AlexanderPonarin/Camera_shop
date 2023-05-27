@@ -5,15 +5,25 @@ import Footer from '../../components/footer/footer';
 import HeaderLogo from '../../components/header-logo/header-logo';
 import Header from '../../components/header/header';
 import ProductCard from '../../components/product-card/product-card';
+import { Products } from '../../types/products';
+import { PromoProduct } from '../../types/promo-product';
 
-function CatalogScreen(): JSX.Element {
+type CatalogScreenProps = {
+  products: Products;
+  promoProduct: PromoProduct;
+}
+
+function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Element {
   return (
     <>
       <HeaderLogo />
       <div className="wrapper">
         <Header />
         <main>
-          <Banner />
+          <Banner
+            promoProduct={promoProduct}
+            productDescription={products.find((item) => item.id === promoProduct.id)?.description}
+          />
           <div className="page-content">
             <div className="breadcrumbs">
               <div className="container">
@@ -40,7 +50,7 @@ function CatalogScreen(): JSX.Element {
                   <div className="catalog__content">
                     <CatalogSortForm />
                     <div className="cards catalog__cards">
-                      <ProductCard />
+                      {products.map((item) => <ProductCard key={item.id} product={item}/>)}
                     </div>
                     <div className="pagination">
                       <ul className="pagination__list">

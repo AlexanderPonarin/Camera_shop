@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
 
@@ -21,9 +22,11 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
       />
     </picture>
     <p className="banner__info"><span className="banner__message">Новинка!</span>
-      <span className="title title--h1">{productDescription ? productDescription : ''}</span>
-      <span className="banner__text">{}</span>
-      <a className="btn" href="#">Подробнее</a>
+      <span className="title title--h1">{promoProduct.name}</span>
+      <span className="banner__text">{productDescription ? productDescription : ''}</span>
+      <Link to={`/product/${promoProduct.id}`}>
+        <button className="btn">Подробнее</button>
+      </Link>
     </p>
   </div>
 );

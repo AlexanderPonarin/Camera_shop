@@ -27,3 +27,15 @@ export const fetchPromoProductAction = createAsyncThunk<PromoProduct, undefined,
       return data;
     },
   );
+
+export const fetchSimilarProductsAction = createAsyncThunk<Products, number, {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }>(
+    'data/fetchSimilarProducts',
+    async (id, {dispatch, extra: api}) => {
+      const {data} = await api.get<Products>(`/cameras/${id}/similar`);
+      return data;
+    },
+  );

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Banner from '../../components/banner/banner';
 import CatalogFilterForm from '../../components/catalog-filter-form/catalog-filter-form';
 import CatalogSortForm from '../../components/catalog-sort-form/catalog-sort-form';
@@ -5,8 +6,9 @@ import Footer from '../../components/footer/footer';
 import HeaderLogo from '../../components/header-logo/header-logo';
 import Header from '../../components/header/header';
 import ProductCard from '../../components/product-card/product-card';
-import { Products } from '../../types/products';
+import { Product, Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
+import AddProductModal from '../../components/modals/add-product-modal';
 
 type CatalogScreenProps = {
   products: Products;
@@ -14,6 +16,45 @@ type CatalogScreenProps = {
 }
 
 function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Element {
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 9;
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const [addModalOpen, setAddModalActive] = useState(false);
+  const [productInAddModal, setProductInAddModal] = useState<Product>(products[0]);
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < pageNumbers.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const onBasketClick = (product: Product) => {
+    setAddModalActive(true);
+    setProductInAddModal(product);
+  };
+
+  const onCloseBtnClick = () => {
+    setAddModalActive(false);
+  };
+
   return (
     <>
       <HeaderLogo />
@@ -50,18 +91,28 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
                   <div className="catalog__content">
                     <CatalogSortForm />
                     <div className="cards catalog__cards">
-                      {products.map((item) => <ProductCard key={item.id} product={item}/>)}
+                      {currentProducts.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClick}/>)}
                     </div>
                     <div className="pagination">
                       <ul className="pagination__list">
-                        <li className="pagination__item"><a className="pagination__link pagination__link--active" href="1">1</a>
-                        </li>
-                        <li className="pagination__item"><a className="pagination__link" href="2">2</a>
-                        </li>
-                        <li className="pagination__item"><a className="pagination__link" href="3">3</a>
-                        </li>
-                        <li className="pagination__item"><a className="pagination__link pagination__link--text" href="2">Далее</a>
-                        </li>
+                        {currentPage > 1 && (
+                          <li className="pagination__item" key="previous">
+                            <a className="pagination__link" href="#" onClick={goToPreviousPage}>Назад</a>
+                          </li>
+                        )}
+                        {pageNumbers.map((number) => (
+                          <li className="pagination__item" key={number}>
+                            <a className={`pagination__link ${currentPage === number ? 'pagination__link--active' : ''}`}
+                              href="#" onClick={() => paginate(number)}
+                            >{number}
+                            </a>
+                          </li>
+                        ))}
+                        {currentPage < pageNumbers.length && (
+                          <li className="pagination__item" key="next">
+                            <a className="pagination__link" href="#" onClick={goToNextPage}>Вперед</a>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </div>
@@ -70,6 +121,7 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
             </section>
           </div>
         </main>
+        {addModalOpen && <AddProductModal product={productInAddModal} cb={onCloseBtnClick} />}
         <Footer />
       </div>
     </>

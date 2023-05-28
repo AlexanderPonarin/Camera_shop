@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
+import { useAppDispatch } from '../../hooks';
 
 type ProductCardProps = {
   product: Product;
+  cb: (product: Product) => void;
 }
 
-function ProductCard({product}: ProductCardProps): JSX.Element {
+
+function ProductCard({product, cb}: ProductCardProps): JSX.Element {
+
   return (
     <div
       className="product-card"
@@ -13,11 +17,7 @@ function ProductCard({product}: ProductCardProps): JSX.Element {
       <div
         className="product-card__img"
       >
-        <picture
-          onClick={() => {
-            <Link to={`/product/${product.id}`} />;
-          }}
-        >
+        <picture >
           <source
             type="image/webp"
             srcSet={`${product.previewImgWebp}, ${product.previewImgWebp2x}`}
@@ -56,10 +56,19 @@ function ProductCard({product}: ProductCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <button className="btn btn--purple product-card__btn" type="button">Купить
+        <button
+          onClick={() => {
+            cb(product);
+          }}
+          className="btn btn--purple product-card__btn" type="button"
+        >Купить
         </button>
-        <a className="btn btn--transparent" href="#">Подробнее
-        </a>
+        <Link to={`/product/${product.id}`}>
+          <button
+            className="btn btn--transparent"
+          >Подробнее
+          </button>
+        </Link>
       </div>
     </div>
   );

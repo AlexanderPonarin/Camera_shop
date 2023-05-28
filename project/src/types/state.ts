@@ -5,6 +5,8 @@ import { PromoProduct } from './promo-product';
 export type ProductDataProcess = {
   products: Products ;
   promoProduct: PromoProduct;
+  similarProducts: Products;
+  isQuestionsDataLoading: boolean;
 }
 
 

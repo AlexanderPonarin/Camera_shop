@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
-import { useAppDispatch } from '../../hooks';
 
 type ProductCardProps = {
   product: Product;
@@ -9,10 +8,9 @@ type ProductCardProps = {
 
 
 function ProductCard({product, cb}: ProductCardProps): JSX.Element {
-
   return (
     <div
-      className="product-card"
+      className="product-card is-active"
     >
       <div
         className="product-card__img"
@@ -20,11 +18,11 @@ function ProductCard({product, cb}: ProductCardProps): JSX.Element {
         <picture >
           <source
             type="image/webp"
-            srcSet={`${product.previewImgWebp}, ${product.previewImgWebp2x}`}
+            srcSet={`/${product.previewImgWebp}, /${product.previewImgWebp2x}`}
           />
           <img
-            src={product.previewImg}
-            srcSet={product.previewImg2x}
+            src={`/${product.previewImg}`}
+            srcSet={`/${product.previewImg2x}`}
             width="280"
             height="240"
             alt="Ретрокамера «Das Auge IV»"

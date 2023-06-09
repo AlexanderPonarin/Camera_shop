@@ -11,11 +11,11 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
   <div className="banner">
     <picture>
       <source type="image/webp"
-        srcSet={`${promoProduct.previewImgWebp}, ${promoProduct.previewImgWebp2x}`}
+        srcSet={`/${promoProduct.previewImgWebp}, /${promoProduct.previewImgWebp2x}`}
       />
       <img
-        src={promoProduct.previewImg}
-        srcSet={promoProduct.previewImg2x}
+        src={`/${promoProduct.previewImg}`}
+        srcSet={`/${promoProduct.previewImg2x}`}
         width="1280"
         height="280"
         alt="баннер"

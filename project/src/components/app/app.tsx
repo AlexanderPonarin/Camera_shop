@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import BasketScreen from '../../pages/basket-screen/basket-screen';
 import CatalogScreen from '../../pages/catalog-screen/catalog-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getProducts, getPromoProduct, getQuestionsDataLoadingStatus } from '../../store/product-data/selectros';
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import CatalogPage from '../catalog-page/catalog-page';
 
 
 function App(): JSX.Element {
@@ -42,6 +43,11 @@ function App(): JSX.Element {
         <Route
           path='*'
           element={<NotFoundScreen />}
+        />
+
+        <Route
+          path='catalog/page/:id'
+          element={<CatalogPage products={products} promoProduct={promoProduct} />}
         />
       </Routes>
     </HistoryRouter>

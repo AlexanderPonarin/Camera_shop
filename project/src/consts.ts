@@ -18,4 +18,5 @@ export enum ProductLevel {
 
 export enum NameSpace {
     Data = 'DATA',
+    ModalView = 'MODALVIEW',
   }

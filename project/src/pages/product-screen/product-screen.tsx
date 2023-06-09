@@ -1,33 +1,31 @@
-import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/footer/footer';
 import HeaderLogo from '../../components/header-logo/header-logo';
 import Header from '../../components/header/header';
 import { Product } from '../../types/products';
-import { fetchSimilarProductsAction } from '../../store/api-action';
-import { getSimilarProducts } from '../../store/product-data/selectros';
 import SimilarProducts from '../../components/similar-products/similar-products';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AddProductModal from '../../components/modals/add-product-modal';
-import { AppDispatch } from '../../types/state';
+
+import ProductTabs from '../../components/product-tabs/product-tabs';
+import ProductReviewList from '../../components/product-review-list/product-review-list';
+import ButtonUp from '../../components/button-up/button-up';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
+import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 
 type ProductScreenProps = {
   product: Product;
 };
 
 function ProductScreen({product}: ProductScreenProps): JSX.Element {
-  const dispatch = useDispatch<AppDispatch>();
-  const similarProducts = useSelector(getSimilarProducts);
-  const [addModalOpen, setAddModalActive] = useState(false);
   const [productInAddModal, setProductInAddModal] = useState<Product>(product);
+  const dispatch = useAppDispatch();
+  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
 
 
   const onBasketClick = (item: Product) => {
-    setAddModalActive(true);
+    dispatch(setAddItemModalViewStatus(true));
     setProductInAddModal(item);
-  };
-
-  const onCloseBtnClick = () => {
-    setAddModalActive(false);
   };
 
   return (
@@ -54,7 +52,8 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                       </svg>
                     </a>
                   </li>
-                  <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">{product.name}</span>
+                  <li className="breadcrumbs__item">
+                    <span className="breadcrumbs__link breadcrumbs__link--active">{product.name}</span>
                   </li>
                 </ul>
               </div>
@@ -64,8 +63,13 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                 <div className="container">
                   <div className="product__img">
                     <picture>
-                      <source type="image/webp" srcSet={`${product.previewImgWebp}, ${product.previewImgWebp2x}`}/>
-                      <img src={`${window.location.origin}${product.previewImg}`} srcSet={product.previewImg2x} width="560" height="480" alt={product.name}/>
+                      <source type="image/webp" srcSet={`/${product.previewImgWebp}, /${product.previewImgWebp2x}`}/>
+                      <img
+                        src={`/${window.location.origin}${product.previewImg}`}
+                        srcSet={`/${product.previewImg2x}`}
+                        width="560" height="480"
+                        alt={product.name}
+                      />
                     </picture>
                   </div>
                   <div className="product__content">
@@ -95,54 +99,23 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                         <use xlinkHref="#icon-add-basket"></use>
                       </svg>Добавить в корзину
                     </button>
-                    <div className="tabs product__tabs">
-                      <div className="tabs__controls product__tabs-controls">
-                        <button className="tabs__control" type="button">Характеристики</button>
-                        <button className="tabs__control is-active" type="button">Описание</button>
-                      </div>
-                      <div className="tabs__content">
-                        <div className="tabs__element">
-                          <ul className="product__tabs-list">
-                            <li className="item-list"><span className="item-list__title">Артикул:</span>
-                              <p className="item-list__text"> {product.vendorCode}</p>
-                            </li>
-                            <li className="item-list"><span className="item-list__title">Категория:</span>
-                              <p className="item-list__text">{product.type}</p>
-                            </li>
-                            <li className="item-list"><span className="item-list__title">Тип камеры:</span>
-                              <p className="item-list__text">{product.category}</p>
-                            </li>
-                            <li className="item-list"><span className="item-list__title">Уровень:</span>
-                              <p className="item-list__text">{product.level}</p>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="tabs__element is-active">
-                          <div className="product__tabs-text">
-                            <p>{product.description}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <ProductTabs product={product} />
                   </div>
                 </div>
               </section>
             </div>
             <div className="page-content__section">
-              <section className="product-similar">
-                <SimilarProducts productId={product.id} cb={onBasketClick}/>
-              </section>
+
+              <SimilarProducts product={product} cb={onBasketClick}/>
+
             </div>
             <div className="page-content__section">
+              <ProductReviewList product={product}/>
             </div>
           </div>
         </main>
-        <a className="up-btn" href="#header">
-          <svg width="12" height="18" aria-hidden="true">
-            <use xlinkHref="#icon-arrow2"></use>
-          </svg>
-        </a>
-        {addModalOpen && <AddProductModal product={productInAddModal} cb={onCloseBtnClick}/>}
+        <ButtonUp />
+        {addItemModalViewStatus && <AddProductModal product={productInAddModal} />}
         <Footer />
       </div>
     </>

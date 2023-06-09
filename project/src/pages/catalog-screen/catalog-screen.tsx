@@ -9,23 +9,33 @@ import ProductCard from '../../components/product-card/product-card';
 import { Product, Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
 import AddProductModal from '../../components/modals/add-product-modal';
+import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
+
 
 type CatalogScreenProps = {
   products: Products;
   promoProduct: PromoProduct;
+  pageId?: number;
 }
 
-function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Element {
-  const [currentPage, setCurrentPage] = useState(1);
+function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JSX.Element {
+  const [currentPage, setCurrentPage] = useState<number>(pageId || 1);
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-  const [addModalOpen, setAddModalActive] = useState(false);
   const [productInAddModal, setProductInAddModal] = useState<Product>(products[0]);
+  window.history.pushState({}, '', `/catalog/page/${currentPage}`);
+  const dispatch = useAppDispatch();
+  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
+
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    window.history.pushState({}, '', `/catalog/page/${currentPage}`);
   };
 
   const pageNumbers = [];
@@ -37,23 +47,22 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      window.history.pushState({}, '', `/catalog/page/${currentPage - 1}`);
     }
   };
 
   const goToNextPage = () => {
     if (currentPage < pageNumbers.length) {
       setCurrentPage(currentPage + 1);
+      window.history.pushState({}, '', `/catalog/page/${currentPage + 1}`);
     }
   };
 
   const onBasketClick = (product: Product) => {
-    setAddModalActive(true);
+    dispatch(setAddItemModalViewStatus(true));
     setProductInAddModal(product);
   };
 
-  const onCloseBtnClick = () => {
-    setAddModalActive(false);
-  };
 
   return (
     <>
@@ -70,13 +79,19 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
               <div className="container">
                 <ul className="breadcrumbs__list">
                   <li className="breadcrumbs__item">
-                    <a className="breadcrumbs__link" href="index.html">Главная
+                    <a className="breadcrumbs__link" href="/">Главная
                       <svg width="5" height="8" aria-hidden="true">
                         <use xlinkHref="#icon-arrow-mini"></use>
                       </svg>
                     </a>
                   </li>
-                  <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Каталог</span>
+                  <li className="breadcrumbs__item">
+                    <Link to={'/'}>
+                      <span className="breadcrumbs__link breadcrumbs__link--active">
+                    Каталог
+                      </span>
+                    </Link>
+
                   </li>
                 </ul>
               </div>
@@ -121,7 +136,7 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
             </section>
           </div>
         </main>
-        {addModalOpen && <AddProductModal product={productInAddModal} cb={onCloseBtnClick} />}
+        {addItemModalViewStatus && <AddProductModal product={productInAddModal} />}
         <Footer />
       </div>
     </>

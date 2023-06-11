@@ -18,7 +18,6 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
 
   return (
     <div
-      ref={modalRef}
       className="modal is-active"
       onClick={() => dispatch(setAddItemModalViewStatus(false))}
     >
@@ -26,7 +25,7 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
         <div className="modal__overlay"></div>
         <div
           ref={modalRef}
-          onClick={(event) => event.stopPropagation()}
+          onClick={(evt) => evt.stopPropagation()}
           className="modal__content"
         >
           <p className="title title--h4">Добавить товар в корзину</p>

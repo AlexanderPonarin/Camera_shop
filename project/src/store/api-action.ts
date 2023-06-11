@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosError, AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../types/state';
 import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
@@ -69,7 +69,6 @@ export const sendReviewAction = createAsyncThunk<void, ReviewForm, {
         dispatch(setReviewModalViewStatus(false));
         dispatch(setReviewModaSuccessViewStatus(true));
       } catch(error) {
-        console.log(error);
         toast.warn('Не удалось отправить отзыв');
 
       }

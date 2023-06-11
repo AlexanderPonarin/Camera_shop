@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { setAddItemModalViewStatus } from '../store/modal-view-process/modal-view-process';
+import { setAddItemModalViewStatus, setReviewModaSuccessViewStatus, setReviewModalViewStatus } from '../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '.';
 
 type UseModalKeyboardEventsProps = {
@@ -9,23 +9,25 @@ type UseModalKeyboardEventsProps = {
 export const useModalKeyboardEvents = ({ modalRef }: UseModalKeyboardEventsProps) => {
   const dispatch = useAppDispatch();
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
+  const handleKeyPress = (evt: KeyboardEvent) => {
+    if (evt.key === 'Escape') {
       dispatch(setAddItemModalViewStatus(false));
+      dispatch(setReviewModalViewStatus(false));
+      dispatch(setReviewModaSuccessViewStatus(false));
     }
-    if (event.key === 'Tab') {
+    if (evt.key === 'Tab') {
       const focusableItems = modalRef.current?.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') || [];
       const firstItem = focusableItems[0];
       const lastItem = focusableItems[focusableItems.length - 1];
-      if (event.shiftKey) {
+      if (evt.shiftKey) {
         if (document.activeElement === firstItem) {
           lastItem.focus();
-          event.preventDefault();
+          evt.preventDefault();
         }
       } else {
         if (document.activeElement === lastItem) {
           firstItem.focus();
-          event.preventDefault();
+          evt.preventDefault();
         }
       }
     }

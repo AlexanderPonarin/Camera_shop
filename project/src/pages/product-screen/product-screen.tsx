@@ -5,7 +5,6 @@ import { Product } from '../../types/products';
 import SimilarProducts from '../../components/similar-products/similar-products';
 import { useState } from 'react';
 import AddProductModal from '../../components/modals/add-product-modal';
-
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import ProductReviewList from '../../components/product-review-list/product-review-list';
 import ButtonUp from '../../components/button-up/button-up';
@@ -94,7 +93,10 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                       <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>
                     </div>
                     <p className="product__price"><span className="visually-hidden">Цена:</span>{product.price}₽</p>
-                    <button className="btn btn--purple" type="button">
+                    <button
+                      onClick={() => dispatch(setAddItemModalViewStatus(true))}
+                      className="btn btn--purple" type="button"
+                    >
                       <svg width="24" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-add-basket"></use>
                       </svg>Добавить в корзину

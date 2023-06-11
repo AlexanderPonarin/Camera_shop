@@ -1,13 +1,27 @@
+import { useRef } from 'react';
 import { useAppDispatch } from '../../hooks';
+import { useModalKeyboardEvents } from '../../hooks/use-madal-keyboard-events';
+import useScrollLock from '../../hooks/use-scroll-lock';
 import { setReviewModaSuccessViewStatus } from '../../store/modal-view-process/modal-view-process';
 
 function ReviewModalSuccess(): JSX.Element {
   const dispatch = useAppDispatch();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useScrollLock();
+  useModalKeyboardEvents({ modalRef });
   return (
-    <div className="modal is-active modal--narrow">
+    <div
+      onClick={() => dispatch(setReviewModaSuccessViewStatus(false))}
+      className="modal is-active modal--narrow"
+    >
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
-        <div className="modal__content">
+        <div
+          ref={modalRef}
+          onClick={(evt) => evt.stopPropagation()}
+          className="modal__content"
+        >
           <p className="title title--h4">Спасибо за отзыв</p>
           <svg className="modal__icon" width="80" height="78" aria-hidden="true">
             <use xlinkHref="#icon-review-success"></use>

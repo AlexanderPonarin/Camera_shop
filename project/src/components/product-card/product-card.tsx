@@ -6,7 +6,6 @@ type ProductCardProps = {
   cb: (product: Product) => void;
 }
 
-
 function ProductCard({product, cb}: ProductCardProps): JSX.Element {
   return (
     <div

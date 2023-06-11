@@ -1,9 +1,12 @@
 import { FieldError, useForm } from 'react-hook-form';
 import { ReviewForm } from '../../types/review-form';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { sendReviewAction } from '../../store/api-action';
 import { Product } from '../../types/products';
+import { useModalKeyboardEvents } from '../../hooks/use-madal-keyboard-events';
+import useScrollLock from '../../hooks/use-scroll-lock';
+import { setReviewModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 
 type ReviewModalProps = {
     onCloseModalBtnClick: (status: boolean) => void;
@@ -15,6 +18,10 @@ function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Ele
   const [ratingValue, setRatingValue] = useState(0);
   const [isDefaultInput, setIsDefaultInput] = useState(true);
   const dispatch = useAppDispatch();
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useScrollLock();
+  useModalKeyboardEvents({ modalRef });
 
   const onSubmit = (data: ReviewForm) => {
     if (product.id) {
@@ -38,10 +45,17 @@ function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Ele
   };
 
   return (
-    <div className="modal is-active">
+    <div
+      onClick={() => dispatch(setReviewModalViewStatus(false))}
+      className="modal is-active"
+    >
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
-        <div className="modal__content">
+        <div
+          ref={modalRef}
+          onClick={(evt) => evt.stopPropagation()}
+          className="modal__content"
+        >
           <p className="title title--h4">Оставить отзыв</p>
           <div className="form-review">
             <form
@@ -236,8 +250,7 @@ function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Ele
             </form>
           </div>
           <button
-            onClick={() => {onCloseModalBtnClick(false);
-            }}
+            onClick={() => onCloseModalBtnClick(false)}
             className="cross-btn" type="button" aria-label="Закрыть попап"
           >
             <svg width="10" height="10" aria-hidden="true">

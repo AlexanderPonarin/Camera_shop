@@ -1,15 +1,17 @@
 import { Review } from '../../types/reviews';
+import { createReviewDate } from '../../utils/formate-review-date';
 
 type ProductReviewProps = {
     review: Review;
 }
 
 function ProductReview({review}: ProductReviewProps): JSX.Element {
+
   return (
     <li className="review-card">
       <div className="review-card__head">
         <p className="title title--h4">{review.userName}</p>
-        <time className="review-card__data" dateTime="2022-04-13">{review.createAt}</time>
+        <time className="review-card__data" dateTime="2022-04-13">{createReviewDate(review.createAt)}</time>
       </div>
       <div className="rate review-card__rate">
         <svg width="17" height="16" aria-hidden="true">

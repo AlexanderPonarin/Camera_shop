@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Product } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
 
 type BannerProps = {
-  promoProduct: PromoProduct | Product;
+  promoProduct: PromoProduct;
   productDescription?: string;
 }
 

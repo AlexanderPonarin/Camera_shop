@@ -31,17 +31,17 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
 
   const slidesToShow = 3;
   const totalSlides = similarProducts.length;
-  const maxSlide = Math.ceil(totalSlides / slidesToShow) - 1;
+  const maxSlide = Math.ceil(totalSlides / slidesToShow);
 
   const goToNextSlide = () => {
     setActiveSlideIndex((prevIndex) =>
-      prevIndex >= maxSlide ? 0 : prevIndex + 1
+      prevIndex >= maxSlide ? 0 : prevIndex + 3
     );
   };
 
   const goToPrevSlide = () => {
     setActiveSlideIndex((prevIndex) =>
-      prevIndex === 0 ? maxSlide : prevIndex - 1
+      prevIndex === 0 ? maxSlide : prevIndex - 3
     );
   };
 

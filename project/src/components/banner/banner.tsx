@@ -10,7 +10,8 @@ type BannerProps = {
 function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { return (
   <div className="banner">
     <picture>
-      <source type="image/webp"
+      <source
+        type="image/webp"
         srcSet={`/${promoProduct.previewImgWebp}, /${promoProduct.previewImgWebp2x}`}
       />
       <img
@@ -21,7 +22,8 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
         alt="баннер"
       />
     </picture>
-    <p className="banner__info"><span className="banner__message">Новинка!</span>
+    <p className="banner__info">
+      <span className="banner__message">Новинка!</span>
       <span className="title title--h1">{promoProduct.name}</span>
       <span className="banner__text">{productDescription ? productDescription : ''}</span>
       <Link to={`/product/${promoProduct.id}`}>

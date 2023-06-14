@@ -25,4 +25,13 @@ describe('Banner component', () => {
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
   });
+
+  test('should render product description if it\'s provided in props', () => {
+    render(
+      <Router>
+        <Banner promoProduct={promoProductMock} productDescription={productDescriptionMock} />
+      </Router> );
+    const description = screen.getByText('Product description Mock');
+    expect(description).toBeInTheDocument();
+  });
 });

@@ -24,7 +24,7 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
     <p className="banner__info">
       <span className="banner__message">Новинка!</span>
       <span className="title title--h1">{promoProduct.name}</span>
-      <span className="banner__text">{productDescription ? productDescription : ''}</span>
+      {productDescription && <span className="banner__text">{productDescription}</span>}
       <Link to={`/product/${promoProduct.id}`}>
         <button className="btn">Подробнее</button>
       </Link>

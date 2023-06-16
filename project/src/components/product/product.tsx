@@ -9,7 +9,7 @@ type ProductsProps = {
 
 function Product(props: ProductsProps): JSX.Element {
   const params = useParams();
-  const product = props.products.find((item) => String(item.id) === params.id);
+  const product = props.products?.find((item) => String(item.id) === params.id);
   return product ? <ProductScreen product={product} /> : <NotFoundScreen />;
 }
 

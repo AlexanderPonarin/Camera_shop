@@ -1,10 +1,10 @@
 import Footer from '../../components/footer/footer';
-import HeaderLogo from '../../components/header-logo/header-logo';
+import Logo from '../../components/logo/logo';
 
 function BasketScreen(): JSX.Element {
   return (
     <>
-      <HeaderLogo />
+      <Logo />
       <div className="wrapper">
         <header className="header" id="header">
           <div className="container">

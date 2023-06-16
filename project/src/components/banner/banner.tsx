@@ -11,11 +11,11 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
     <picture>
       <source
         type="image/webp"
-        srcSet={`/${promoProduct.previewImgWebp}, /${promoProduct.previewImgWebp2x}`}
+        srcSet={`/${promoProduct?.previewImgWebp}, /${promoProduct?.previewImgWebp2x}`}
       />
       <img
-        src={`/${promoProduct.previewImg}`}
-        srcSet={`/${promoProduct.previewImg2x}`}
+        src={`/${promoProduct?.previewImg}`}
+        srcSet={`/${promoProduct?.previewImg2x}`}
         width="1280"
         height="280"
         alt="баннер"
@@ -23,9 +23,11 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
     </picture>
     <p className="banner__info">
       <span className="banner__message">Новинка!</span>
-      <span className="title title--h1">{promoProduct.name}</span>
-      {productDescription && <span className="banner__text">{productDescription}</span>}
-      <Link to={`/product/${promoProduct.id}`}>
+      {promoProduct &&
+      <span className="title title--h1">{promoProduct.name}</span>}
+      {productDescription &&
+      <span className="banner__text">{productDescription}</span>}
+      <Link to={`/product/${promoProduct?.id}`}>
         <button className="btn">Подробнее</button>
       </Link>
     </p>

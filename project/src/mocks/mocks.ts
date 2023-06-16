@@ -1,3 +1,4 @@
+import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
 
 const promoProductMock = {
@@ -11,4 +12,6 @@ const promoProductMock = {
 
 const productDescriptionMock = 'Product description Mock';
 
-export {promoProductMock, productDescriptionMock};
+const promoProductsMock = [promoProductMock] as Products;
+
+export {promoProductMock, productDescriptionMock, promoProductsMock};

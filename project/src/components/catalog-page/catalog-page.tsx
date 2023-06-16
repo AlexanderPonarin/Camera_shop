@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { Products } from '../../types/products';
-import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import CatalogScreen from '../../pages/catalog-screen/catalog-screen';
 import { PromoProduct } from '../../types/promo-product';
 
@@ -18,7 +17,10 @@ function CatalogPage({products, promoProduct}: CatalogPageProps): JSX.Element {
       pageId={Number(params.id)}
     />
     :
-    <NotFoundScreen />;
+    <CatalogScreen
+      promoProduct={promoProduct}
+      products={products}
+    />;
 }
 
 export default CatalogPage;

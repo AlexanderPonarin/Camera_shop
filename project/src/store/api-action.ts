@@ -7,6 +7,8 @@ import { Reviews } from '../types/reviews';
 import { ReviewForm } from '../types/review-form';
 import { setReviewModaSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     dispatch: AppDispatch;

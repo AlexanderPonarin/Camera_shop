@@ -1,5 +1,5 @@
 import Footer from '../../components/footer/footer';
-import HeaderLogo from '../../components/header-logo/header-logo';
+import Logo from '../../components/logo/logo';
 import Header from '../../components/header/header';
 import { Product } from '../../types/products';
 import SimilarProducts from '../../components/similar-products/similar-products';
@@ -29,7 +29,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
 
   return (
     <>
-      <HeaderLogo />
+      <Logo />
       <div className="wrapper">
         <Header />
         <main>
@@ -107,9 +107,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
               </section>
             </div>
             <div className="page-content__section">
-
               <SimilarProducts product={product} cb={onBasketClick}/>
-
             </div>
             <div className="page-content__section">
               <ProductReviewList product={product}/>

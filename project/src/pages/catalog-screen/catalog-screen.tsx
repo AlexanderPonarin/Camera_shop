@@ -3,7 +3,7 @@ import Banner from '../../components/banner/banner';
 import CatalogFilterForm from '../../components/catalog-filter-form/catalog-filter-form';
 import CatalogSortForm from '../../components/catalog-sort-form/catalog-sort-form';
 import Footer from '../../components/footer/footer';
-import HeaderLogo from '../../components/header-logo/header-logo';
+import Logo from '../../components/logo/logo';
 import Header from '../../components/header/header';
 import ProductCard from '../../components/product-card/product-card';
 import { Product, Products } from '../../types/products';
@@ -26,8 +26,8 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-  const [productInAddModal, setProductInAddModal] = useState<Product>(products[0]);
+  const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
+  const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
   window.history.pushState({}, '', `/catalog/page/${currentPage}`);
   const dispatch = useAppDispatch();
   const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
@@ -40,7 +40,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
 
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(products?.length / productsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -66,13 +66,13 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
 
   return (
     <>
-      <HeaderLogo />
+      <Logo />
       <div className="wrapper">
         <Header />
         <main>
           <Banner
             promoProduct={promoProduct}
-            productDescription={products.find((item) => item.id === promoProduct.id)?.description}
+            productDescription={products?.find((item) => item.id === promoProduct.id)?.description}
           />
           <div className="page-content">
             <div className="breadcrumbs">
@@ -106,7 +106,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
                   <div className="catalog__content">
                     <CatalogSortForm />
                     <div className="cards catalog__cards">
-                      {currentProducts.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClick}/>)}
+                      {currentProducts?.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClick}/>)}
                     </div>
                     <div className="pagination">
                       <ul className="pagination__list">

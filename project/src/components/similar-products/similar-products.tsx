@@ -64,6 +64,8 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
     activeSlideIndex + slidesToShow
   );
 
+  const slidess = similarProducts.map((item) => <ProductCard key={item.id} product={item} cb={cb}/>);
+
   return (
     <section className="product-similar">
       <div

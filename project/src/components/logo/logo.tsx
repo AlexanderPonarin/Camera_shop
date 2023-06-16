@@ -1,4 +1,4 @@
-function HeaderLogo(): JSX.Element {
+function Logo(): JSX.Element {
   return (
     <div className="visually-hidden">
       <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -80,5 +80,5 @@ function HeaderLogo(): JSX.Element {
   );
 }
 
-export default HeaderLogo;
+export default Logo;
 

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
 
+
 type ProductCardProps = {
   product: Product;
   cb: (product: Product) => void;

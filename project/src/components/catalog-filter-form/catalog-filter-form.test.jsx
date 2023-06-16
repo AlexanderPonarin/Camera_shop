@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import CatalogFilterForm from './catalog-filter-form';
 import { render, screen } from '@testing-library/react';
 

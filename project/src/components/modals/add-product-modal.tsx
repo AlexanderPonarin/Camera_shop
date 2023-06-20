@@ -1,9 +1,10 @@
 import { useRef } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 import { Product } from '../../types/products';
 import useScrollLock from '../../hooks/use-scroll-lock';
-import { useModalKeyboardEvents } from '../../hooks/use-madal-keyboard-events';
+import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
+import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
 
 type AddProductModalProps = {
   product: Product;
@@ -12,13 +13,16 @@ type AddProductModalProps = {
 function AddProductModal({product}: AddProductModalProps): JSX.Element {
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
+  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
+
 
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
 
   return (
     <div
-      className="modal is-active"
+      data-testid="add-product-modal"
+      className={addItemModalViewStatus ? 'modal is-active' : 'modal'}
       onClick={() => dispatch(setAddItemModalViewStatus(false))}
     >
       <div className="modal__wrapper">

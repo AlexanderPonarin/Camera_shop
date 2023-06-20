@@ -3078,6 +3078,8 @@ button,
   width: 100%;
   max-width: 1112px;
   margin: 0 auto;
+  overflow: hidden;
+
 }
 
 .product-similar__slider-list {
@@ -3087,6 +3089,7 @@ button,
   width: calc(100% + 16px);
   max-width: 936px;
   margin: 0 auto;
+  transition: 2s;
 }
 
 .product-similar .product-card {
@@ -3099,6 +3102,7 @@ button,
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  min-width: calc(33%);
 }
 
 .product-similar .product-card:last-child {

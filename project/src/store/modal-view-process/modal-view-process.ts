@@ -15,7 +15,7 @@ export const ModalView = createSlice({
     setReviewModalViewStatus: (state, action: PayloadAction<boolean>) => {
       state.reviewModalViewStatus = action.payload;
     },
-    setReviewModaSuccessViewStatus: (state, action: PayloadAction<boolean>) => {
+    setReviewModalSuccessViewStatus: (state, action: PayloadAction<boolean>) => {
       state.reviewModalSuccessViewStatus = action.payload;
     },
     setAddItemModalViewStatus: (state, action: PayloadAction<boolean>) => {
@@ -24,4 +24,4 @@ export const ModalView = createSlice({
   },
 });
 
-export const {setReviewModalViewStatus, setReviewModaSuccessViewStatus, setAddItemModalViewStatus} = ModalView.actions;
+export const {setReviewModalViewStatus, setReviewModalSuccessViewStatus, setAddItemModalViewStatus} = ModalView.actions;

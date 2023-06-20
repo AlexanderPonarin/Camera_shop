@@ -1,19 +1,23 @@
 import { useRef } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { useModalKeyboardEvents } from '../../hooks/use-madal-keyboard-events';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../hooks/use-scroll-lock';
-import { setReviewModaSuccessViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { setReviewModalSuccessViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { getReviewModalSuccessStatus } from '../../store/modal-view-process/selectors';
 
 function ReviewModalSuccess(): JSX.Element {
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
+  const reviewModalSuccessStatus = useAppSelector(getReviewModalSuccessStatus);
+
 
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
   return (
     <div
-      onClick={() => dispatch(setReviewModaSuccessViewStatus(false))}
-      className="modal is-active modal--narrow"
+      data-testid="review-modal-success"
+      onClick={() => dispatch(setReviewModalSuccessViewStatus(false))}
+      className={reviewModalSuccessStatus ? 'modal is-active modal--narrow' : 'modal'}
     >
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
@@ -28,13 +32,13 @@ function ReviewModalSuccess(): JSX.Element {
           </svg>
           <div className="modal__buttons">
             <button
-              onClick={ () => dispatch(setReviewModaSuccessViewStatus(false))}
+              onClick={ () => dispatch(setReviewModalSuccessViewStatus(false))}
               className="btn btn--purple modal__btn modal__btn--fit-width" type="button"
             >Вернуться к покупкам
             </button>
           </div>
           <button
-            onClick={ () => dispatch(setReviewModaSuccessViewStatus(false))}
+            onClick={ () => dispatch(setReviewModalSuccessViewStatus(false))}
             className="cross-btn" type="button" aria-label="Закрыть попап"
           >
             <svg width="10" height="10" aria-hidden="true">

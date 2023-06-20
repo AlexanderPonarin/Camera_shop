@@ -1,4 +1,5 @@
 import styles from './not-found-screen.module.css';
+import { Link } from 'react-router-dom';
 
 function NotFoundScreen(): JSX.Element {
   return (
@@ -13,7 +14,9 @@ function NotFoundScreen(): JSX.Element {
       <button
         className={styles.button}
       >
+        <Link to={'/'} >
       Нажмите для перехода на главную страницу
+        </Link>
       </button>
     </div>
   );

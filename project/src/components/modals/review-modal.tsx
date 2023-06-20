@@ -1,24 +1,26 @@
 import { FieldError, useForm } from 'react-hook-form';
 import { ReviewForm } from '../../types/review-form';
 import { ChangeEvent, useRef, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { sendReviewAction } from '../../store/api-action';
 import { Product } from '../../types/products';
-import { useModalKeyboardEvents } from '../../hooks/use-madal-keyboard-events';
+import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../hooks/use-scroll-lock';
 import { setReviewModalViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { getReviewModalStatus } from '../../store/modal-view-process/selectors';
 
 type ReviewModalProps = {
-    onCloseModalBtnClick: (status: boolean) => void;
     product: Product;
 }
 
-function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Element {
+function ReviewModal({product}: ReviewModalProps): JSX.Element {
   const { register, formState: { errors }, handleSubmit} = useForm<ReviewForm>();
   const [ratingValue, setRatingValue] = useState(0);
   const [isDefaultInput, setIsDefaultInput] = useState(true);
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
+  const reviewModalStatus = useAppSelector(getReviewModalStatus);
+
 
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
@@ -47,7 +49,7 @@ function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Ele
   return (
     <div
       onClick={() => dispatch(setReviewModalViewStatus(false))}
-      className="modal is-active"
+      className={reviewModalStatus ? 'modal is-active' : 'modal'}
     >
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
@@ -250,7 +252,7 @@ function ReviewModal({onCloseModalBtnClick, product}: ReviewModalProps): JSX.Ele
             </form>
           </div>
           <button
-            onClick={() => onCloseModalBtnClick(false)}
+            onClick={() => dispatch(setReviewModalViewStatus(false))}
             className="cross-btn" type="button" aria-label="Закрыть попап"
           >
             <svg width="10" height="10" aria-hidden="true">

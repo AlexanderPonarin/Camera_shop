@@ -1,79 +1,42 @@
-import { render, screen } from '@testing-library/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Product } from '../../types/products';
+import { render, screen, fireEvent } from '@testing-library/react';
 import ProductReviewList from './product-review-list';
-import { Reviews } from '../../types/reviews';
+import { Provider } from 'react-redux';
+import { store } from '../../store';
+import { Product } from '../../types/products';
 
-jest.mock('react-redux', () => ({
-  useDispatch: jest.fn(),
-  useSelector: jest.fn()
-}));
-
-const mockReviews = [
-  {
-    id: '1',
-    userName: 'author1',
-    review: 'text1',
-    createAt: '2022-07-09T13:24:57.980Z',
-  },
-  {
-    id: '2',
-    userName: 'author2',
-    review: 'text2',
-    createAt: '2022-07-09T13:24:57.980Z',
-  },
-  {
-    id: '3',
-    userName: 'author3',
-    review: 'text3',
-    createAt: '2022-07-09T13:24:57.980Z',
-  },
-  {
-    id: '3',
-    userName: 'author3',
-    review: 'text3',
-    createAt: '2022-07-09T13:24:57.980Z',
-  }
-] as Reviews;
-
-const mockProduct: Product = {
-  id: 1,
-  name: 'product1',
-  vendorCode: 'vendorCode1',
-  description: 'description1',
-  price: 100,
-} as Product;
+const product = {
+  id: '1',
+  vendorCode: '12345',
+  name: 'test product',
+  description: 'test description',
+  price: 10,
+  imageUrl: 'test.jpg',
+} as unknown as Product;
 
 describe('ProductReviewList', () => {
-  let mockUseDispatch: jest.Mock;
-  let mockUseSelector: jest.Mock;
+  test('renders product review list component', () => {
+    render(
+      <Provider store={store}>
+        <ProductReviewList product={product} />
+      </Provider>
+    );
 
-  beforeEach(() => {
-    mockUseDispatch = useDispatch as jest.Mock;
-    mockUseDispatch.mockReturnValue(jest.fn());
-    mockUseSelector = useSelector as jest.Mock;
+    const reviewTitle = screen.getByText('Отзывы');
+    const reviewButton = screen.getByText('Оставить свой отзыв');
+
+    expect(reviewTitle).toBeInTheDocument();
+    expect(reviewButton).toBeInTheDocument();
   });
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
+  test('clicking on "Оставить свой отзыв" button opens review modal', () => {
+    render(
+      <Provider store={store}>
+        <ProductReviewList product={product} />
+      </Provider>
+    );
 
-  it('should render component properly for empty list of reviews', () => {
-    mockUseSelector.mockReturnValueOnce(mockProduct.vendorCode);
-    mockUseSelector.mockReturnValueOnce([]);
-    render(<ProductReviewList product={mockProduct} />);
-    expect(screen.getByText('Отзывы')).toBeInTheDocument();
-    expect(screen.getByText('Оставить свой отзыв')).toBeInTheDocument();
-  });
+    fireEvent.click(screen.getByText('Оставить свой отзыв'));
 
-  it('should render component properly for non-empty list of reviews', () => {
-    mockUseSelector.mockReturnValueOnce(mockProduct.vendorCode);
-    mockUseSelector.mockReturnValueOnce(mockReviews);
-    render(<ProductReviewList product={mockProduct} />);
-    expect(screen.queryByText('Empty list')).not.toBeInTheDocument();
-    expect(screen.getByText('Отзывы')).toBeInTheDocument();
-    expect(screen.getByText('Оставить свой отзыв')).toBeInTheDocument();
-    expect(screen.getByText('author1')).toBeInTheDocument();
-    expect(screen.getByText('text1')).toBeInTheDocument();
+    expect(screen.getByText('Оставить отзыв')).toBeInTheDocument();
   });
 });

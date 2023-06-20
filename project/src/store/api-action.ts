@@ -5,7 +5,7 @@ import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
 import { Reviews } from '../types/reviews';
 import { ReviewForm } from '../types/review-form';
-import { setReviewModaSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
+import { setReviewModalSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -69,7 +69,7 @@ export const sendReviewAction = createAsyncThunk<void, ReviewForm, {
         await api.post<ReviewForm>('reviews', userReview);
         dispatch(fetchReviewsAction(userReview.cameraId));
         dispatch(setReviewModalViewStatus(false));
-        dispatch(setReviewModaSuccessViewStatus(true));
+        dispatch(setReviewModalSuccessViewStatus(true));
       } catch(error) {
         toast.warn('Не удалось отправить отзыв');
 

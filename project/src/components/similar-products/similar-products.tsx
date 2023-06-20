@@ -4,8 +4,9 @@ import ProductCard from '../product-card/product-card';
 import { getActiveProductVenderCode, getSimilarProducts } from '../../store/product-data/selectros';
 import { fetchSimilarProductsAction } from '../../store/api-action';
 import { useAppDispatch } from '../../hooks';
-import { useEffect, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
+import React from 'react';
 
 type SimilarProductsProps = {
   cb: (product: Product) => void;
@@ -16,6 +17,8 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
   const similarProducts = useSelector(getSimilarProducts);
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const dispatch = useAppDispatch();
+  const slidess = similarProducts.map((item) => <ProductCard key={item.id} product={item} cb={cb}/>);
+
 
   useEffect(() => {
     if (activeVenderCode !== product.vendorCode) {
@@ -27,7 +30,85 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
     }
   }, [activeVenderCode, dispatch, product.id, product.vendorCode]);
 
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+
+  let position = 0;
+  const totalSlides: number = similarProducts.length / 3;
+  const slidesToshow = 0;
+  const slodeToScroll = 0;
+  const [sliderGroupCount, setSliderGroupCount] = useState(1);
+  const sliderPositionRef = useRef(0);
+
+  const sliderListRef = useRef<HTMLDivElement | null>(null);
+
+
+
+  const toNextSlide = (sliderListRefEl: MutableRefObject<HTMLDivElement | null>) => {
+    if (sliderListRefEl.current) {
+      sliderPositionRef.current -= 107;
+      setSliderGroupCount(sliderGroupCount + 1);
+      console.log(sliderPositionRef.current, sliderGroupCount);
+
+      sliderListRefEl.current.style.transform = `translateX(${sliderPositionRef.current}%)`;
+    }
+  };
+
+  const toPrevSlide = (sliderListRefEl: MutableRefObject<HTMLDivElement | null>) => {
+    if (sliderListRefEl.current) {
+      sliderPositionRef.current += 105;
+      setSliderGroupCount(sliderGroupCount - 1);
+      console.log(sliderPositionRef.current, sliderGroupCount);
+
+      sliderListRefEl.current.style.transform = `translateX(${sliderPositionRef.current}%)`;
+    }
+  };
+
+  return (
+    <section className="product-similar">
+      <div
+        className="container"
+      >
+        <h2 className="title title--h3">Похожие товары</h2>
+        <div
+          className="product-similar__slider"
+        >
+          <div
+            ref={sliderListRef}
+            className="product-similar__slider-list"
+          >{slidess}
+          </div>
+          <button
+            onClick={() => toPrevSlide(sliderListRef)}
+            className="slider-controls slider-controls--prev"
+            type="button"
+            aria-label="Предыдущий слайд"
+            disabled={sliderGroupCount === 1}
+          >
+            <svg width="7" height="12" aria-hidden="true">
+              <use xlinkHref="#icon-arrow"></use>
+            </svg>
+          </button>
+          <button
+            onClick={() => toNextSlide(sliderListRef)}
+            className="slider-controls slider-controls--next"
+            type="button"
+            aria-label="Следующий слайд"
+            disabled={sliderGroupCount === totalSlides - 1}
+          >
+            <svg
+              width="7" height="12" aria-hidden="true"
+            >
+              <use xlinkHref="#icon-arrow"></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default SimilarProducts;
+
+/* const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const slidesToShow = 3;
   const totalSlides = similarProducts.length;
@@ -62,46 +143,4 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
   const currentSlides = slides.slice(
     activeSlideIndex,
     activeSlideIndex + slidesToShow
-  );
-
-  const slidess = similarProducts.map((item) => <ProductCard key={item.id} product={item} cb={cb}/>);
-
-  return (
-    <section className="product-similar">
-      <div
-        className="container"
-      >
-        <h2 className="title title--h3">Похожие товары</h2>
-        <div className="product-similar__slider">
-          <div className="product-similar__slider-list">{currentSlides}</div>
-          <button
-            onClick={goToPrevSlide}
-            className="slider-controls slider-controls--prev"
-            type="button"
-            aria-label="Предыдущий слайд"
-            disabled={activeSlideIndex === 0}
-          >
-            <svg width="7" height="12" aria-hidden="true">
-              <use xlinkHref="#icon-arrow"></use>
-            </svg>
-          </button>
-          <button
-            onClick={goToNextSlide}
-            className="slider-controls slider-controls--next"
-            type="button"
-            aria-label="Следующий слайд"
-            disabled={activeSlideIndex === maxSlide}
-          >
-            <svg
-              width="7" height="12" aria-hidden="true"
-            >
-              <use xlinkHref="#icon-arrow"></use>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default SimilarProducts;
+  ); */

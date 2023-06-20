@@ -8,7 +8,7 @@ const promoProductMock = {
   previewImg2x: 'previewImg2x',
   previewImgWebp: 'previewImgWebp',
   previewImgWebp2x: 'previewImgWebp2x',
-} as PromoProduct;
+} as unknown as PromoProduct;
 
 const productDescriptionMock = 'Product description Mock';
 

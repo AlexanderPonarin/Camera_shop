@@ -3,6 +3,10 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import CatalogSortForm from './catalog-sort-form';
 
 describe('CatalogSortForm', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test('renders correctly', () => {
     render(<CatalogSortForm />);
 
@@ -17,7 +21,9 @@ describe('CatalogSortForm', () => {
     fireEvent.click(screen.getByLabelText('по цене'));
     fireEvent.click(screen.getByLabelText('По убыванию'));
 
-    expect(screen.getByLabelText('по цене').checked).toBe(true);
-    expect(screen.getByLabelText('По убыванию').checked).toBe(true);
+    expect(screen.getByRole('radio', { name: 'по цене' })).toHaveProperty('checked', true);
+    expect(screen.getByRole('radio', { name: 'По убыванию' })).toHaveProperty('checked', true);
+
+    jest.clearAllMocks();
   });
 });

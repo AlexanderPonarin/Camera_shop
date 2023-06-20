@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProductReview from './product-review';
+import { Review } from '../../types/reviews';
 
 const review = {
   id: '1',
@@ -10,7 +11,7 @@ const review = {
   disadvantage: 'None',
   review: 'I am very satisfied with this product',
   createdAt: '2022-04-13T10:00:00.000Z'
-};
+} as unknown as Review;
 
 describe('ProductReview', () => {
   it('renders review information correctly', () => {

@@ -227,16 +227,12 @@ describe('ProductData', () => {
     expect(newState.isProductsDataLoading).toBe(true);
   });
 
-
-
   it('should set the isProductsDataLoading flag to true when fetching the promo product', () => {
     const action = fetchPromoProductAction.pending;
     const newState = ProductData.reducer(initialState, action);
 
     expect(newState.isProductsDataLoading).toBe(true);
   });
-
-
 
   it('should set the isProductsDataLoading flag to true when fetching the similar products', () => {
     const action = fetchSimilarProductsAction.pending;

@@ -10,7 +10,7 @@ const mockStore = configureMockStore();
 
 const store = mockStore({
   DATA: {
-    isQuestionsDataLoading: false,
+    isProductsDataLoading: false,
   },
   MODALVIEW: {
     addItemModalViewStatus: false

@@ -16,9 +16,13 @@ export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     extra: AxiosInstance;
   }>(
     'data/fetchProducts',
-    async (_arg, {dispatch, extra: api}) => {
-      const {data} = await api.get<Products>('cameras');
-      return data;
+    async (_arg, { extra: api}) => {
+      try {
+        const {data} = await api.get<Products>('cameras');
+        return data;
+      } catch(e) {
+        return [];
+      }
     },
   );
 

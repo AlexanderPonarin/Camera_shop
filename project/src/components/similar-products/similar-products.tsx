@@ -4,9 +4,12 @@ import ProductCard from '../product-card/product-card';
 import { getActiveProductVenderCode, getSimilarProducts } from '../../store/product-data/selectros';
 import { fetchSimilarProductsAction } from '../../store/api-action';
 import { useAppDispatch } from '../../hooks';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
-import React from 'react';
+import clsx from 'clsx';
+import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
+
 
 type SimilarProductsProps = {
   cb: (product: Product) => void;
@@ -17,7 +20,11 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
   const similarProducts = useSelector(getSimilarProducts);
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const dispatch = useAppDispatch();
-  const slidess = similarProducts.map((item) => <ProductCard key={item.id} product={item} cb={cb}/>);
+  const swiperRef = useRef<SwiperRef['swiper']>();
+  const [{ isBeginning, isEnd }, setSliderState] = useState({
+    isBeginning: true,
+    isEnd: false
+  });
 
 
   useEffect(() => {
@@ -31,37 +38,6 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
   }, [activeVenderCode, dispatch, product.id, product.vendorCode]);
 
 
-  let position = 0;
-  const totalSlides: number = similarProducts.length / 3;
-  const slidesToshow = 0;
-  const slodeToScroll = 0;
-  const [sliderGroupCount, setSliderGroupCount] = useState(1);
-  const sliderPositionRef = useRef(0);
-
-  const sliderListRef = useRef<HTMLDivElement | null>(null);
-
-
-
-  const toNextSlide = (sliderListRefEl: MutableRefObject<HTMLDivElement | null>) => {
-    if (sliderListRefEl.current) {
-      sliderPositionRef.current -= 107;
-      setSliderGroupCount(sliderGroupCount + 1);
-      console.log(sliderPositionRef.current, sliderGroupCount);
-
-      sliderListRefEl.current.style.transform = `translateX(${sliderPositionRef.current}%)`;
-    }
-  };
-
-  const toPrevSlide = (sliderListRefEl: MutableRefObject<HTMLDivElement | null>) => {
-    if (sliderListRefEl.current) {
-      sliderPositionRef.current += 105;
-      setSliderGroupCount(sliderGroupCount - 1);
-      console.log(sliderPositionRef.current, sliderGroupCount);
-
-      sliderListRefEl.current.style.transform = `translateX(${sliderPositionRef.current}%)`;
-    }
-  };
-
   return (
     <section className="product-similar">
       <div
@@ -71,32 +47,50 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
         <div
           className="product-similar__slider"
         >
-          <div
-            ref={sliderListRef}
+          <Swiper
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            onSlideChange={(swiper) => {
+              setSliderState({
+                isBeginning: swiper.isBeginning,
+                isEnd: swiper.isEnd });
+            }}
             className="product-similar__slider-list"
-          >{slidess}
-          </div>
+            slidesPerView={3}
+            slidesPerGroup={3}
+            spaceBetween={30}
+            allowTouchMove={false}
+          >
+            {similarProducts.map((item) => (
+              <SwiperSlide key={item.id}>
+                <ProductCard product={item} cb={cb} style={{width: '100%', margin: 0}} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
           <button
-            onClick={() => toPrevSlide(sliderListRef)}
-            className="slider-controls slider-controls--prev"
+            style={{
+              pointerEvents: isBeginning ? 'none' : 'auto'
+            }}
+            onClick={() => swiperRef.current?.slidePrev()}
+            className={clsx('slider-controls slider-controls--prev', isBeginning && 'disabled')}
             type="button"
             aria-label="Предыдущий слайд"
-            disabled={sliderGroupCount === 1}
           >
             <svg width="7" height="12" aria-hidden="true">
               <use xlinkHref="#icon-arrow"></use>
             </svg>
           </button>
           <button
-            onClick={() => toNextSlide(sliderListRef)}
-            className="slider-controls slider-controls--next"
+            style={{
+              pointerEvents: isEnd ? 'none' : 'auto'
+            }}
+            onClick={() => swiperRef.current?.slideNext()}
+            className={clsx('slider-controls slider-controls--next', isEnd && 'disabled')}
             type="button"
             aria-label="Следующий слайд"
-            disabled={sliderGroupCount === totalSlides - 1}
           >
-            <svg
-              width="7" height="12" aria-hidden="true"
-            >
+            <svg width="7" height="12" aria-hidden="true">
               <use xlinkHref="#icon-arrow"></use>
             </svg>
           </button>
@@ -107,40 +101,3 @@ function SimilarProducts({ product, cb }: SimilarProductsProps): JSX.Element {
 }
 
 export default SimilarProducts;
-
-/* const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-
-  const slidesToShow = 3;
-  const totalSlides = similarProducts.length;
-  const maxSlide = Math.ceil(totalSlides / slidesToShow);
-
-  const goToNextSlide = () => {
-    setActiveSlideIndex((prevIndex) =>
-      prevIndex >= maxSlide ? 0 : prevIndex + 3
-    );
-  };
-
-  const goToPrevSlide = () => {
-    setActiveSlideIndex((prevIndex) =>
-      prevIndex === 0 ? maxSlide : prevIndex - 3
-    );
-  };
-
-  const slides = similarProducts.map((item) => (
-    <ProductCard key={item.id} product={item} cb={cb} />
-  ));
-  for (let i = 0; i < totalSlides; i += slidesToShow) {
-    const slideGroup = similarProducts
-      .slice(i, i + slidesToShow)
-      .map((item) => <ProductCard key={item.id} product={item} cb={cb} />);
-    slides.push(
-      <div className="product-similar__slider-slide" >
-        {slideGroup}
-      </div>
-    );
-  }
-
-  const currentSlides = slides.slice(
-    activeSlideIndex,
-    activeSlideIndex + slidesToShow
-  ); */

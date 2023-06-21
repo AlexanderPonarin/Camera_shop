@@ -7,10 +7,9 @@ type ProductsProps = {
     products: Products;
 }
 
-function Product(props: ProductsProps): JSX.Element {
-  setTimeout(() => 10000);
+function Product({products}: ProductsProps): JSX.Element {
   const params = useParams();
-  const product = props.products?.find((item) => String(item.id) === params.id);
+  const product = products?.find((item) => String(item.id) === params?.id);
   return product ? <ProductScreen product={product} /> : <NotFoundScreen />;
 }
 

@@ -1,15 +1,18 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
-
+import { CSSProperties } from 'react';
 
 type ProductCardProps = {
   product: Product;
   cb: (product: Product) => void;
+  style?: CSSProperties;
+
 }
 
-function ProductCard({product, cb}: ProductCardProps): JSX.Element {
+function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   return (
     <div
+      style={style}
       className="product-card is-active"
     >
       <div

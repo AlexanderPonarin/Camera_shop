@@ -3,7 +3,7 @@ import {PromoProduct} from '../../types/promo-product';
 import {NameSpace} from '../../consts';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {ProductDataProcess} from '../../types/state';
-import { ProductData } from './product-data';
+import { ProductData, setActiveProductVenderCode } from './product-data';
 
 describe('ProductData', () => {
   const promoProduct: PromoProduct = {
@@ -212,6 +212,44 @@ describe('ProductData', () => {
       };
       expect(ProductData.actions.setActiveProductVenderCode(activeProductVenderCode)).toEqual(expectedAction);
     });
+  });
+  it('should set the activeProductVenderCode', () => {
+    const action = setActiveProductVenderCode('123');
+    const newState = ProductData.reducer(initialState, action);
+
+    expect(newState.activeProductVenderCode).toBe('123');
+  });
+
+  it('should set the isProductsDataLoading flag to true when fetching products', () => {
+    const action = fetchProductsAction.pending;
+    const newState = ProductData.reducer(initialState, action);
+
+    expect(newState.isProductsDataLoading).toBe(true);
+  });
+
+
+
+  it('should set the isProductsDataLoading flag to true when fetching the promo product', () => {
+    const action = fetchPromoProductAction.pending;
+    const newState = ProductData.reducer(initialState, action);
+
+    expect(newState.isProductsDataLoading).toBe(true);
+  });
+
+
+
+  it('should set the isProductsDataLoading flag to true when fetching the similar products', () => {
+    const action = fetchSimilarProductsAction.pending;
+    const newState = ProductData.reducer(initialState, action);
+
+    expect(newState.isProductsDataLoading).toBe(true);
+  });
+
+  it('should set the isProductsDataLoading flag to true when fetching the reviews', () => {
+    const action = fetchReviewsAction.pending;
+    const newState = ProductData.reducer(initialState, action);
+
+    expect(newState.isProductsDataLoading).toBe(true);
   });
 
 });

@@ -1,29 +1,89 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { createMemoryHistory } from 'history';
-import HistoryRouter from '../history-route/history-route';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
 import SimilarProducts from './similar-products';
+import { fetchSimilarProductsAction } from '../../store/api-action';
 import { Product } from '../../types/products';
-
-const history = createMemoryHistory();
-const mockSimilarProduct: Product = {
-  id: 1,
-  name: 'Product 1',
-  price: 10.5,
-} as Product;
-
-const fakeApp = (
-  <HistoryRouter history={history}>
-    <SimilarProducts product={mockSimilarProduct} cb={() => false}/>
-  </HistoryRouter>
-);
-
-describe('Component: SimilarProducts', () => {
-  it('should render correctly', () => {
-    render(fakeApp);
-    expect(screen.getByText(/Похожие товары/i)).toBeInTheDocument();
-    expect(screen.getByText(/Product 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/10.5/i)).toBeInTheDocument();
+import { setActiveProductVenderCode } from '../../store/product-data/product-data';
 
 
+const mockStore = configureMockStore();
+
+describe('SimilarProducts', () => {
+  let store = mockStore();
+  const product: Product = {
+    id: 1,
+    vendorCode: 'vc1',
+  } as Product;
+
+  const similarProducts = [
+    {
+      id: 2,
+      vendorCode: 'vc2',
+    },
+    {
+      id: 3,
+      vendorCode: 'vc3',
+    },
+  ];
+  const cb = jest.fn();
+
+  beforeEach(() => {
+    store = mockStore({
+      productData: {
+        activeProductVenderCode: '',
+        similarProducts: [],
+      },
+    });
+    store.dispatch = jest.fn();
+  });
+
+  it('should render component and check initial slider state', () => {
+    render(
+      <Provider store={store}>
+        <SimilarProducts product={product} cb={cb} />
+      </Provider>
+    );
+
+    screen.getByText('Похожие товары');
+    expect(store.dispatch).toHaveBeenCalledWith(fetchSimilarProductsAction(product.id));
+    expect(store.dispatch).toHaveBeenCalledWith(setActiveProductVenderCode(product.vendorCode));
+  });
+
+  it('should render component and check slider buttons', () => {
+    render(
+      <Provider store={store}>
+        <SimilarProducts product={product} cb={cb} />
+      </Provider>
+    );
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(true);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+
+    jest.spyOn(window.HTMLMediaElement.prototype, 'clientWidth', 'get').mockReturnValue(100);
+
+    store = mockStore({
+      productData: {
+        activeProductVenderCode: product.vendorCode,
+        similarProducts,
+      },
+    });
+
+    screen.getByLabelText('Следующий слайд').click();
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+
+    screen.getByLabelText('Следующий слайд').click();
+    screen.getByLabelText('Следующий слайд').click();
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(true);
+
+    screen.getByLabelText('Предыдущий слайд').click();
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
   });
 });

@@ -8,10 +8,15 @@ import { Product } from '../../types/products';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
 
 
-const mockStore = configureMockStore();
+const mockStore = configureMockStore()
+
 
 describe('SimilarProducts', () => {
-  let store = mockStore();
+  let store = mockStore({
+    DATA: {
+      similarProducts: [] as Products
+    }
+  });
   const product: Product = {
     id: 1,
     vendorCode: 'vc1',
@@ -31,9 +36,9 @@ describe('SimilarProducts', () => {
 
   beforeEach(() => {
     store = mockStore({
-      productData: {
+      DATA: {
         activeProductVenderCode: '',
-        similarProducts: [],
+        similarProducts: nextSlideBtn,
       },
     });
     store.dispatch = jest.fn();
@@ -57,7 +62,8 @@ describe('SimilarProducts', () => {
         <SimilarProducts product={product} cb={cb} />
       </Provider>
     );
-
+    const nextSlideBtn = screen.getByLabelText('Предыдущий слайд')
+    expect(nextSlideBtn).not.toBeInDocument()
     expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(true);
     expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
 

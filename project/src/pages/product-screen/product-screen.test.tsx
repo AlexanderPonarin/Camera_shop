@@ -11,7 +11,7 @@ const mockStore = configureMockStore([thunk]);
 
 describe('<ProductScreen />', () => {
   const store = mockStore({
-    MODALVIEW: {addItemModalViewStatus: false,}
+    MODALVIEW: {addItemModalViewStatus: false}
   });
 
   const mockProduct: Product = {

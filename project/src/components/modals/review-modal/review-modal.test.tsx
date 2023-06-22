@@ -6,16 +6,16 @@ import { store } from '../../../store';
 import { promoProductMock } from '../../../mocks/mocks';
 import { Product } from '../../../types/products';
 
-jest.mock('../../hooks/use-scroll-lock', () => jest.fn());
-jest.mock('../../hooks/use-modal-keyboard-events', () => ({
+jest.mock('../../../hooks/use-scroll-lock', () => jest.fn());
+jest.mock('../../../hooks/use-modal-keyboard-events', () => ({
   useModalKeyboardEvents: jest.fn(),
 }));
 
-jest.mock('../../store/modal-view-process/selectors', () => ({
+jest.mock('../../../store/modal-view-process/selectors', () => ({
   getAddItemModalStatus: jest.fn(() => true),
 }));
 
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useAppSelector: jest.fn(),
   useAppDispatch: jest.fn(() => jest.fn()),
 }));

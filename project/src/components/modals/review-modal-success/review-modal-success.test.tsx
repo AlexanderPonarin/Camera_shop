@@ -5,16 +5,16 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import {setReviewModalSuccessViewStatus} from '../../../store/modal-view-process/modal-view-process';
 
 
-jest.mock('../../hooks/use-scroll-lock', () => jest.fn());
-jest.mock('../../hooks/use-modal-keyboard-events', () => ({
+jest.mock('../../../hooks/use-scroll-lock', () => jest.fn());
+jest.mock('../../../hooks/use-modal-keyboard-events', () => ({
   useModalKeyboardEvents: jest.fn(),
 }));
 
-jest.mock('../../store/modal-view-process/selectors', () => ({
+jest.mock('../../../store/modal-view-process/selectors', () => ({
   getAddItemModalStatus: jest.fn(() => true),
 }));
 
-jest.mock('../../hooks', () => ({
+jest.mock('../../../hooks', () => ({
   useAppSelector: jest.fn(),
   useAppDispatch: jest.fn(() => jest.fn()),
 }));

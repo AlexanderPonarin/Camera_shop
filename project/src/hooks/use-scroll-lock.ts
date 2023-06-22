@@ -1,36 +1,77 @@
-import { useEffect, useRef } from 'react';
+import { renderHook } from '@testing-library/react-hooks';
 import { useAppSelector } from '.';
 import { getAddItemModalStatus, getReviewModalStatus, getReviewModalSuccessStatus } from '../store/modal-view-process/selectors';
+import useScrollLock from '../hooks/';
 
-function useScrollLock() {
-  const bodyRef = useRef(document.body);
-  const reviewModalSuccessStatus = useAppSelector(getReviewModalSuccessStatus);
-  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
-  const reviewModalViewStatus = useAppSelector(getReviewModalStatus);
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useRef: jest.fn(),
+  useEffect: jest.fn(),
+}));
+jest.mock('./useAppSelector', () => ({
+  useAppSelector: jest.fn(),
+}));
 
+describe('useScrollLock', () => {
+  let addModalStatus;
+  let reviewModalStatus;
+  let reviewModalSuccessStatus;
+  let bodyRef;
 
-  useEffect(() => {
-    if (reviewModalSuccessStatus || reviewModalViewStatus || addItemModalViewStatus) {
-      const { current } = bodyRef;
-      const originalOverflow = window.getComputedStyle(current).overflow;
-      current.style.overflow = 'hidden';
+  beforeEach(() => {
+    addModalStatus = false;
+    reviewModalStatus = false;
+    reviewModalSuccessStatus = false;
+    bodyRef = { current: { style: {}, getComputedStyle: jest.fn() } };
+    useRef.mockReturnValueOnce(bodyRef);
 
-      return () => {
-        current.style.overflow = originalOverflow;
-      };}
+    useAppSelector.mockImplementation((selectorFn) => {
+      if (selectorFn === getAddItemModalStatus) return addModalStatus;
+      if (selectorFn === getReviewModalStatus) return reviewModalStatus;
+      if (selectorFn === getReviewModalSuccessStatus) return reviewModalSuccessStatus;
 
-    if (!reviewModalSuccessStatus || !reviewModalViewStatus || !addItemModalViewStatus) {
-      const { current } = bodyRef;
-      const originalOverflow = window.getComputedStyle(current).overflow;
-      current.style.overflow = '';
+      return null;
+    });
+    window.getComputedStyle.mockReturnValue({ overflow: '' });
+  });
 
-      return () => {
-        current.style.overflow = originalOverflow;
-      };}
-  }, [addItemModalViewStatus, reviewModalSuccessStatus, reviewModalViewStatus]);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  return bodyRef;
+  it('should set overflow to hidden when any modal is open', () => {
+    addModalStatus = true;
+    renderHook(() => useScrollLock());
 
-}
+    expect(bodyRef.current.style.overflow).toBe('hidden');
+  });
 
-export default useScrollLock;
+  it('should set overflow to original value when all modals are closed', () => {
+    addModalStatus = false;
+    reviewModalSuccessStatus = false;
+    reviewModalStatus = false;
+    renderHook(() => useScrollLock());
+
+    expect(bodyRef.current.style.overflow).toBe('');
+  });
+
+  it('should set overflow to hidden when any review modal is open', () => {
+    reviewModalStatus = true;
+    renderHook(() => useScrollLock());
+
+    expect(bodyRef.current.style.overflow).toBe('hidden');
+  });
+
+  it('should set overflow to hidden when review modal success is open', () => {
+    reviewModalSuccessStatus = true;
+    renderHook(() => useScrollLock());
+
+    expect(bodyRef.current.style.overflow).toBe('hidden');
+  });
+
+  it('should return the body reference', () => {
+    const { result } = renderHook(() => useScrollLock());
+
+    expect(result.current).toBe(bodyRef);
+  });
+});

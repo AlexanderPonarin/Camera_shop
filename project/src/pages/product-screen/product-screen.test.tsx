@@ -4,6 +4,8 @@ import { Product } from '../../types/products';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+import {BrowserRouter as Router } from 'react-router-dom';
+
 
 afterEach(cleanup);
 const mockStore = configureMockStore([thunk]);
@@ -30,7 +32,9 @@ describe('ProductScreen', () => {
   it('renders product details correctly', () => {
     render(
       <Provider store={store}>
-        <ProductScreen product={mockProduct} />
+        <Router>
+          <ProductScreen product={mockProduct} />
+        </Router>
       </Provider>
     );
     expect(screen.getAllByText(mockProduct.name)[0]).toBeInTheDocument();
@@ -42,7 +46,9 @@ describe('ProductScreen', () => {
   it('dispatches add product action when add to basket button is clicked', () => {
     render(
       <Provider store={store}>
-        <ProductScreen product={mockProduct} />
+        <Router>
+          <ProductScreen product={mockProduct} />
+        </Router>
       </Provider>
     );
     const addButton = screen.getByText('Добавить в корзину');

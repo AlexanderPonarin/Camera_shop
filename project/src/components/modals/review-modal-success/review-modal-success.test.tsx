@@ -1,8 +1,8 @@
 import React from 'react';
 import ReviewModalSuccess from './review-modal-success';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch} from '../../../hooks';
 import {render, screen, fireEvent} from '@testing-library/react';
-import {setReviewModalSuccessViewStatus} from '../../store/modal-view-process/modal-view-process';
+import {setReviewModalSuccessViewStatus} from '../../../store/modal-view-process/modal-view-process';
 
 
 jest.mock('../../hooks/use-scroll-lock', () => jest.fn());

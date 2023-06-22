@@ -4,7 +4,7 @@ import Header from '../../components/header/header';
 import { Product } from '../../types/products';
 import SimilarProducts from '../../components/similar-products/similar-products';
 import { useState } from 'react';
-import AddProductModal from '../../components/modals/add-product-modal';
+import AddProductModal from '../../components/modals/add-product-modal/add-product-modal';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import ProductReviewList from '../../components/product-review-list/product-review-list';
 import ButtonUp from '../../components/button-up/button-up';
@@ -20,7 +20,6 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
   const [productInAddModal, setProductInAddModal] = useState<Product>(product);
   const dispatch = useAppDispatch();
   const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
-
 
   const onBasketClick = (item: Product) => {
     dispatch(setAddItemModalViewStatus(true));
@@ -62,17 +61,17 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                 <div className="container">
                   <div className="product__img">
                     <picture>
-                      <source type="image/webp" srcSet={`/${product.previewImgWebp}, /${product.previewImgWebp2x}`}/>
+                      <source type="image/webp" srcSet={`/${product?.previewImgWebp}, /${product?.previewImgWebp2x}`}/>
                       <img
-                        src={`/${window.location.origin}${product.previewImg}`}
-                        srcSet={`/${product.previewImg2x}`}
+                        src={`/${window.location.origin}${product?.previewImg}`}
+                        srcSet={`/${product?.previewImg2x}`}
                         width="560" height="480"
-                        alt={product.name}
+                        alt={product?.name}
                       />
                     </picture>
                   </div>
                   <div className="product__content">
-                    <h1 className="title title--h3">{product.name}</h1>
+                    <h1 className="title title--h3">{product?.name}</h1>
                     <div className="rate product__rate">
                       <svg width="17" height="16" aria-hidden="true">
                         <use xlinkHref="#icon-full-star"></use>
@@ -90,9 +89,9 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                         <use xlinkHref="#icon-star"></use>
                       </svg>
                       <p className="visually-hidden">Рейтинг: 4</p>
-                      <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>
+                      <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product?.reviewCount}</p>
                     </div>
-                    <p className="product__price"><span className="visually-hidden">Цена:</span>{product.price}₽</p>
+                    <p className="product__price"><span className="visually-hidden">Цена:</span>{product?.price}₽</p>
                     <button
                       onClick={() => dispatch(setAddItemModalViewStatus(true))}
                       className="btn btn--purple" type="button"

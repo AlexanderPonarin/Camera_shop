@@ -1,10 +1,11 @@
 import { useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
-import { Product } from '../../types/products';
-import useScrollLock from '../../hooks/use-scroll-lock';
-import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
-import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
+import useScrollLock from '../../../hooks/use-scroll-lock';
+import { setAddItemModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { getAddItemModalStatus } from '../../../store/modal-view-process/selectors';
+import { Product } from '../../../types/products';
+
 
 type AddProductModalProps = {
   product: Product;

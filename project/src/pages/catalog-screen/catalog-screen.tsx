@@ -8,10 +8,10 @@ import Header from '../../components/header/header';
 import ProductCard from '../../components/product-card/product-card';
 import { Product, Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
-import AddProductModal from '../../components/modals/add-product-modal';
+import AddProductModal from '../../components/modals/add-product-modal/add-product-modal';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
-import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { useAppSelector } from '../../hooks';
+import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
 
 
 type CatalogScreenProps = {
@@ -28,7 +28,8 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
   const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
   window.history.pushState({}, '', `/catalog/page/${currentPage}`);
-  const dispatch = useAppDispatch();
+  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
+
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -55,8 +56,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
     }
   };
 
-  const onBasketClick = (product: Product) => {
-    dispatch(setAddItemModalViewStatus(true));
+  const onBasketClickHandler = (product: Product) => {
     setProductInAddModal(product);
   };
 
@@ -105,7 +105,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
                     <div className="cards catalog__cards">
                       {
                         products &&
-                      currentProducts?.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClick}/>)
+                      currentProducts?.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClickHandler}/>)
                       }
                     </div>
                     <div className="pagination">
@@ -151,7 +151,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
             </section>
           </div>
         </main>
-        <AddProductModal product={productInAddModal} />
+        {addItemModalViewStatus && <AddProductModal product={productInAddModal} />}
         <Footer />
       </div>
     </>

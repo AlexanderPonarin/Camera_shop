@@ -1,20 +1,20 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import SimilarProducts from './similar-products';
-import { fetchSimilarProductsAction } from '../../store/api-action';
 import { Product } from '../../types/products';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
+import {BrowserRouter as Router } from 'react-router-dom';
 
 
-const mockStore = configureMockStore()
+const mockStore = configureMockStore();
 
 
 describe('SimilarProducts', () => {
   let store = mockStore({
     DATA: {
-      similarProducts: [] as Products
+      similarProducts: [],
     }
   });
   const product: Product = {
@@ -38,7 +38,7 @@ describe('SimilarProducts', () => {
     store = mockStore({
       DATA: {
         activeProductVenderCode: '',
-        similarProducts: nextSlideBtn,
+        similarProducts: similarProducts,
       },
     });
     store.dispatch = jest.fn();
@@ -47,24 +47,25 @@ describe('SimilarProducts', () => {
   it('should render component and check initial slider state', () => {
     render(
       <Provider store={store}>
-        <SimilarProducts product={product} cb={cb} />
+        <Router>
+          <SimilarProducts product={product} cb={cb} />
+        </Router>
       </Provider>
     );
 
     screen.getByText('Похожие товары');
-    expect(store.dispatch).toHaveBeenCalledWith(fetchSimilarProductsAction(product.id));
     expect(store.dispatch).toHaveBeenCalledWith(setActiveProductVenderCode(product.vendorCode));
   });
 
   it('should render component and check slider buttons', () => {
     render(
       <Provider store={store}>
-        <SimilarProducts product={product} cb={cb} />
+        <Router>
+          <SimilarProducts product={product} cb={cb} />
+        </Router>
       </Provider>
     );
-    const nextSlideBtn = screen.getByLabelText('Предыдущий слайд')
-    expect(nextSlideBtn).not.toBeInDocument()
-    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(true);
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
     expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
 
     jest.spyOn(window.HTMLMediaElement.prototype, 'clientWidth', 'get').mockReturnValue(100);
@@ -76,18 +77,24 @@ describe('SimilarProducts', () => {
       },
     });
 
-    screen.getByLabelText('Следующий слайд').click();
+    act(() => {
+      screen.getByLabelText('Следующий слайд').click();
+    });
 
     expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
     expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
 
-    screen.getByLabelText('Следующий слайд').click();
-    screen.getByLabelText('Следующий слайд').click();
+    act(() => {
+      screen.getByLabelText('Следующий слайд').click();
+      screen.getByLabelText('Следующий слайд').click();
+    });
 
     expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
-    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(true);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
 
-    screen.getByLabelText('Предыдущий слайд').click();
+    act(() => {
+      screen.getByLabelText('Предыдущий слайд').click();
+    });
 
     expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
     expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);

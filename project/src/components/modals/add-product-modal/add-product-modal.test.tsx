@@ -1,9 +1,9 @@
 import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import AddProductModal from './add-product-modal';
-import {Product} from '../../types/products';
-import {useAppDispatch} from '../../hooks';
-import {setAddItemModalViewStatus} from '../../store/modal-view-process/modal-view-process';
+import { setAddItemModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { Product } from '../../../types/products';
+import { useAppDispatch } from '../../../hooks';
 
 jest.mock('../../hooks/use-scroll-lock', () => jest.fn());
 jest.mock('../../hooks/use-modal-keyboard-events', () => ({

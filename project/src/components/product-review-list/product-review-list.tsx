@@ -6,9 +6,9 @@ import { getActiveProductVenderCode, getReviews } from '../../store/product-data
 import { fetchReviewsAction } from '../../store/api-action';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
 import ProductReview from '../product-review/product-review';
-import ReviewModal from '../modals/review-modal';
+import ReviewModal from '../modals/review-modal/review-modal';
 import { setReviewModalViewStatus } from '../../store/modal-view-process/modal-view-process';
-import ReviewModalSuccess from '../modals/review-modal-success';
+import ReviewModalSuccess from '../modals/review-modal-success/review-modal-success';
 
 type ProductReviewListProps = {
   product: Product;
@@ -19,7 +19,7 @@ function ProductReviewList({ product }: ProductReviewListProps): JSX.Element {
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const reviews = useSelector(getReviews);
   const [visibleReviews, setVisibleReviews] = useState(3);
-  const sortedReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
+  const sortedReviews = [...reviews]?.sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime()) || [];
 
   useEffect(() => {
     if (activeVenderCode !== product.vendorCode) {

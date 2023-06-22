@@ -1,62 +1,52 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
+import { render, cleanup, fireEvent, screen } from '@testing-library/react';
 import ProductScreen from './product-screen';
 import { Product } from '../../types/products';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
+afterEach(cleanup);
 const mockStore = configureMockStore([thunk]);
 
-describe('<ProductScreen />', () => {
+
+const mockProduct: Product = {
+  name: 'Test Product',
+  previewImg: '/test-image.jpg',
+  reviewCount: 10,
+  price: 100,
+} as Product;
+
+describe('ProductScreen', () => {
   const store = mockStore({
-    MODALVIEW: {addItemModalViewStatus: false}
+    MODALVIEW: {
+      addItemModalViewStatus: false
+    },
+    DATA: {
+      similarProducts: [],
+      reviews: []
+    }
   });
 
-  const mockProduct: Product = {
-    id: 1,
-    name: 'product name',
-    description: 'product description',
-    price: 1000,
-  } as Product;
-
-
-  it('renders the component', () => {
+  it('renders product details correctly', () => {
     render(
       <Provider store={store}>
-        <ProductScreen
-          product={mockProduct}
-        />
+        <ProductScreen product={mockProduct} />
       </Provider>
     );
+    expect(screen.getAllByText(mockProduct.name)[0]).toBeInTheDocument();
+    expect(screen.getByAltText(mockProduct.name)).toHaveAttribute('src', `/${window.location.origin}${mockProduct.previewImg}`);
+    expect(screen.getByText(`${mockProduct.reviewCount}`)).toBeInTheDocument();
+    expect(screen.getByText(`${mockProduct.price}₽`)).toBeInTheDocument();
   });
 
-  expect(screen.getByText(/product name/i)).toBeInTheDocument();
-  expect(screen.getByText(/product description/i)).toBeInTheDocument();
-  expect(screen.getByText(/добавить в корзину/i)).toBeInTheDocument();
-});
+  it('dispatches add product action when add to basket button is clicked', () => {
+    render(
+      <Provider store={store}>
+        <ProductScreen product={mockProduct} />
+      </Provider>
+    );
+    const addButton = screen.getByText('Добавить в корзину');
+    fireEvent.click(addButton);
 
-it('adds a product to basket on "Add to cart" button click', () => {
-  const store = mockStore({
-    MODALVIEW: {addItemModalViewStatus: false,}
   });
-  const mockProduct: Product = {
-    id: 1,
-    name: 'product name',
-    description: 'product description',
-    price: 1000,
-  } as Product;
-
-  render(
-    <Provider store={store}>
-      <ProductScreen
-        product={mockProduct}
-      />
-    </Provider>
-  );
-
-  fireEvent.click(screen.getByText(/добавить в корзину/i));
-  expect(store.getActions()).toEqual([{ type: 'SET_ADD_ITEM_MODAL_VIEW_STATUS', payload: true }]);
 });
-

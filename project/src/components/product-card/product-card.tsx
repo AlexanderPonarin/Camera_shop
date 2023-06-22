@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
 import { CSSProperties } from 'react';
+import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { useAppDispatch } from '../../hooks';
 
 type ProductCardProps = {
   product: Product;
@@ -10,6 +12,8 @@ type ProductCardProps = {
 }
 
 function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
   return (
     <div
       style={style}
@@ -60,6 +64,8 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
         <button
           onClick={() => {
             cb(product);
+            dispatch(setAddItemModalViewStatus(true));
+
           }}
           className="btn btn--purple product-card__btn" type="button"
         >Купить

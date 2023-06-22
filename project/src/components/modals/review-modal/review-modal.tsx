@@ -1,13 +1,14 @@
 import { FieldError, useForm } from 'react-hook-form';
-import { ReviewForm } from '../../types/review-form';
 import { ChangeEvent, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { sendReviewAction } from '../../store/api-action';
-import { Product } from '../../types/products';
-import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
-import useScrollLock from '../../hooks/use-scroll-lock';
-import { setReviewModalViewStatus } from '../../store/modal-view-process/modal-view-process';
-import { getReviewModalStatus } from '../../store/modal-view-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
+import useScrollLock from '../../../hooks/use-scroll-lock';
+import { sendReviewAction } from '../../../store/api-action';
+import { setReviewModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { getReviewModalStatus } from '../../../store/modal-view-process/selectors';
+import { ReviewForm } from '../../../types/review-form';
+import { Product } from '../../../types/products';
+
 
 type ReviewModalProps = {
     product: Product;

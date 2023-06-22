@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useModalKeyboardEvents } from '../../hooks/use-modal-keyboard-events';
-import useScrollLock from '../../hooks/use-scroll-lock';
-import { setReviewModalSuccessViewStatus } from '../../store/modal-view-process/modal-view-process';
-import { getReviewModalSuccessStatus } from '../../store/modal-view-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { getReviewModalSuccessStatus } from '../../../store/modal-view-process/selectors';
+import useScrollLock from '../../../hooks/use-scroll-lock';
+import { setReviewModalSuccessViewStatus } from '../../../store/modal-view-process/modal-view-process';
+
 
 function ReviewModalSuccess(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -53,3 +53,7 @@ function ReviewModalSuccess(): JSX.Element {
 }
 
 export default ReviewModalSuccess;
+function useModalKeyboardEvents(arg0: { modalRef: import('react').RefObject<HTMLDivElement> }) {
+  throw new Error('Function not implemented.');
+}
+

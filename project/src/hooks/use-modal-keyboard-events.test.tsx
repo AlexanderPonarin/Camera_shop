@@ -2,7 +2,6 @@ import { renderHook } from '@testing-library/react';
 import { useModalKeyboardEvents } from './use-modal-keyboard-events';
 import { useAppDispatch } from '../hooks/index';
 import { setAddItemModalViewStatus, setReviewModalSuccessViewStatus, setReviewModalViewStatus } from '../store/modal-view-process/modal-view-process';
-import { render, act } from '@testing-library/react';
 
 jest.mock('../hooks/index', () => ({
   useAppDispatch: jest.fn(),

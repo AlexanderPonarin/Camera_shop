@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { Router } from 'react-router-dom';
 import HistoryRouter from './history-route';
 
 test('renders children correctly with history prop', () => {

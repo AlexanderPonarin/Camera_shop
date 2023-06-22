@@ -28,14 +28,15 @@ export const useModalKeyboardEvents = ({ modalRef }: UseModalKeyboardEventsProps
         if (document.activeElement === lastItem) {
           firstItem.focus();
           evt.preventDefault();
+          modalRef.current?.focus();
         }
       }
     }
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyPress);
     modalRef.current?.focus();
+    document.addEventListener('keydown', handleKeyPress);
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };

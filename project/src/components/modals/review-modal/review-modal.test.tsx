@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ReviewModal from './review-modal';
 import { Provider } from 'react-redux';
-import { store } from '../../store';
-import { promoProductMock } from '../../mocks/mocks';
-import { Product } from '../../types/products';
+import { store } from '../../../store';
+import { promoProductMock } from '../../../mocks/mocks';
+import { Product } from '../../../types/products';
 
 jest.mock('../../hooks/use-scroll-lock', () => jest.fn());
 jest.mock('../../hooks/use-modal-keyboard-events', () => ({

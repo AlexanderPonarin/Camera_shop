@@ -3,6 +3,8 @@ import { Product } from '../../types/products';
 import { CSSProperties } from 'react';
 import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '../../hooks';
+import { formateProductPrice } from '../../utils/formate-product-price';
+import { ProductTabsNameSpace } from '../../consts';
 
 type ProductCardProps = {
   product: Product;
@@ -57,7 +59,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
           <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>
         </div>
         <p className="product-card__title">{product.name}</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{product.price}
+        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)} ₽
         </p>
       </div>
       <div className="product-card__buttons">
@@ -70,7 +72,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
           className="btn btn--purple product-card__btn" type="button"
         >Купить
         </button>
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${product.id}/${ProductTabsNameSpace.Description}`}>
           <button
             className="btn btn--transparent"
           >Подробнее

@@ -1,7 +1,6 @@
 import {fetchProductsAction, fetchPromoProductAction, fetchReviewsAction, fetchSimilarProductsAction} from '../api-action';
 import {PromoProduct} from '../../types/promo-product';
-import {NameSpace} from '../../consts';
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {PayloadAction} from '@reduxjs/toolkit';
 import {ProductDataProcess} from '../../types/state';
 import { ProductData, setActiveProductVenderCode } from './product-data';
 

@@ -9,21 +9,31 @@ function useScrollLock() {
   const reviewModalViewStatus = useAppSelector(getReviewModalStatus);
 
   useEffect(() => {
+    const { current } = bodyRef;
+
+    const handleLockScroll = () => {
+      const windowPosition = current.getBoundingClientRect();
+      current.style.overflowY = 'scroll';
+      current.style.position = 'fixed';
+      current.style.width = '100%';
+      current.style.top = `${windowPosition.top}px`;
+    };
+
+    const handleUnlockScroll = () => {
+      const windowPosition = current.getBoundingClientRect();
+      current.style.position = '';
+      current.style.width = '';
+      current.style.top = `${windowPosition.bottom}px`;
+    };
+
     if (reviewModalSuccessStatus || reviewModalViewStatus || addItemModalViewStatus) {
-      const { current } = bodyRef;
-      const originalOverflow = window.getComputedStyle(current).overflow;
-      current.style.overflow = 'hidden';
-      return () => {
-        current.style.overflow = originalOverflow;
-      };}
-    if (!reviewModalSuccessStatus || !reviewModalViewStatus || !addItemModalViewStatus) {
-      const { current } = bodyRef;
-      const originalOverflow = window.getComputedStyle(current).overflow;
-      current.style.overflow = '';
-      return () => {
-        current.style.overflow = originalOverflow;
-      };}
+      handleLockScroll();
+
+      return () => handleUnlockScroll();
+    }
+
   }, [addItemModalViewStatus, reviewModalSuccessStatus, reviewModalViewStatus]);
+
   return bodyRef;
 }
 

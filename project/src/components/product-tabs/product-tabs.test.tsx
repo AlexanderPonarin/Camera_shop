@@ -2,6 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ProductTabs from './product-tabs';
 import { Product } from '../../types/products';
 import { ProductCategory, ProductLevel, ProductType } from '../../consts';
+import {BrowserRouter as Router } from 'react-router-dom';
+
 
 const mockProduct = {
   id: 1,
@@ -15,13 +17,21 @@ const mockProduct = {
 
 describe('ProductTabs', () => {
   it('renders tabs with correct titles', () => {
-    render(<ProductTabs product={mockProduct} />);
+    render(
+      <Router>
+        <ProductTabs product={mockProduct} />
+      </Router>
+    );
     expect(screen.getByText('Характеристики')).toBeInTheDocument();
     expect(screen.getByText('Описание')).toBeInTheDocument();
   });
 
   it('changes active tab on click', () => {
-    render(<ProductTabs product={mockProduct} />);
+    render(
+      <Router>
+        <ProductTabs product={mockProduct} />
+      </Router>
+    );
     const characterizationTab = screen.getByText('Характеристики');
     const descriptionTab = screen.getByText('Описание');
 

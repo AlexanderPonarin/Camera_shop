@@ -1,4 +1,3 @@
-import { AxiosInstance } from 'axios';
 import { fetchProductsAction, fetchPromoProductAction, fetchSimilarProductsAction, fetchReviewsAction, sendReviewAction } from './api-action';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
@@ -6,9 +5,9 @@ import { createAPI } from '../services/api';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { Product, Products } from '../types/products';
+import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
-import { Review, Reviews } from '../types/reviews';
+import { Reviews } from '../types/reviews';
 import { ReviewForm } from '../types/review-form';
 
 const mockReviews: Reviews = [{

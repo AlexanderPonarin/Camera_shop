@@ -7,6 +7,7 @@ import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import CatalogPage from '../catalog-page/catalog-page';
+import { ProductTabsNameSpace } from '../../consts';
 
 
 function App(): JSX.Element {
@@ -39,6 +40,14 @@ function App(): JSX.Element {
 
       <Route
         path='product/:id'
+        element={<Product products={products} />}
+      />
+      <Route
+        path={`product/:id/${ProductTabsNameSpace.Description}`}
+        element={<Product products={products} />}
+      />
+      <Route
+        path={`product/:id/${ProductTabsNameSpace.Characterization}`}
         element={<Product products={products} />}
       />
 

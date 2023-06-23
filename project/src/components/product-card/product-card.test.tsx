@@ -38,7 +38,7 @@ describe('ProductCard component', () => {
     );
     expect(screen.getByAltText('Ретрокамера «Das Auge IV»')).toBeInTheDocument();
     expect(screen.getByText('Product Name')).toBeInTheDocument();
-    expect(screen.getByText('100')).toBeInTheDocument();
+    expect(screen.getByText('100 ₽')).toBeInTheDocument();
   });
   it('calls the cb function when the "Купить" button is clicked', () => {
     const store = mockStore({

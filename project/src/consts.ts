@@ -20,3 +20,8 @@ export enum NameSpace {
     Data = 'DATA',
     ModalView = 'MODALVIEW',
   }
+
+export enum ProductTabsNameSpace {
+    Characterization = 'characterization',
+    Description = 'description'
+  }

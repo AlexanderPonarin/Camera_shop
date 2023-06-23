@@ -15,19 +15,19 @@ function ProductReview({review}: ProductReviewProps): JSX.Element {
       </div>
       <div className="rate review-card__rate">
         <svg width="17" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
+          <use xlinkHref={`#icon-${review.rating >= 1 ? 'full-star' : 'star' }`}></use>
         </svg>
         <svg width="17" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
+          <use xlinkHref={`#icon-${review.rating >= 2 ? 'full-star' : 'star' }`}></use>
         </svg>
         <svg width="17" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
+          <use xlinkHref={`#icon-${review.rating >= 3 ? 'full-star' : 'star' }`}></use>
         </svg>
         <svg width="17" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
+          <use xlinkHref={`#icon-${review.rating >= 4 ? 'full-star' : 'star' }`}></use>
         </svg>
         <svg width="17" height="16" aria-hidden="true">
-          <use xlinkHref="#icon-full-star"></use>
+          <use xlinkHref={`#icon-${review.rating === 5 ? 'full-star' : 'star' }`}></use>
         </svg>
         <p className="visually-hidden">Оценка: {review.rating}</p>
       </div>

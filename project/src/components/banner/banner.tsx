@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PromoProduct } from '../../types/promo-product';
+import { ProductTabsNameSpace } from '../../consts';
 
 type BannerProps = {
   promoProduct: PromoProduct;
@@ -27,7 +28,7 @@ function Banner({promoProduct, productDescription}: BannerProps): JSX.Element { 
       <span className="title title--h1">{promoProduct.name}</span>}
       {productDescription &&
       <span className="banner__text">{productDescription}</span>}
-      <Link to={`/product/${promoProduct?.id}`}>
+      <Link to={`/product/${promoProduct?.id}/${ProductTabsNameSpace.Description}`}>
         <button className="btn">Подробнее</button>
       </Link>
     </p>

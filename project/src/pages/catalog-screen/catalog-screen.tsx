@@ -10,8 +10,7 @@ import { Product, Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
 import AddProductModal from '../../components/modals/add-product-modal/add-product-modal';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
-import { getAddItemModalStatus } from '../../store/modal-view-process/selectors';
+import ReviewModalSuccess from '../../components/modals/review-modal-success/review-modal-success';
 
 
 type CatalogScreenProps = {
@@ -28,7 +27,6 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
   const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
   window.history.pushState({}, '', `/catalog/page/${currentPage}`);
-  const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
 
 
   const paginate = (pageNumber: number) => {
@@ -105,14 +103,14 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
                     <div className="cards catalog__cards">
                       {
                         products &&
-                      currentProducts?.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClickHandler}/>)
+                      currentProducts.map((item) => <ProductCard key={item.id} product={item} cb={onBasketClickHandler}/>)
                       }
                     </div>
                     <div className="pagination">
                       <ul className="pagination__list">
                         {currentPage > 1 && (
                           <li className="pagination__item" key="previous">
-                            <a className="pagination__link" href="#" onClick={(evt) => {
+                            <a className="pagination__link" href="" onClick={(evt) => {
                               evt.preventDefault();
                               goToPreviousPage();}}
                             >
@@ -124,12 +122,13 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
                           products &&
                           pageNumbers.map((number) => (
                             <li className="pagination__item" key={number}>
-                              <a className={`pagination__link ${currentPage === number ? 'pagination__link--active' : ''}`}
-                                href="#" onClick={(evt) =>
-                                { evt.preventDefault();
-                                  paginate(number);}}
+                              <Link className={`pagination__link ${currentPage === number ? 'pagination__link--active' : ''}`}
+                                onClick={(evt) => {
+                                  evt.preventDefault();
+                                  paginate(number);
+                                } } to={''}
                               >{number}
-                              </a>
+                              </Link>
                             </li>
                           ))
                         }
@@ -151,7 +150,8 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
             </section>
           </div>
         </main>
-        {addItemModalViewStatus && <AddProductModal product={productInAddModal} />}
+        <AddProductModal product={productInAddModal} />
+        <ReviewModalSuccess />
         <Footer />
       </div>
     </>

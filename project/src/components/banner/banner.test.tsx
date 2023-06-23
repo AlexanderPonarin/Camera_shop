@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Banner from './banner';
 import { promoProductMock, productDescriptionMock } from '../../mocks/mocks';
+import { ProductTabsNameSpace } from '../../consts';
 
 
 describe('Banner component', () => {
@@ -21,7 +22,7 @@ describe('Banner component', () => {
         <Banner promoProduct={promoProductMock} productDescription={productDescriptionMock} />
       </Router> );
     const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', `/product/${promoProductMock.id}`);
+    expect(link).toHaveAttribute('href', `/product/${promoProductMock.id}/${ProductTabsNameSpace.Description}`);
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
   });

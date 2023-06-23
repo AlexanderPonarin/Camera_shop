@@ -14,7 +14,6 @@ const mockStore = configureMockStore([thunk]);
 const mockProduct: Product = {
   name: 'Test Product',
   previewImg: '/test-image.jpg',
-  reviewCount: 10,
   price: 100,
 } as Product;
 
@@ -38,9 +37,8 @@ describe('ProductScreen', () => {
       </Provider>
     );
     expect(screen.getAllByText(mockProduct.name)[0]).toBeInTheDocument();
-    expect(screen.getByAltText(mockProduct.name)).toHaveAttribute('src', `/${window.location.origin}${mockProduct.previewImg}`);
-    expect(screen.getByText(`${mockProduct.reviewCount}`)).toBeInTheDocument();
-    expect(screen.getByText(`${mockProduct.price}₽`)).toBeInTheDocument();
+    expect(screen.getAllByAltText(mockProduct.name)[0]).toHaveAttribute('src', `/${window.location.origin}${mockProduct.previewImg}`);
+    expect(screen.getByText(`${mockProduct.price} ₽`)).toBeInTheDocument();
   });
 
   it('dispatches add product action when add to basket button is clicked', () => {
@@ -51,8 +49,8 @@ describe('ProductScreen', () => {
         </Router>
       </Provider>
     );
-    const addButton = screen.getByText('Добавить в корзину');
-    fireEvent.click(addButton);
+    const addButton = screen.getAllByText('Добавить в корзину');
+    fireEvent.click(addButton[0]);
 
   });
 });

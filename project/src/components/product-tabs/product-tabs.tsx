@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { Product } from '../../types/products';
+import { ProductTabsNameSpace } from '../../consts';
+import { useLocation } from 'react-router-dom';
+
 
 type ProductTabsProps = {
     product: Product;
 }
 
 function ProductTabs({product}: ProductTabsProps): JSX.Element {
-  const [activeTab, setActiveTab] = useState('description');
+  const { pathname } = useLocation();
+  const urlTabName = pathname.substring(pathname.lastIndexOf('/') + 1);
+  const [activeTab, setActiveTab] = useState(urlTabName);
+  window.history.pushState({}, '', `/product/${product.id}/${activeTab}`);
 
-  const handleTabClick = (tabName: string) => {
+  const handleTabClick = (tabName: ProductTabsNameSpace) => {
     setActiveTab(tabName);
   };
 
@@ -16,20 +22,20 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
     <div className="tabs product__tabs">
       <div className="tabs__controls product__tabs-controls">
         <button
-          onClick={() => handleTabClick('characterization')}
-          className={`tabs__control ${activeTab === 'characterization' ? 'is-active' : ''}`}
+          onClick={() => handleTabClick(ProductTabsNameSpace.Characterization)}
+          className={`tabs__control ${activeTab === ProductTabsNameSpace.Characterization ? 'is-active' : ''}`}
           type="button"
         >Характеристики
         </button>
         <button
-          onClick={() => handleTabClick('description')}
-          className={`tabs__control ${activeTab === 'description' ? 'is-active' : ''}`}
+          onClick={() => handleTabClick(ProductTabsNameSpace.Description)}
+          className={`tabs__control ${activeTab === ProductTabsNameSpace.Description ? 'is-active' : ''}`}
           type="button"
         >Описание
         </button>
       </div>
       <div className="tabs__content">
-        {activeTab === 'characterization' && (
+        {activeTab === ProductTabsNameSpace.Characterization && (
           <div className="tabs__element is-active">
             <ul className="product__tabs-list">
               <li className="item-list"><span className="item-list__title">Артикул:</span>
@@ -47,7 +53,7 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
             </ul>
           </div>
         )}
-        {activeTab === 'description' && (
+        {activeTab === ProductTabsNameSpace.Description && (
           <div className="tabs__element is-active">
             <div className="product__tabs-text">
               <p>{product.description}</p>

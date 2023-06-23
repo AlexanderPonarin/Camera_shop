@@ -1,10 +1,10 @@
 import { FieldError, useForm } from 'react-hook-form';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../../hooks/use-scroll-lock';
 import { sendReviewAction } from '../../../store/api-action';
-import { setReviewModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { setReviewModalSuccessViewStatus, setReviewModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { getReviewModalStatus } from '../../../store/modal-view-process/selectors';
 import { ReviewForm } from '../../../types/review-form';
 import { Product } from '../../../types/products';
@@ -15,22 +15,23 @@ type ReviewModalProps = {
 }
 
 function ReviewModal({product}: ReviewModalProps): JSX.Element {
-  const { register, formState: { errors }, handleSubmit} = useForm<ReviewForm>();
+  const { register, formState: { errors }, clearErrors, handleSubmit, reset} = useForm<ReviewForm>();
   const [ratingValue, setRatingValue] = useState(0);
   const [isDefaultInput, setIsDefaultInput] = useState(true);
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
   const reviewModalStatus = useAppSelector(getReviewModalStatus);
 
-
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
 
   const onSubmit = (data: ReviewForm) => {
     if (product.id) {
+      dispatch(setReviewModalViewStatus(false));
       data.cameraId = product.id;
       data.rating = ratingValue;
       dispatch(sendReviewAction(data));
+      dispatch(setReviewModalSuccessViewStatus(true));
     }
   };
 
@@ -47,9 +48,18 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
     }
   };
 
+  useEffect(() => {
+    if(!reviewModalStatus) {
+      reset();
+      clearErrors();
+      setIsDefaultInput(true);
+    }
+  }, [reviewModalStatus]);
+
+
   return (
     <div
-      onClick={() => dispatch(setReviewModalViewStatus(false))}
+      onClick={() => dispatch(setReviewModalViewStatus(false)) }
       className={reviewModalStatus ? 'modal is-active' : 'modal'}
     >
       <div className="modal__wrapper">
@@ -72,7 +82,13 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                     <svg width="9" height="9" aria-hidden="true">
                       <use xlinkHref="#icon-snowflake"></use>
                     </svg>
-                    {errors.rating?.message && <p className="custom-input__error">{errors.rating?.message}</p>}
+                    <p
+                      className="custom-input__error"
+                      style={{opacity: errors.rating?.message ?
+                        1 : 0, transition: '2s'}}
+                    >
+                      {errors.rating?.message}
+                    </p>
                   </legend>
 
                   <div
@@ -86,12 +102,14 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                     >
                       <input
                         {...register('rating', {
-                          value: 0,
                           required: {
                             value: true,
                             message: 'Нужно оценить товар',
                           },
-                          min: 1,
+                          min: {
+                            value: 1,
+                            message: 'Нужно оценить товар'
+                          },
                           max: 5
                         })}
                         className="visually-hidden" id="star-5" name="rating" type="radio" value="5"
@@ -153,7 +171,14 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                     type="text" name="userName" placeholder="Введите ваше имя" id="userName"
                   />
                 </label>
-                {errors.userName?.message ? <p className="custom-input__error">{errors.userName?.message}</p> : ''}
+
+                <p
+                  className="custom-input__error"
+                  style={{opacity: errors.userName?.message ? 1 : 0, transition: '2s'}}
+                >
+                  {errors.userName?.message}
+                </p>
+
               </div>
               <div
                 className={onChangeInputColorHandler(isDefaultInput, errors.advantage)}
@@ -183,7 +208,16 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                     type="text" name="advantage" placeholder="Основные преимущества товара"
                   />
                 </label>
-                {errors.advantage && <p className="custom-input__error">{errors.advantage.message}</p>}
+                <p className="custom-input__error"
+                  style={
+                    {
+                      opacity: errors.advantage?.message ? 1 : 0,
+                      transition: '2s'
+                    }
+                  }
+                >
+                  {errors.advantage?.message}
+                </p>
               </div>
               <div
                 className={onChangeInputColorHandler(isDefaultInput, errors.disadvantage)}
@@ -194,7 +228,13 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                       <use xlinkHref="#icon-snowflake"></use>
                     </svg>
                   </span>
-                  {errors.disadvantage && <p className="custom-input__error">{errors.disadvantage.message}</p>}
+                  <p
+                    className="custom-input__error"
+                    style={{opacity: errors.disadvantage?.message ? 1 : 0,
+                      transition: '2s'}}
+                  >
+                    {errors.disadvantage?.message}
+                  </p>
                   <input
                     {...register('disadvantage', {
                       required:{
@@ -224,7 +264,13 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                       <use xlinkHref="#icon-snowflake"></use>
                     </svg>
                   </span>
-                  {errors.disadvantage && <p className="custom-input__error">{errors.review?.message}</p>}
+                  <p
+                    className="custom-input__error"
+                    style={{opacity: errors.review?.message ? 1 : 0,
+                      transition: '2s'}}
+                  >
+                    {errors.review?.message}
+                  </p>
                   <textarea
                     {...register('review', {
                       required:{
@@ -253,7 +299,7 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
             </form>
           </div>
           <button
-            onClick={() => dispatch(setReviewModalViewStatus(false))}
+            onClick={() => dispatch(setReviewModalViewStatus(false)) }
             className="cross-btn" type="button" aria-label="Закрыть попап"
           >
             <svg width="10" height="10" aria-hidden="true">

@@ -38,7 +38,7 @@ describe('ProductScreen', () => {
     );
     expect(screen.getAllByText(mockProduct.name)[0]).toBeInTheDocument();
     expect(screen.getAllByAltText(mockProduct.name)[0]).toHaveAttribute('src', `/${window.location.origin}${mockProduct.previewImg}`);
-    expect(screen.getByText(`${mockProduct.price} ₽`)).toBeInTheDocument();
+    expect(screen.getAllByText(`${mockProduct.price} ₽`)[0]).toBeInTheDocument();
   });
 
   it('dispatches add product action when add to basket button is clicked', () => {

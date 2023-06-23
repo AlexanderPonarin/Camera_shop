@@ -60,7 +60,7 @@ describe('AddProductModal', () => {
     const level = screen.getByText('beginner');
     expect(level).toBeInTheDocument();
 
-    const price = screen.getByText('10');
+    const price = screen.getByText('10 ₽');
     expect(price).toBeInTheDocument();
   });
 

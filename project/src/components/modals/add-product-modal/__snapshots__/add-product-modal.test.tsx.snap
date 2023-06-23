@@ -84,6 +84,7 @@ exports[`AddProductModal should match snapshot 1`] = `
               Цена:
             </span>
             10
+             ₽
           </p>
         </div>
       </div>

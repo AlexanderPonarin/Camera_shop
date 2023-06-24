@@ -7,8 +7,6 @@ import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import CatalogPage from '../catalog-page/catalog-page';
-import { ProductTabsNameSpace } from '../../consts';
-
 
 function App(): JSX.Element {
   const isDataLoading = useSelector(getDataLoadingStatus);
@@ -43,14 +41,9 @@ function App(): JSX.Element {
         element={<Product products={products} />}
       />
       <Route
-        path={`product/:id/${ProductTabsNameSpace.Description}`}
+        path={'product/:id/:tab'}
         element={<Product products={products} />}
       />
-      <Route
-        path={`product/:id/${ProductTabsNameSpace.Characterization}`}
-        element={<Product products={products} />}
-      />
-
       <Route
         path='*'
         element={<NotFoundScreen />}

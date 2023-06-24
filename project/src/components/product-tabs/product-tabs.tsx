@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Product } from '../../types/products';
 import { ProductTabsNameSpace } from '../../consts';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 type ProductTabsProps = {
@@ -12,7 +12,7 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
   const { pathname } = useLocation();
   const urlTabName = pathname.substring(pathname.lastIndexOf('/') + 1);
   const [activeTab, setActiveTab] = useState(urlTabName);
-  window.history.pushState({}, '', `/product/${product.id}/${activeTab}`);
+  //window.history.pushState({}, '', `/product/${product.id}/${activeTab}`);
 
   const handleTabClick = (tabName: ProductTabsNameSpace) => {
     setActiveTab(tabName);
@@ -21,18 +21,22 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
   return (
     <div className="tabs product__tabs">
       <div className="tabs__controls product__tabs-controls">
-        <button
-          onClick={() => handleTabClick(ProductTabsNameSpace.Characterization)}
-          className={`tabs__control ${activeTab === ProductTabsNameSpace.Characterization ? 'is-active' : ''}`}
-          type="button"
-        >Характеристики
-        </button>
-        <button
-          onClick={() => handleTabClick(ProductTabsNameSpace.Description)}
-          className={`tabs__control ${activeTab === ProductTabsNameSpace.Description ? 'is-active' : ''}`}
-          type="button"
-        >Описание
-        </button>
+        <Link to={`/product/${product.id}/characterization`} >
+          <button
+            onClick={() => handleTabClick(ProductTabsNameSpace.Characterization)}
+            className={`tabs__control ${activeTab === ProductTabsNameSpace.Characterization ? 'is-active' : ''}`}
+            type="button"
+          >Характеристики
+          </button>
+        </Link>
+        <Link to={`/product/${product.id}/description`} >
+          <button
+            onClick={() => handleTabClick(ProductTabsNameSpace.Description)}
+            className={`tabs__control ${activeTab === ProductTabsNameSpace.Description ? 'is-active' : ''}`}
+            type="button"
+          >Описание
+          </button>
+        </Link>
       </div>
       <div className="tabs__content">
         {activeTab === ProductTabsNameSpace.Characterization && (

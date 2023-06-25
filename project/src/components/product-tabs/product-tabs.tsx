@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Product } from '../../types/products';
 import { ProductTabsNameSpace } from '../../consts';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 type ProductTabsProps = {
@@ -9,10 +9,10 @@ type ProductTabsProps = {
 }
 
 function ProductTabs({product}: ProductTabsProps): JSX.Element {
-  const { pathname } = useLocation();
-  const urlTabName = pathname.substring(pathname.lastIndexOf('/') + 1);
-  const [activeTab, setActiveTab] = useState(urlTabName);
-  //window.history.pushState({}, '', `/product/${product.id}/${activeTab}`);
+  const { tab } = useParams();
+  const [activeTab, setActiveTab] = useState(
+    tab === ProductTabsNameSpace.Description || tab === ProductTabsNameSpace.Characterization
+      ? tab : ProductTabsNameSpace.Description);
 
   const handleTabClick = (tabName: ProductTabsNameSpace) => {
     setActiveTab(tabName);

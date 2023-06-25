@@ -3,6 +3,11 @@ import ProductTabs from './product-tabs';
 import { Product } from '../../types/products';
 import { ProductCategory, ProductLevel, ProductType } from '../../consts';
 import {BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
+
+
+const mockStore = configureMockStore();
 
 
 const mockProduct = {
@@ -16,11 +21,15 @@ const mockProduct = {
 } as Product;
 
 describe('ProductTabs', () => {
+
+  const store = mockStore();
   it('renders tabs with correct titles', () => {
     render(
-      <Router>
-        <ProductTabs product={mockProduct} />
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <ProductTabs product={mockProduct} />
+        </Router>
+      </Provider>
     );
     expect(screen.getByText('Характеристики')).toBeInTheDocument();
     expect(screen.getByText('Описание')).toBeInTheDocument();
@@ -28,9 +37,11 @@ describe('ProductTabs', () => {
 
   it('changes active tab on click', () => {
     render(
-      <Router>
-        <ProductTabs product={mockProduct} />
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <ProductTabs product={mockProduct} />
+        </Router>
+      </Provider>
     );
     const characterizationTab = screen.getByText('Характеристики');
     const descriptionTab = screen.getByText('Описание');

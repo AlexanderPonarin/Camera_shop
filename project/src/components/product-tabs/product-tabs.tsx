@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Product } from '../../types/products';
 import { ProductTabsNameSpace } from '../../consts';
 import { Link, useParams } from 'react-router-dom';
+import { redirectToRoute } from '../../store/actions';
+import { useAppDispatch } from '../../hooks';
 
 
 type ProductTabsProps = {
@@ -10,9 +12,17 @@ type ProductTabsProps = {
 
 function ProductTabs({product}: ProductTabsProps): JSX.Element {
   const { tab } = useParams();
-  const [activeTab, setActiveTab] = useState(
-    tab === ProductTabsNameSpace.Description || tab === ProductTabsNameSpace.Characterization
-      ? tab : ProductTabsNameSpace.Description);
+  const dispatch = useAppDispatch();
+  const [activeTab, setActiveTab] = useState(tab);
+
+
+  useEffect(() => {
+    if(tab !== ProductTabsNameSpace.Description && tab !== ProductTabsNameSpace.Characterization){
+      dispatch(redirectToRoute(`/product/${product.id}/${ProductTabsNameSpace.Description}`));
+      setActiveTab(ProductTabsNameSpace.Description);
+    }
+  }, [dispatch, product.id, tab]);
+
 
   const handleTabClick = (tabName: ProductTabsNameSpace) => {
     setActiveTab(tabName);

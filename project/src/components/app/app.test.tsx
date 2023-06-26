@@ -4,13 +4,32 @@ import {Provider} from 'react-redux';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import HistoryRouter from '../history-route/history-route';
 import App from './app';
+import { Products } from '../../types/products';
+import { PromoProduct } from '../../types/promo-product';
 
 
 const mockStore = configureMockStore();
 
+const mockProducts: Products = [{
+  id: 1,
+  name: 'Test product name 1'
+},
+{
+  id: 2,
+  name: 'Test product name 2'
+},
+] as Products;
+
+const mockPromoProduct: PromoProduct = {
+  id: 1,
+  name: 'Test promo product'
+} as PromoProduct;
+
 const store = mockStore({
   DATA: {
     isProductsDataLoading: false,
+    products: mockProducts,
+    promoProduct: mockPromoProduct
   },
   MODALVIEW: {
     addItemModalViewStatus: false

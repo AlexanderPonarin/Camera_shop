@@ -24,7 +24,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
   const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
   window.history.pushState({}, '', `/catalog/page/${currentPage}`);
 
@@ -36,7 +36,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
 
   const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(products?.length / productsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -67,7 +67,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
         <main>
           <Banner
             promoProduct={promoProduct}
-            productDescription={products?.find((item) => item.id === promoProduct.id)?.description}
+            productDescription={products.find((item) => item.id === promoProduct.id)?.description}
           />
           <div className="page-content">
             <div className="breadcrumbs">

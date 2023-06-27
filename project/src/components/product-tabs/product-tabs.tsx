@@ -31,7 +31,7 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
   return (
     <div className="tabs product__tabs">
       <div className="tabs__controls product__tabs-controls">
-        <Link to={`/product/${product.id}/characterization`} >
+        <Link tabIndex={-1} to={`/product/${product.id}/characterization`} >
           <button
             onClick={() => handleTabClick(ProductTabsNameSpace.Characterization)}
             className={`tabs__control ${activeTab === ProductTabsNameSpace.Characterization ? 'is-active' : ''}`}
@@ -39,7 +39,7 @@ function ProductTabs({product}: ProductTabsProps): JSX.Element {
           >Характеристики
           </button>
         </Link>
-        <Link to={`/product/${product.id}/description`} >
+        <Link tabIndex={-1} to={`/product/${product.id}/description`} >
           <button
             onClick={() => handleTabClick(ProductTabsNameSpace.Description)}
             className={`tabs__control ${activeTab === ProductTabsNameSpace.Description ? 'is-active' : ''}`}

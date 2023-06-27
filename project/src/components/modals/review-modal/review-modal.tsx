@@ -158,13 +158,6 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                         value: true,
                         message: 'Введите имя'
                       },
-                      maxLength: {
-                        value: 20,
-                        message: 'Максимальное количество символов 25'
-                      },
-                      minLength:
-                      {value: 4,
-                        message: 'Имя должно быть не менее 4 символов'}
                     },
                     )}
                     aria-invalid={errors.userName ? 'true' : 'false'}
@@ -195,13 +188,6 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                         value: true,
                         message: 'Нужно указать достоинства'
                       },
-                      maxLength: {
-                        value: 300,
-                        message: 'Максимальное количество символов 300'
-                      },
-                      minLength:{
-                        value: 5,
-                        message: 'Имя должно быть не менее 5 символов'}
                     },
                     )}
                     aria-invalid={errors.advantage ? 'true' : 'false'}
@@ -241,13 +227,6 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                         value: true,
                         message: 'Нужно указать недостатки'
                       },
-                      maxLength: {
-                        value: 300,
-                        message: 'Максимальное количество символов 300'
-                      },
-                      minLength:{
-                        value: 5,
-                        message: 'Имя должно быть не менее 5 символов'}
                     },
                     )}
                     aria-invalid={errors.disadvantage ? 'true' : 'false'}
@@ -277,13 +256,6 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
                         value: true,
                         message: 'Нужно добавить комментарий'
                       },
-                      maxLength: {
-                        value: 1000,
-                        message: 'Максимальное количество символов 1000'
-                      },
-                      minLength:{
-                        value: 5,
-                        message: 'Имя должно быть не менее 5 символов'}
                     },
                     )}
                     name="review" placeholder="Поделитесь своим опытом покупки"

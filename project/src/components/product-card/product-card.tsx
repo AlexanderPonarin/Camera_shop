@@ -63,7 +63,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <button
+        <button tabIndex={0}
           onClick={() => {
             cb(product);
             dispatch(setAddItemModalViewStatus(true));
@@ -73,7 +73,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
         >Купить
         </button>
         <Link to={`/product/${product.id}/${ProductTabsNameSpace.Description}`}>
-          <button
+          <button tabIndex={-1}
             className="btn btn--transparent"
           >Подробнее
           </button>

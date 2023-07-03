@@ -28,7 +28,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const reviews = useSelector(getReviews);
 
-  const productRating = Math.round(reviews.map((item) => item.rating)
+  const productRating = Math.ceil(reviews.map((item) => item.rating)
     .reduce((acc, number) => acc + number, 0) / reviews.length);
 
   useEffect(() => {

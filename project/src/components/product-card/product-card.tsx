@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
-import { CSSProperties } from 'react';
+import { CSSProperties, useEffect } from 'react';
 import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '../../hooks';
 import { formateProductPrice } from '../../utils/formate-product-price';
 import { ProductTabsNameSpace } from '../../consts';
+import useProductRating from '../../hooks/use-product-rating';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { getActiveProductVenderCode, getReviews } from '../../store/product-data/selectros';
+import { fetchReviewsAction } from '../../store/api-action';
 
 type ProductCardProps = {
   product: Product;
@@ -15,7 +19,10 @@ type ProductCardProps = {
 
 function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const acvc = useSelector(getActiveProductVenderCode);
 
+
+  const productRating = 1;
   return (
     <div
       style={style}
@@ -41,21 +48,21 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
       <div className="product-card__info">
         <div className="rate product-card__rate">
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
+            <use xlinkHref={`#icon-${productRating >= 1 ? 'full-star' : 'star' }`}></use>
           </svg>
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
+            <use xlinkHref={`#icon-${productRating >= 2 ? 'full-star' : 'star' }`}></use>
           </svg>
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
+            <use xlinkHref={`#icon-${productRating >= 3 ? 'full-star' : 'star' }`}></use>
           </svg>
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref={`#icon-${productRating >= 4 ? 'full-star' : 'star' }`}></use>
           </svg>
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
+            <use xlinkHref={`#icon-${productRating < 5 ? 'full-star' : 'star' }`}></use>
           </svg>
-          <p className="visually-hidden">Рейтинг: 3</p>
+          <p className="visually-hidden">Рейтинг: {productRating}</p>
           <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>
         </div>
         <p className="product-card__title">{product.name}</p>

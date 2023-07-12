@@ -1,8 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CatalogScreen from './catalog-screen';
-import CatalogFilterForm from '../../components/catalog-filter-form/catalog-filter-form';
-import CatalogSortForm from '../../components/catalog-sort-form/catalog-sort-form';
 import { Products } from '../../types/products';
 import {BrowserRouter as Router } from 'react-router-dom';
 import { PromoProduct } from '../../types/promo-product';
@@ -11,7 +9,37 @@ import { Provider } from 'react-redux';
 
 
 const mockStore = configureMockStore();
+
+const reviews = {
+  1:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ],
+  2:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ]};
+
 const store = mockStore({
+  DATA: {
+    reviews: reviews
+  },
   MODALVIEW: {
     addProductModalViewStatus: false
   }
@@ -52,14 +80,26 @@ describe('CatalogScreen', () => {
   });
 
   it('renders the CatalogFilterForm component', () => {
-    render(<CatalogFilterForm />);
+    render(
+      <Provider store={store}>
+        <Router >
+          <CatalogScreen products={mockProducts} promoProduct={mockPromoProduct} />
+        </Router>
+      </Provider>
+    );
     expect(screen.getByText(/Категория/)).toBeInTheDocument();
     expect(screen.getByText(/Тип камеры/)).toBeInTheDocument();
     expect(screen.getByText(/Уровень/)).toBeInTheDocument();
   });
 
   it('renders the CatalogSortForm component', () => {
-    render(<CatalogSortForm />);
+    render(
+      <Provider store={store}>
+        <Router >
+          <CatalogScreen products={mockProducts} promoProduct={mockPromoProduct} />
+        </Router>
+      </Provider>
+    );
     expect(screen.getByText(/Сортировать/i)).toBeInTheDocument();
   });
 

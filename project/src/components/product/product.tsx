@@ -3,7 +3,6 @@ import { Products } from '../../types/products';
 import ProductScreen from '../../pages/product-screen/product-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 
-
 type ProductsProps = {
     products: Products;
 }

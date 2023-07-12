@@ -15,8 +15,10 @@ import ReviewModalSuccess from '../../components/modals/review-modal-success/rev
 import { fetchReviewsAction } from '../../store/api-action';
 import { setActiveProductVenderCode } from '../../store/product-data/product-data';
 import { useSelector } from 'react-redux';
-import { getActiveProductVenderCode, getReviews } from '../../store/product-data/selectros';
+import { getActiveProductVenderCode, getProducts, getReviews } from '../../store/product-data/selectros';
 import { formateProductPrice } from '../../utils/formate-product-price';
+import { Reviews } from '../../types/reviews';
+import { getProductRating } from '../../utils/get-product-rating';
 
 type ProductScreenProps = {
   product: Product;
@@ -26,17 +28,21 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
   const [productInAddModal, setProductInAddModal] = useState<Product>(product);
   const dispatch = useAppDispatch();
   const activeVenderCode = useSelector(getActiveProductVenderCode);
+  const products = useSelector(getProducts);
   const reviews = useSelector(getReviews);
-
-  const productRating = Math.ceil(reviews.map((item) => item.rating)
-    .reduce((acc, number) => acc + number, 0) / reviews.length);
+  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
+  const productRating = getProductRating(productReviews) || 0;
 
   useEffect(() => {
     if (activeVenderCode !== product.vendorCode) {
       dispatch(fetchReviewsAction(product.id));
       dispatch(setActiveProductVenderCode(product.vendorCode));
+      for(let i = 0; i < products.length; i++) {
+        dispatch(fetchReviewsAction(products[i].id));
+      }
     }
   }, [activeVenderCode, dispatch, product.id, product.vendorCode]);
+
 
   const onBasketClick = (item: Product) => {
     dispatch(setAddItemModalViewStatus(true));
@@ -106,7 +112,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                         <use xlinkHref={`#icon-${productRating === 5 ? 'full-star' : 'star' }`}></use>
                       </svg>
                       <p className="visually-hidden">Рейтинг: {productRating}</p>
-                      <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{reviews.length}</p>
+                      <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{productReviews?.length}</p>
                     </div>
                     <p className="product__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)} ₽</p>
                     <button
@@ -126,7 +132,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
               <SimilarProducts product={product} cb={onBasketClick}/>
             </div>
             <div className="page-content__section">
-              {reviews.length && <ProductReviewList product={product}/>}
+              {productReviews?.length && <ProductReviewList product={product}/>}
             </div>
           </div>
         </main>

@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
-import { CSSProperties, useEffect } from 'react';
+import { CSSProperties } from 'react';
 import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '../../hooks';
 import { formateProductPrice } from '../../utils/formate-product-price';
 import { ProductTabsNameSpace } from '../../consts';
-import useProductRating from '../../hooks/use-product-rating';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { getActiveProductVenderCode, getReviews } from '../../store/product-data/selectros';
-import { fetchReviewsAction } from '../../store/api-action';
+import { getReviews } from '../../store/product-data/selectros';
+import { Reviews } from '../../types/reviews';
+import { getProductRating } from '../../utils/get-product-rating';
 
 type ProductCardProps = {
   product: Product;
@@ -19,10 +19,10 @@ type ProductCardProps = {
 
 function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const acvc = useSelector(getActiveProductVenderCode);
+  const reviews = useSelector(getReviews);
+  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
+  const productRating = getProductRating(productReviews);
 
-
-  const productRating = 1;
   return (
     <div
       style={style}
@@ -60,7 +60,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
             <use xlinkHref={`#icon-${productRating >= 4 ? 'full-star' : 'star' }`}></use>
           </svg>
           <svg width="17" height="16" aria-hidden="true">
-            <use xlinkHref={`#icon-${productRating < 5 ? 'full-star' : 'star' }`}></use>
+            <use xlinkHref={`#icon-${productRating === 5 ? 'full-star' : 'star' }`}></use>
           </svg>
           <p className="visually-hidden">Рейтинг: {productRating}</p>
           <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>

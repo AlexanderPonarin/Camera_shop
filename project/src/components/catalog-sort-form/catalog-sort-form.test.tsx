@@ -1,6 +1,10 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import CatalogSortForm from './catalog-sort-form';
+import {BrowserRouter as Router } from 'react-router-dom';
+
+const sortTypeChangeHandlerMock = jest.fn();
+const sortOrderChangeHandlerMock = jest.fn();
 
 describe('CatalogSortForm', () => {
   afterEach(() => {
@@ -8,7 +12,14 @@ describe('CatalogSortForm', () => {
   });
 
   test('renders correctly', () => {
-    render(<CatalogSortForm />);
+    render(
+      <Router>
+        <CatalogSortForm
+          sortTypeChangeHandler={sortTypeChangeHandlerMock}
+          sortOrderChangeHandler={sortOrderChangeHandlerMock}
+        />
+      </Router>
+    );
 
     expect(screen.getByText('по цене')).toBeTruthy();
     expect(screen.getByText('по популярности')).toBeTruthy();
@@ -16,7 +27,13 @@ describe('CatalogSortForm', () => {
   });
 
   test('sorts correctly', () => {
-    render(<CatalogSortForm />);
+    render(
+      <Router>
+        <CatalogSortForm
+          sortTypeChangeHandler={sortTypeChangeHandlerMock}
+          sortOrderChangeHandler={sortOrderChangeHandlerMock}
+        />
+      </Router>);
 
     fireEvent.click(screen.getByLabelText('по цене'));
     fireEvent.click(screen.getByLabelText('По убыванию'));

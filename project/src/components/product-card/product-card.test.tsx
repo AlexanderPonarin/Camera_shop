@@ -4,7 +4,6 @@ import {BrowserRouter as Router } from 'react-router-dom';
 import { Product } from '../../types/products';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-//import {BrowserRouter as Router } from 'react-router-dom';
 
 
 const mockStore = configureMockStore();
@@ -19,6 +18,20 @@ const product: Product = {
   previewImgWebp2x: 'product@2x.webp',
   reviewCount: 5,
 } as Product;
+
+const reviews = {
+  1:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ]};
 
 describe('ProductCard component', () => {
   const cbMock = jest.fn();
@@ -42,6 +55,9 @@ describe('ProductCard component', () => {
   });
   it('calls the cb function when the "Купить" button is clicked', () => {
     const store = mockStore({
+      DATA: {
+        reviews: reviews
+      },
       MODALVIEW: {
         addItemModalViewStatus: false
       }

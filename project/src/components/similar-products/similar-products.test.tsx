@@ -9,12 +9,38 @@ import {BrowserRouter as Router } from 'react-router-dom';
 
 
 const mockStore = configureMockStore();
-
+const reviews = {
+  2:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ],
+  3:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ],
+};
 
 describe('SimilarProducts', () => {
   let store = mockStore({
     DATA: {
       similarProducts: [],
+      reviews: reviews,
     }
   });
   const product: Product = {
@@ -39,6 +65,7 @@ describe('SimilarProducts', () => {
       DATA: {
         activeProductVenderCode: '',
         similarProducts: similarProducts,
+        reviews: reviews,
       },
     });
     store.dispatch = jest.fn();
@@ -74,6 +101,7 @@ describe('SimilarProducts', () => {
       productData: {
         activeProductVenderCode: product.vendorCode,
         similarProducts,
+        revies: reviews
       },
     });
 

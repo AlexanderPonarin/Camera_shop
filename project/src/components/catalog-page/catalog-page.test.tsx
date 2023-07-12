@@ -7,7 +7,25 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 
 const mockStore = configureMockStore();
+
+const reviews = {
+  1:[
+    {
+      id: 1,
+      author: 'User 1',
+      reviewText: 'Good product.',
+    },
+    {
+      id: 2,
+      author: 'User 2',
+      reviewText: 'Bad product.',
+    },
+  ]};
+
 const store = mockStore({
+  DATA: {
+    revies: reviews
+  },
   MODALVIEW: {
     addItemModalViewStatus: false
   }
@@ -29,8 +47,8 @@ describe('CatalogPage', () => {
     expect(screen.getByText(/Каталог фото- и видеотехники/i)).toBeInTheDocument();
     expect(screen.getByTestId('icon-add-basket')).toBeInTheDocument();
     expect(screen.getByText('Promo Product')).toBeInTheDocument();
-    expect(screen.getByText('Product 1')).toBeInTheDocument();
-    expect(screen.getByText('Product 2')).toBeInTheDocument();
+    expect(screen.getByText(/Product 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Product 2/i)).toBeInTheDocument();
     expect(screen.getByText(/Категория/i)).toBeInTheDocument();
     expect(screen.getByText(/Тип камеры/i)).toBeInTheDocument();
     expect(screen.getByText(/Уровень/i)).toBeInTheDocument();
@@ -48,8 +66,8 @@ describe('CatalogPage', () => {
     expect(screen.getByText(/Каталог фото- и видеотехники/i)).toBeInTheDocument();
     expect(screen.getByTestId('icon-add-basket')).toBeInTheDocument();
     expect(screen.getByText('Promo Product')).toBeInTheDocument();
-    expect(screen.getByText('Product 1')).toBeInTheDocument();
-    expect(screen.getByText('Product 2')).toBeInTheDocument();
+    expect(screen.getByText(/Product 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Product 2/i)).toBeInTheDocument();
     expect(screen.getByText(/Категория/i)).toBeInTheDocument();
     expect(screen.getByText(/Тип камеры/i)).toBeInTheDocument();
     expect(screen.getByText(/Уровень/i)).toBeInTheDocument();

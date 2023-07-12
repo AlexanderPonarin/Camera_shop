@@ -8,6 +8,7 @@ import { setActiveProductVenderCode } from '../../store/product-data/product-dat
 import ProductReview from '../product-review/product-review';
 import ReviewModal from '../modals/review-modal/review-modal';
 import { setReviewModalViewStatus } from '../../store/modal-view-process/modal-view-process';
+import { Reviews } from '../../types/reviews';
 
 type ProductReviewListProps = {
   product: Product;
@@ -17,8 +18,9 @@ function ProductReviewList({ product }: ProductReviewListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const reviews = useSelector(getReviews);
+  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
   const [visibleReviews, setVisibleReviews] = useState(3);
-  const sortedReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime()) || [];
+  const sortedReviews = [...productReviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime()) || [];
 
   useEffect(() => {
     if (activeVenderCode !== product.vendorCode) {
@@ -50,7 +52,7 @@ function ProductReviewList({ product }: ProductReviewListProps): JSX.Element {
               <ProductReview key={item.id} review={item} />
             ))}
         </ul>
-        {visibleReviews < reviews.length && (
+        {visibleReviews < productReviews.length && (
           <div className="review-block__buttons">
             <button className="btn btn--purple" type="button" onClick={handleShowMoreReviews}>
               Показать больше отзывов

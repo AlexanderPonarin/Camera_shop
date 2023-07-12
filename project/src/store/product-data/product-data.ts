@@ -10,7 +10,7 @@ const initialState: ProductDataProcess = {
   similarProducts: [],
   isProductsDataLoading: false,
   activeProductVenderCode: '',
-  reviews: [],
+  reviews: {},
 };
 
 export const ProductData = createSlice({
@@ -55,7 +55,7 @@ export const ProductData = createSlice({
       });
     builder
       .addCase(fetchReviewsAction.fulfilled, (state, action) => {
-        state.reviews = action.payload;
+        state.reviews = {...state.reviews, ...action.payload};
         state.isProductsDataLoading = false;
       });
 

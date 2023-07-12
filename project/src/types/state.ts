@@ -9,7 +9,7 @@ export type ProductDataProcess = {
   similarProducts: Products;
   isProductsDataLoading: boolean;
   activeProductVenderCode: string;
-  reviews: Reviews;
+  reviews: {[key: number]: Reviews};
 }
 
 export type ModalViewProcess = {

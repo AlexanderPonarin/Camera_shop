@@ -9,4 +9,4 @@ export const getPromoProduct = ( state: State): PromoProduct => state[NameSpace.
 export const getSimilarProducts = ( state: State): Products => state[NameSpace.Data].similarProducts;
 export const getDataLoadingStatus = (state: State): boolean => state[NameSpace.Data].isProductsDataLoading;
 export const getActiveProductVenderCode = (state: State): string => state[NameSpace.Data].activeProductVenderCode;
-export const getReviews = (state: State): Reviews => state[NameSpace.Data].reviews;
+export const getReviews = (state: State): {[key: number]: Reviews} => state[NameSpace.Data].reviews;

@@ -27,18 +27,19 @@ describe('ProductData', () => {
     },
   ];
 
-  const reviews = [
-    {
-      id: 1,
-      author: 'User 1',
-      reviewText: 'Good product.',
-    },
-    {
-      id: 2,
-      author: 'User 2',
-      reviewText: 'Bad product.',
-    },
-  ];
+  const reviews = {
+    1:[
+      {
+        id: 1,
+        author: 'User 1',
+        reviewText: 'Good product.',
+      },
+      {
+        id: 2,
+        author: 'User 2',
+        reviewText: 'Bad product.',
+      },
+    ]};
 
   const initialState: ProductDataProcess = {
     products: [],
@@ -46,7 +47,7 @@ describe('ProductData', () => {
     similarProducts: [],
     isProductsDataLoading: false,
     activeProductVenderCode: '',
-    reviews: [],
+    reviews: {},
   };
 
   describe('Reducer', () => {

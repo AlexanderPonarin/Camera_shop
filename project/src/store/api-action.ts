@@ -9,7 +9,6 @@ import { setReviewModalSuccessViewStatus, setReviewModalViewStatus } from './mod
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     dispatch: AppDispatch;
     state: State;
@@ -50,7 +49,7 @@ export const fetchSimilarProductsAction = createAsyncThunk<Products, number, {
     },
   );
 
-export const fetchReviewsAction = createAsyncThunk<Reviews, number, {
+export const fetchReviewsAction = createAsyncThunk<{[key: number]: Reviews}, number, {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
@@ -58,7 +57,7 @@ export const fetchReviewsAction = createAsyncThunk<Reviews, number, {
     'data/fetchReviews',
     async ( id, {dispatch, extra: api}) => {
       const {data} = await api.get<Reviews>(`/cameras/${id}/reviews`);
-      return data;
+      return {[id]: data};
     },
   );
 

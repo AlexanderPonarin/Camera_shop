@@ -1,7 +1,7 @@
 import {store} from '../store/index';
+import { DataReviesList } from './data-reviews-list';
 import { Products } from './products';
 import { PromoProduct } from './promo-product';
-import { Reviews } from './reviews';
 
 export type ProductDataProcess = {
   products: Products ;
@@ -9,7 +9,7 @@ export type ProductDataProcess = {
   similarProducts: Products;
   isProductsDataLoading: boolean;
   activeProductVenderCode: string;
-  reviews: {[key: number]: Reviews};
+  reviews: DataReviesList;
 }
 
 export type ModalViewProcess = {

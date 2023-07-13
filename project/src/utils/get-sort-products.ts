@@ -10,7 +10,7 @@ type sortProductsProps = {
   order: string | null;
 }
 
-export function sortProducts({products, reviews, type, order}: sortProductsProps) {
+export const getSortProducts = ({products, reviews, type, order}: sortProductsProps) => {
   const sortedProducts = [];
 
   if(reviews) {
@@ -38,4 +38,4 @@ export function sortProducts({products, reviews, type, order}: sortProductsProps
   }
 
   return sortedProducts;
-}
+};

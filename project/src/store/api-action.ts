@@ -8,6 +8,7 @@ import { ReviewForm } from '../types/review-form';
 import { setReviewModalSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DataReviesList } from '../types/data-reviews-list';
 
 export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     dispatch: AppDispatch;
@@ -49,7 +50,7 @@ export const fetchSimilarProductsAction = createAsyncThunk<Products, number, {
     },
   );
 
-export const fetchReviewsAction = createAsyncThunk<{[key: number]: Reviews}, number, {
+export const fetchReviewsAction = createAsyncThunk<DataReviesList, number, {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;

@@ -3,14 +3,16 @@ import { NameSpace } from '../../consts';
 import { ProductDataProcess } from '../../types/state';
 import { fetchProductsAction, fetchPromoProductAction, fetchReviewsAction, fetchSimilarProductsAction } from '../api-action';
 import { PromoProduct } from '../../types/promo-product';
+import { DataReviesList } from '../../types/data-reviews-list';
+import { Products } from '../../types/products';
 
 const initialState: ProductDataProcess = {
-  products: [],
+  products: [] as Products,
   promoProduct: {} as PromoProduct,
   similarProducts: [],
   isProductsDataLoading: false,
   activeProductVenderCode: '',
-  reviews: {},
+  reviews: {} as DataReviesList,
 };
 
 export const ProductData = createSlice({

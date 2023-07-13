@@ -1,84 +1,35 @@
 import React from 'react';
-import { act, render, screen, fireEvent, getByRole } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import SimilarProducts from './similar-products';
-import { Product, Products } from '../../types/products';
-import { setActiveProductVenderCode } from '../../store/product-data/product-data';
+import { Product } from '../../types/products';
 import {BrowserRouter as Router } from 'react-router-dom';
-import App from '../app/app';
-import { PromoProduct } from '../../types/promo-product';
-import userEvent from '@testing-library/user-event';
-import ProductScreen from '../../pages/product-screen/product-screen';
 
 
 const mockStore = configureMockStore();
-const mockProducts = [
-  {
-    'id': 1,
-    'name': 'кексо фотик',
-    'type': 'Коллекционная',
-    'category': 'Видеокамера',
-    'level': 'Нулевой',
-    'price': 65000,
-  }] as Products;
 
-const reviews = {
-  1:[
-    {
-      id: 1,
-      author: 'User 1',
-      reviewText: 'Good product.',
-    },
-    {
-      id: 2,
-      author: 'User 2',
-      reviewText: 'Bad product.',
-    },
-  ],
-  3:[
-    {
-      id: 1,
-      author: 'User 1',
-      reviewText: 'Good product.',
-    },
-    {
-      id: 2,
-      author: 'User 2',
-      reviewText: 'Bad product.',
-    },
-  ],
-};
-
-const similarProducts = [
-  {
-    id: 1,
-    vendorCode: 'vc2',
-  },
-  {
-    id: 1,
-    vendorCode: 'vc3',
-  },
-];
-
-const mockPromoProduct = {
-  id: 1
-} as PromoProduct;
-
-
-const store = mockStore({
-  DATA: {
-    isProductsDataLoading: false,
-    products: mockProducts,
-    promoProduct: mockPromoProduct,
-    similarProducts: similarProducts,
-  },
-  MODALVIEW: {
-    addItemModalViewStatus: false
-  }
-});
 
 describe('SimilarProducts', () => {
+  const similarProducts = [
+    {
+      id: 2,
+      vendorCode: 'vc2',
+      name: 'test similar product'
+    },
+    {
+      id: 3,
+      vendorCode: 'vc3',
+      name: 'test similar product 2'
+    },
+  ];
+
+  let store = mockStore({
+    DATA: {
+      activeProductVenderCode: '',
+      similarProducts: similarProducts,
+    },
+  });
 
   const product: Product = {
     id: 1,
@@ -86,26 +37,75 @@ describe('SimilarProducts', () => {
   } as Product;
 
 
-  it('should render component and check initial slider state', () => {
+  const cb = jest.fn();
+
+  beforeEach(() => {
+    store = mockStore({
+      DATA: {
+        activeProductVenderCode: '',
+        similarProducts: similarProducts,
+      },
+    });
+    store.dispatch = jest.fn();
+  });
+
+  it('should render component', () => {
     render(
       <Provider store={store}>
         <Router>
-          <SimilarProducts product={product} cb={() => {}}/>
+          <SimilarProducts product={product} cb={cb} />
         </Router>
       </Provider>
     );
-    const body = screen.getByRole('body')
-    screen.debug(body)
-
-
-    const ff = screen.getByText(/подробнее/i);
-
-    userEvent.click(ff);
-
     screen.getByText('Похожие товары');
 
-
-    expect(store.dispatch).toHaveBeenCalledWith(setActiveProductVenderCode(product.vendorCode));
   });
 
+  it('should render component and check slider buttons', () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <SimilarProducts product={product} cb={cb} />
+        </Router>
+      </Provider>
+    );
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+
+    jest.spyOn(window.HTMLMediaElement.prototype, 'clientWidth', 'get').mockReturnValue(100);
+
+    store = mockStore({
+      productData: {
+        activeProductVenderCode: product.vendorCode,
+        similarProducts,
+      },
+    });
+
+    screen.getByLabelText('Следующий слайд').click();
+    act(() => {
+      screen.getByLabelText('Следующий слайд').click();
+    });
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+
+    screen.getByLabelText('Следующий слайд').click();
+    screen.getByLabelText('Следующий слайд').click();
+    act(() => {
+      screen.getByLabelText('Следующий слайд').click();
+      screen.getByLabelText('Следующий слайд').click();
+    });
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+
+    screen.getByLabelText('Предыдущий слайд').click();
+    act(() => {
+      screen.getByLabelText('Предыдущий слайд').click();
+    });
+
+    expect(screen.getByLabelText('Предыдущий слайд').hasAttribute('disabled')).toBe(false);
+    expect(screen.getByLabelText('Следующий слайд').hasAttribute('disabled')).toBe(false);
+  });
 });

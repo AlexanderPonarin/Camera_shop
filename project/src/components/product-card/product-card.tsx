@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 import { Product } from '../../types/products';
 import { CSSProperties } from 'react';
 import { setAddItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { formateProductPrice } from '../../utils/formate-product-price';
 import { ProductTabsNameSpace } from '../../consts';
-import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { getReviews } from '../../store/product-data/selectros';
 import { Reviews } from '../../types/reviews';
 import { getProductRating } from '../../utils/get-product-rating';
@@ -19,7 +18,7 @@ type ProductCardProps = {
 
 function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const reviews = useSelector(getReviews);
+  const reviews = useAppSelector(getReviews);
   const productReviews: Reviews = reviews ? reviews[product.id] : [];
   const productRating = getProductRating(productReviews);
 

@@ -38,6 +38,9 @@ describe('ProductCard component', () => {
 
   test('renders correctly', () => {
     const store = mockStore({
+      DATA: {
+        reviews: reviews
+      },
       MODALVIEW: {
         addItemModalViewStatus: false
       }
@@ -49,7 +52,7 @@ describe('ProductCard component', () => {
         </Router>
       </Provider>
     );
-    expect(screen.getByAltText('Ретрокамера «Das Auge IV»')).toBeInTheDocument();
+    expect(screen.getByAltText('Product Name')).toBeInTheDocument();
     expect(screen.getByText('Product Name')).toBeInTheDocument();
     expect(screen.getByText('100 ₽')).toBeInTheDocument();
   });

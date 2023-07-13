@@ -11,12 +11,12 @@ import { PromoProduct } from '../../types/promo-product';
 import AddProductModal from '../../components/modals/add-product-modal/add-product-modal';
 import { Link } from 'react-router-dom';
 import ReviewModalSuccess from '../../components/modals/review-modal-success/review-modal-success';
-import { sortProducts } from '../../utils/sort-products';
+import { getSortProducts } from '../../utils/get-sort-products';
 import { getFilterProducts } from '../../utils/get-filter-products';
 import { ProductsFilterOption } from '../../types/products-filter-option';
 import { useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/product-data/selectros';
-import { Reviews } from '../../types/reviews';
+import { DataReviesList } from '../../types/data-reviews-list';
 
 
 type CatalogScreenProps = {
@@ -27,7 +27,7 @@ type CatalogScreenProps = {
 
 function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>(pageId || 1);
-  const reviews: {[key: number]: Reviews} = useAppSelector(getReviews);
+  const reviews: DataReviesList = useAppSelector(getReviews);
   const productsPerPage = 9;
   const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
   const [sortType, setSortType] = useState<string | null>(null);
@@ -36,7 +36,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const [filterOptions, setFilterOptions] = useState({} as ProductsFilterOption);
   const filteredProducts = getFilterProducts({products, filterOptions});
-  const sortedProducts = sortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
+  const sortedProducts = getSortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
 

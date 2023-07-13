@@ -18,9 +18,9 @@ function ProductReviewList({ product }: ProductReviewListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const reviews = useSelector(getReviews);
-  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
+  const productReviews: Reviews = reviews[product.id] || [];
   const [visibleReviews, setVisibleReviews] = useState(3);
-  const sortedReviews = [...productReviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime()) || [];
+  const sortedReviews = Array.isArray(reviews[product.id]) ? reviews[product.id] : [];
 
   useEffect(() => {
     if (activeVenderCode !== product.vendorCode) {

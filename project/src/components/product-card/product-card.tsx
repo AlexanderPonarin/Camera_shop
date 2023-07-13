@@ -20,7 +20,7 @@ type ProductCardProps = {
 function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   const dispatch = useAppDispatch();
   const reviews = useSelector(getReviews);
-  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
+  const productReviews: Reviews = reviews ? reviews[product.id] : [];
   const productRating = getProductRating(productReviews);
 
   return (
@@ -41,7 +41,7 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
             srcSet={`/${product.previewImg2x}`}
             width="280"
             height="240"
-            alt="Ретрокамера «Das Auge IV»"
+            alt={product.name}
           />
         </picture>
       </div>

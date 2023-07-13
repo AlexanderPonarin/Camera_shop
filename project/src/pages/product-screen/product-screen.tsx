@@ -30,7 +30,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
   const activeVenderCode = useSelector(getActiveProductVenderCode);
   const products = useSelector(getProducts);
   const reviews = useSelector(getReviews);
-  const productReviews: Reviews = reviews[product.id as keyof typeof reviews];
+  const productReviews: Reviews = reviews ? reviews[product.id] : [];
   const productRating = getProductRating(productReviews) || 0;
 
   useEffect(() => {

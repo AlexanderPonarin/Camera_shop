@@ -79,6 +79,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
               name="price"
               placeholder= {lte ? `от ${lte}` : 'от'}
               pattern='^(?:[1-9]\d*|0)$'
+              data-testid='minprice'
             />
           </label>
         </div>

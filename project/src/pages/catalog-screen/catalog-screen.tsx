@@ -96,7 +96,7 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
         <main>
           <Banner
             promoProduct={promoProduct}
-            productDescription={products.find((item) => item.id === promoProduct.id)?.description}
+            productDescription={products.find((item) => item.id === promoProduct?.id)?.description || ''}
           />
           <div className="page-content">
             <div className="breadcrumbs">

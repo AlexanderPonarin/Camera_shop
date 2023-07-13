@@ -7,8 +7,8 @@ export type GetFilterProductsProps = {
   filterOptions: ProductsFilterOption;
 }
 
-export function getFilterProducts({products, filterOptions}: GetFilterProductsProps): Products {
-  let filteredProducts = [...products];
+export const getFilterProducts = ({products, filterOptions}: GetFilterProductsProps): Products => {
+  let filteredProducts = Array.from(products);
 
   if(filterOptions.minPrice || filterOptions.maxPrice) {
     if(filterOptions.maxPrice === 0) {
@@ -54,7 +54,6 @@ export function getFilterProducts({products, filterOptions}: GetFilterProductsPr
 
   if(filterOptions.level && filteredProducts.length > 0 && filterOptions.level.length) {
     const updateProductLevels: string[] = [];
-    console.log(filteredProducts);
     for(const level of filterOptions.level) {
       if(level === 'zero') {
         updateProductLevels.push(ProductLevel.Beginning);
@@ -72,5 +71,4 @@ export function getFilterProducts({products, filterOptions}: GetFilterProductsPr
   }
 
   return filteredProducts;
-}
-
+};

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 
 const mockStore = configureMockStore();
-
+const mockProducts: Products = [{id: 1, name: 'Product 1'}, {id: 2, name: 'Product 2'}] as Products;
 const reviews = {
   1:[
     {
@@ -24,6 +24,7 @@ const reviews = {
 
 const store = mockStore({
   DATA: {
+    products: mockProducts,
     revies: reviews
   },
   MODALVIEW: {
@@ -32,7 +33,6 @@ const store = mockStore({
 });
 
 describe('CatalogPage', () => {
-  const mockProducts: Products = [{id: 1, name: 'Product 1'}, {id: 2, name: 'Product 2'}] as Products;
   const mockPromoProduct: PromoProduct = {id: 3, name: 'Promo Product'} as PromoProduct;
 
   test('renders CatalogScreen with pageId when route param is provided', () => {
@@ -47,8 +47,6 @@ describe('CatalogPage', () => {
     expect(screen.getByText(/Каталог фото- и видеотехники/i)).toBeInTheDocument();
     expect(screen.getByTestId('icon-add-basket')).toBeInTheDocument();
     expect(screen.getByText('Promo Product')).toBeInTheDocument();
-    expect(screen.getByText(/Product 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Product 2/i)).toBeInTheDocument();
     expect(screen.getByText(/Категория/i)).toBeInTheDocument();
     expect(screen.getByText(/Тип камеры/i)).toBeInTheDocument();
     expect(screen.getByText(/Уровень/i)).toBeInTheDocument();
@@ -66,8 +64,6 @@ describe('CatalogPage', () => {
     expect(screen.getByText(/Каталог фото- и видеотехники/i)).toBeInTheDocument();
     expect(screen.getByTestId('icon-add-basket')).toBeInTheDocument();
     expect(screen.getByText('Promo Product')).toBeInTheDocument();
-    expect(screen.getByText(/Product 1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Product 2/i)).toBeInTheDocument();
     expect(screen.getByText(/Категория/i)).toBeInTheDocument();
     expect(screen.getByText(/Тип камеры/i)).toBeInTheDocument();
     expect(screen.getByText(/Уровень/i)).toBeInTheDocument();

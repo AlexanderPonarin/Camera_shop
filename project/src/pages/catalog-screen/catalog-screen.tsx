@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Banner from '../../components/banner/banner';
 import CatalogFilterForm from '../../components/catalog-filter-form/catalog-filter-form';
 import CatalogSortForm from '../../components/catalog-sort-form/catalog-sort-form';
@@ -9,7 +9,7 @@ import ProductCard from '../../components/product-card/product-card';
 import { Product, Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
 import AddProductModal from '../../components/modals/add-product-modal/add-product-modal';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ReviewModalSuccess from '../../components/modals/review-modal-success/review-modal-success';
 import { getSortProducts } from '../../utils/get-sort-products';
 import { getFilterProducts } from '../../utils/get-filter-products';
@@ -26,7 +26,9 @@ type CatalogScreenProps = {
 }
 
 function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JSX.Element {
-  const [currentPage, setCurrentPage] = useState<number>(pageId || 1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParams = searchParams.get('page');
+  const [currentPage, setCurrentPage] = useState<number>(Number(pageParams));
   const reviews: DataReviesList = useAppSelector(getReviews);
   const productsPerPage = 9;
   const [productInAddModal, setProductInAddModal] = useState<Product>({} as Product);
@@ -38,6 +40,20 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   const filteredProducts = getFilterProducts({products, filterOptions});
   const sortedProducts = getSortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  useEffect(() => {
+    if(!pageParams) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', '1');
+      setSearchParams(params);
+    }
+    if(sortedProducts.length !== 0 && sortedProducts.length + productsPerPage < currentPage * productsPerPage) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', '1');
+      setSearchParams(params);
+    }
+    setCurrentPage(Number(pageParams));
+  },[currentPage, pageParams, searchParams, setSearchParams, sortedProducts.length]);
 
 
   const sortTypeChangeHandler = (type: string) => {
@@ -59,8 +75,9 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
   };
 
   const paginate = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-    window.history.pushState({}, '', `/catalog/page/${currentPage}`);
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', pageNumber.toString());
+    setSearchParams(params);
   };
 
   const pageNumbers = [];
@@ -71,15 +88,17 @@ function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JS
 
   const goToPreviousPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      window.history.pushState({}, '', `/catalog/page/${currentPage - 1}`);
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', (currentPage - 1).toString());
+      setSearchParams(params);
     }
   };
 
   const goToNextPage = () => {
     if (currentPage < pageNumbers.length) {
-      setCurrentPage(currentPage + 1);
-      window.history.pushState({}, '', `/catalog/page/${currentPage + 1}`);
+      const params = new URLSearchParams(window.location.search);
+      params.set('page', (currentPage + 1).toString());
+      setSearchParams(params);
     }
   };
 

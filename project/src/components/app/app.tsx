@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/product-data/selectros';
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
-import CatalogPage from '../catalog-page/catalog-page';
 import { useAppDispatch } from '../../hooks';
 import { fetchReviewsAction } from '../../store/api-action';
 import { useEffect } from 'react';
@@ -62,11 +61,6 @@ function App(): JSX.Element {
       <Route
         path='*'
         element={<NotFoundScreen />}
-      />
-
-      <Route
-        path='catalog/page/:id/'
-        element={<CatalogPage products={products} promoProduct={promoProduct} />}
       />
     </Routes>
   );

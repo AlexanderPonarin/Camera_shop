@@ -22,10 +22,9 @@ import { DataReviesList } from '../../types/data-reviews-list';
 type CatalogScreenProps = {
   products: Products;
   promoProduct: PromoProduct;
-  pageId?: number;
 }
 
-function CatalogScreen({products, promoProduct, pageId}: CatalogScreenProps): JSX.Element {
+function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParams = searchParams.get('page');
   const [currentPage, setCurrentPage] = useState<number>(Number(pageParams));

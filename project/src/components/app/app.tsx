@@ -6,26 +6,12 @@ import { useSelector } from 'react-redux';
 import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/product-data/selectros';
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
-import { useAppDispatch } from '../../hooks';
-import { fetchReviewsAction } from '../../store/api-action';
-import { useEffect } from 'react';
-import { store } from '../../store';
 
 
 function App(): JSX.Element {
   const isDataLoading = useSelector(getDataLoadingStatus);
   const products = useSelector(getProducts);
   const promoProduct = useSelector(getPromoProduct);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if(products) {
-      for(let i = 0; i < products.length; i++) {
-        store.dispatch(fetchReviewsAction(products[i].id));
-      }
-    }
-  },[dispatch, products]);
-
 
   if (isDataLoading) {
     return (

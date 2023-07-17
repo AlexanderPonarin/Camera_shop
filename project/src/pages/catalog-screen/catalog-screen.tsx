@@ -14,9 +14,10 @@ import ReviewModalSuccess from '../../components/modals/review-modal-success/rev
 import { getSortProducts } from '../../utils/get-sort-products';
 import { getFilterProducts } from '../../utils/get-filter-products';
 import { ProductsFilterOption } from '../../types/products-filter-option';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/product-data/selectros';
 import { DataReviesList } from '../../types/data-reviews-list';
+import { fetchReviewsAction } from '../../store/api-action';
 
 
 type CatalogScreenProps = {
@@ -25,6 +26,7 @@ type CatalogScreenProps = {
 }
 
 function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageParams = searchParams.get('page');
   const [currentPage, setCurrentPage] = useState<number>(Number(pageParams));
@@ -39,6 +41,16 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
   const filteredProducts = getFilterProducts({products, filterOptions});
   const sortedProducts = getSortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  useEffect(() => {
+    if(currentProducts.length) {
+      for(let i = 0; i < currentProducts.length; i++) {
+        if(!reviews[currentProducts[i].id]) {
+          dispatch(fetchReviewsAction(currentProducts[i].id));
+        }
+      }
+    }
+  },[currentProducts]);
 
   useEffect(() => {
     if(!pageParams) {

@@ -17,7 +17,7 @@ function SearchItem({product, isFocused}: SearchItemProps) {
   });
 
   return (
-    <Link to={`/product/${product.id}`} >
+    <Link to={`/product/${product.id}/description`} >
       <li
         style={{backgroundColor: isFocused ? '#f4f4fc' : '' }}
         ref={searchItemRef}

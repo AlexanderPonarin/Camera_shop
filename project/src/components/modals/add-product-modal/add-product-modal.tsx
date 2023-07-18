@@ -2,10 +2,13 @@ import { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../../hooks/use-scroll-lock';
-import { setAddItemModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { setAddItemModalViewStatus, setAddItemSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { getAddItemModalStatus } from '../../../store/modal-view-process/selectors';
 import { Product } from '../../../types/products';
 import { formateProductPrice } from '../../../utils/formate-product-price';
+import { setUserProducts } from '../../../store/user-process/user-process';
+import { getUserProducts } from '../../../store/user-process/selectors';
+import { addUserProduct } from '../../../utils/add-user-product';
 
 
 type AddProductModalProps = {
@@ -16,6 +19,7 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
   const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
+  const userProducts = useAppSelector(getUserProducts);
 
 
   useScrollLock();
@@ -62,7 +66,13 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
             </div>
           </div>
           <div className="modal__buttons">
-            <button className="btn btn--purple modal__btn modal__btn--fit-width" type="button" tabIndex={0}>
+            <button
+              onClick={() => {
+                dispatch(setAddItemModalViewStatus(false));
+                dispatch(setUserProducts(addUserProduct({userProducts, product})));
+                dispatch(setAddItemSuccessModalViewStatus(true));}}
+              className="btn btn--purple modal__btn modal__btn--fit-width" type="button" tabIndex={0}
+            >
               <svg width="24" height="16" aria-hidden="true">
                 <use xlinkHref="#icon-add-basket"></use>
               </svg>Добавить в корзину

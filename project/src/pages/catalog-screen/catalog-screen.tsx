@@ -15,9 +15,13 @@ import { getSortProducts } from '../../utils/get-sort-products';
 import { getFilterProducts } from '../../utils/get-filter-products';
 import { ProductsFilterOption } from '../../types/products-filter-option';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getReviews } from '../../store/product-data/selectros';
+import { getDataLoadingStatus, getReviews } from '../../store/product-data/selectros';
 import { DataReviesList } from '../../types/data-reviews-list';
 import { fetchReviewsAction } from '../../store/api-action';
+import AddProductSuccessModal from '../../components/modals/add-product-success-modal/add-product-success-modal';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { setIsProductsDataLoading } from '../../store/product-data/product-data';
 
 
 type CatalogScreenProps = {
@@ -41,14 +45,18 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
   const filteredProducts = getFilterProducts({products, filterOptions});
   const sortedProducts = getSortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const isDataLoading = useSelector(getDataLoadingStatus);
+
 
   useEffect(() => {
     if(currentProducts.length) {
+      dispatch(setIsProductsDataLoading(true));
       for(let i = 0; i < currentProducts.length; i++) {
         if(!reviews[currentProducts[i].id]) {
           dispatch(fetchReviewsAction(currentProducts[i].id));
         }
       }
+      dispatch(setIsProductsDataLoading(false));
     }
   },[currentProducts]);
 
@@ -66,6 +74,11 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
     setCurrentPage(Number(pageParams));
   },[currentPage, pageParams, searchParams, setSearchParams, sortedProducts.length]);
 
+  if (isDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   const sortTypeChangeHandler = (type: string) => {
     setSortType(type);
@@ -167,7 +180,7 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
                     />
                     <div className="cards catalog__cards">
                       {
-                        sortedProducts.length ?
+                        currentProducts.length ?
                           currentProducts.map((item) =>
                             <ProductCard key={item.id} product={item} cb={onBasketClickHandler}/>)
                           : <p>По вашему запросу ничего не найдено</p>
@@ -219,6 +232,7 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
         </main>
         <AddProductModal product={productInAddModal} />
         <ReviewModalSuccess />
+        <AddProductSuccessModal />
         <Footer />
       </div>
     </>

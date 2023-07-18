@@ -19,6 +19,7 @@ import { getActiveProductVenderCode, getProducts, getReviews } from '../../store
 import { formateProductPrice } from '../../utils/formate-product-price';
 import { Reviews } from '../../types/reviews';
 import { getProductRating } from '../../utils/get-product-rating';
+import AddProductSuccessModal from '../../components/modals/add-product-success-modal/add-product-success-modal';
 
 type ProductScreenProps = {
   product: Product;
@@ -139,6 +140,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
         <ButtonUp />
         <AddProductModal product={productInAddModal} />
         <ReviewModalSuccess />
+        <AddProductSuccessModal />
         <Footer />
       </div>
     </>

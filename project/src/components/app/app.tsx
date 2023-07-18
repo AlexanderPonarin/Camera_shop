@@ -25,17 +25,14 @@ function App(): JSX.Element {
         path={'/'}
         element={<CatalogScreen products={products} promoProduct={promoProduct} />}
       />
-
       <Route
         path={'/catalog'}
         element={<CatalogScreen products={products} promoProduct={promoProduct} />}
       />
-
       <Route
         path={'basket'}
         element={<BasketScreen />}
       />
-
       <Route
         path='product/:id'
         element={<Product products={products} />}

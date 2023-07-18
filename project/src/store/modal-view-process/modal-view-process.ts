@@ -5,7 +5,10 @@ import { ModalViewProcess } from '../../types/state';
 const initialState: ModalViewProcess = {
   reviewModalViewStatus: false,
   reviewModalSuccessViewStatus: false,
-  addItemModalViewStatus: false
+  addItemModalViewStatus: false,
+  addItemSuccessModalViewStatus: false,
+  itemBasketSuccessViewStatus: false,
+  basketRemoveItemModalViewStatus: false,
 };
 
 export const ModalView = createSlice({
@@ -21,7 +24,22 @@ export const ModalView = createSlice({
     setAddItemModalViewStatus: (state, action: PayloadAction<boolean>) => {
       state.addItemModalViewStatus = action.payload;
     },
+    setAddItemSuccessModalViewStatus: (state, action: PayloadAction<boolean>) => {
+      state.addItemSuccessModalViewStatus = action.payload;
+    },
+    setItemBasketSuccessModalViewStatus: (state, action: PayloadAction<boolean>) => {
+      state.itemBasketSuccessViewStatus = action.payload;
+    },
+    setBasketRemoveItemModalViewStatus: (state, action: PayloadAction<boolean>) => {
+      state.basketRemoveItemModalViewStatus = action.payload;
+    },
   },
 });
 
-export const {setReviewModalViewStatus, setReviewModalSuccessViewStatus, setAddItemModalViewStatus} = ModalView.actions;
+export const {setReviewModalViewStatus,
+  setReviewModalSuccessViewStatus,
+  setAddItemModalViewStatus,
+  setAddItemSuccessModalViewStatus,
+  setItemBasketSuccessModalViewStatus,
+  setBasketRemoveItemModalViewStatus
+} = ModalView.actions;

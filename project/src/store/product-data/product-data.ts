@@ -22,6 +22,9 @@ export const ProductData = createSlice({
     setActiveProductVenderCode: (state, action: PayloadAction<string>) => {
       state.activeProductVenderCode = action.payload;
     },
+    setIsProductsDataLoading: (state, action: PayloadAction<boolean>) => {
+      state.isProductsDataLoading = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -64,4 +67,4 @@ export const ProductData = createSlice({
   }
 });
 
-export const {setActiveProductVenderCode} = ProductData.actions;
+export const {setActiveProductVenderCode, setIsProductsDataLoading} = ProductData.actions;

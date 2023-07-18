@@ -5,6 +5,9 @@ describe('ModalView slice', () => {
     reviewModalViewStatus: false,
     reviewModalSuccessViewStatus: false,
     addItemModalViewStatus: false,
+    addItemSuccessModalViewStatus: false,
+    itemBasketSuccessViewStatus: false,
+    basketRemoveItemModalViewStatus: false
   };
 
   beforeEach(() => {
@@ -12,6 +15,9 @@ describe('ModalView slice', () => {
       reviewModalViewStatus: false,
       reviewModalSuccessViewStatus: false,
       addItemModalViewStatus: false,
+      addItemSuccessModalViewStatus: false,
+      itemBasketSuccessViewStatus: false,
+      basketRemoveItemModalViewStatus: false
     };
   });
 

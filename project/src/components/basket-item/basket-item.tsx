@@ -103,7 +103,8 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
       </div>
       <button
         onClick={removeBtnClickHandler}
-        className="cross-btn" type="button" aria-label="Удалить товар">
+        className="cross-btn" type="button" aria-label="Удалить товар"
+      >
         <svg width="10" height="10" aria-hidden="true">
           <use xlinkHref="#icon-close"></use>
         </svg>

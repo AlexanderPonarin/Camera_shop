@@ -54,13 +54,18 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
     setMaxPrice(Number(maxPriceParams));
   }, [minPriceParams, maxPriceParams, searchParams]);
 
+  function replaceNonDigits(str: string) {
+    return str.replace(/\D/g, '');
+  }
+
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const params = new URLSearchParams(window.location.search);
-    if(Number(evt.target.value) < 0) {
+    const eventValue = replaceNonDigits(evt.target.value);
+    if(Number(eventValue) < 0) {
       params.delete('price_start');
       setSearchParams(params.toString());
     } else {
-      params.set('price_start', evt.target.value );
+      params.set('price_start', eventValue);
       setSearchParams(params.toString());
     }
   };
@@ -106,11 +111,13 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
 
   const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const params = new URLSearchParams(window.location.search);
-    if(Number(evt.target.value) < 0) {
+    const eventValue = replaceNonDigits(evt.target.value);
+
+    if(Number(eventValue) < 0) {
       params.delete('price_end');
       setSearchParams(params.toString());
     } else {
-      params.set('price_end', evt.target.value );
+      params.set('price_end', eventValue);
       setSearchParams(params.toString());
     }
   };
@@ -165,11 +172,11 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
               onChange={handleMinPriceChange}
               onBlur={handleMinPriceBlur}
               value={minPrice ? minPrice : ''}
-              type="number"
+              type="text"
               name="price"
               placeholder={lte ? `${lte}` : placeHolderLte.toString()}
-              pattern='^(?:[1-9]\d*|0)$'
               data-testid='minprice'
+              pattern='/^[0-9]+$/'
             />
           </label>
         </div>
@@ -180,10 +187,10 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
               onChange={handleMaxPriceChange}
               onBlur={handleMaxPriceBlur}
               value={maxPrice ? maxPrice : ''}
-              type="number"
+              type="text"
               name="priceUp"
               placeholder= {gte ? `${gte}` : placeHolderGte.toString()}
-              pattern='^(?:[1-9]\d*|0)$'
+              pattern='/^[0-9]+$/'
             />
           </label>
         </div>

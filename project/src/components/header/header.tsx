@@ -4,6 +4,7 @@ import { useAppSelector } from '../../hooks';
 import { getProducts } from '../../store/product-data/selectros';
 import { Products } from '../../types/products';
 import SearchItem from '../search-item/search-item';
+import { getUserProducts } from '../../store/user-process/selectors';
 
 function Header(): JSX.Element {
   const [searchProductName, setSearchProductName] = useState<string>('');
@@ -11,6 +12,18 @@ function Header(): JSX.Element {
   const [selectedProductIndex, setSelectedProductIndex] = useState<number>(-1);
   const serchFormRef = useRef<HTMLFormElement>(null);
   const navigate = useNavigate();
+  const userProducts = useAppSelector(getUserProducts);
+  const [totalUserProductsQuantity, setTotalUserProductsQuantity] = useState<number>();
+
+  useEffect(() => {
+    if (userProducts) {
+      let sum = 0;
+      for (const product of userProducts) {
+        sum += product.selectedQuantity;
+      }
+      setTotalUserProductsQuantity(sum);
+    }
+  },[userProducts]);
 
   const getSerchProducts = (productList: Products, searchName: string): Products => {
     const findedProducts = [];
@@ -112,11 +125,15 @@ function Header(): JSX.Element {
             </svg><span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
-        <a className="header__basket-link" href="#">
+        <Link to={'/basket'}
+          className="header__basket-link"
+        >
           <svg width="16" height="16" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg>
-        </a>
+          {totalUserProductsQuantity !== 0 &&
+                    <span className="header__basket-count">{totalUserProductsQuantity}</span>}
+        </Link>
       </div>
     </header>
   );

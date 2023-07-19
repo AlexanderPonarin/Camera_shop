@@ -1,6 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Product } from '../../types/products';
 import { formateProductPrice } from '../../utils/formate-product-price';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setUserProducts } from '../../store/user-process/user-process';
+import { getUserProducts } from '../../store/user-process/selectors';
+import { changeUserProductQuantity } from '../../utils/change-user-product-quantity';
+import { removeUserProduct } from '../../utils/remove-user-product';
 
 type BasketItemProps = {
     product: Product;
@@ -10,6 +15,18 @@ type BasketItemProps = {
 function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
   const [productCount, setProductCount] = useState<number>(userQuantity);
   const [totalPrice, setTotalPrice] = useState<number>(product.price * userQuantity);
+  const userProducts = useAppSelector(getUserProducts);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setUserProducts(changeUserProductQuantity({userProducts, product, quantity: productCount})));
+  },[productCount]);
+
+
+  useEffect(() => {
+    setTotalPrice(productCount * product.price);
+  },[product.price, productCount]);
+
 
   const onInputCounterChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setProductCount(Number(evt.target.value));
@@ -17,12 +34,16 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
 
   const onIncreaseBtnClickHandler = () => {
     setProductCount(productCount + 1);
-    setTotalPrice(product.price * productCount);
+    setTotalPrice(product.price * (productCount + 1));
   };
 
   const onDecreaseBtnClickHandler = () => {
     setProductCount(productCount - 1);
-    setTotalPrice(product.price * productCount);
+    setTotalPrice(product.price * (productCount - 1));
+  };
+
+  const removeBtnClickHandler = () => {
+    dispatch(setUserProducts(removeUserProduct({userProducts, product})));
   };
 
   return (
@@ -46,7 +67,7 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
         <ul className="basket-item__list">
           <li className="basket-item__list-item">
             <span className="basket-item__article">Артикул:</span>
-            <span className="basket-item__number">{product.vendorCode}</span>
+            <span className="basket-item__number"> {product.vendorCode}</span>
           </li>
           <li className="basket-item__list-item">{`${product.type} ${product.category}`}</li>
           <li className="basket-item__list-item">{`${product.level} уровень`}</li>
@@ -80,7 +101,9 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
       <div className="basket-item__total-price">
         <span className="visually-hidden">Общая цена:</span>{formateProductPrice(totalPrice)}
       </div>
-      <button className="cross-btn" type="button" aria-label="Удалить товар">
+      <button
+        onClick={removeBtnClickHandler}
+        className="cross-btn" type="button" aria-label="Удалить товар">
         <svg width="10" height="10" aria-hidden="true">
           <use xlinkHref="#icon-close"></use>
         </svg>

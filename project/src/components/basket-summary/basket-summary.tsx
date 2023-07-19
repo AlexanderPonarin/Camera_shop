@@ -1,4 +1,23 @@
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../hooks';
+import { getUserProducts } from '../../store/user-process/selectors';
+import { formateProductPrice } from '../../utils/formate-product-price';
+
+
 function BasketSummary(): JSX.Element {
+  const userProducts = useAppSelector(getUserProducts);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+
+  useEffect(() => {
+    if(userProducts) {
+      let total = 0;
+      for(const userProduct of userProducts) {
+        total += userProduct.product.price * userProduct.selectedQuantity;
+      }
+      setTotalPrice(total);
+    }
+  },[userProducts]);
+
   return (
     <div className="basket__summary">
       <div className="basket__promo">
@@ -20,7 +39,7 @@ function BasketSummary(): JSX.Element {
       <div className="basket__summary-order">
         <p className="basket__summary-item">
           <span className="basket__summary-text">Всего:</span>
-          <span className="basket__summary-value">111 390 ₽</span>
+          <span className="basket__summary-value">{formateProductPrice(totalPrice) || '0 ₽'}</span>
         </p>
         <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span>
           <span className="basket__summary-value basket__summary-value--bonus">0 ₽</span>

@@ -57,22 +57,27 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
 
   const handleMinPriceBlur = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const params = new URLSearchParams(window.location.search);
-    if(sortProductsByPrice && Number(evt.target.value) < sortProductsByPrice[0].price) {
+    if(sortProductsByPrice && Number(minPriceParams) < sortProductsByPrice[0].price) {
       params.set('price_start', sortProductsByPrice[0].price.toString());
       setSearchParams(params.toString());
     } else {
-      params.set('price_start', evt.target.value);
+      params.set('price_start', minPriceParams ? minPriceParams : '');
       setSearchParams(params.toString());
     }
-    if(evt.target.value === '') {
+    if(minPriceParams === '') {
       params.delete('price_start');
       setSearchParams(params.toString());
     }
   };
 
+
   const handleMaxPriceBlur = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const params = new URLSearchParams(window.location.search);
-    if(sortProductsByPrice && Number(evt.target.value) > sortProductsByPrice[sortProductsByPrice.length - 1].price) {
+    if(maxPriceParams === '') {
+      params.delete('price_end');
+      setSearchParams(params.toString());
+    }
+    if(sortProductsByPrice && Number(evt.target.value) > sortProductsByPrice[sortProductsByPrice.length - 1].price && maxPriceParams !== '') {
       params.set('price_end', sortProductsByPrice[sortProductsByPrice.length - 1].price.toString());
       setSearchParams(params.toString());
     } else {
@@ -82,7 +87,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
     if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams)) {
       params.set('price_start', sortProductsByPrice[0].price.toString());
       setSearchParams(params.toString());
-      if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price) {
+      if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price && maxPriceParams !== '') {
         params.set('price_end', sortProductsByPrice[0].price.toString());
       }
       setSearchParams(params.toString());
@@ -120,17 +125,18 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
   const handleMaxPriceKeyDown = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.code === 'Enter') {
       const params = new URLSearchParams(window.location.search);
-      if(sortProductsByPrice && Number(maxPriceParams) > sortProductsByPrice[sortProductsByPrice.length - 1].price) {
-        params.set('price_end', sortProductsByPrice[sortProductsByPrice.length - 1].price.toString());
+      if(maxPriceParams === '') {
+        params.delete('price_end');
         setSearchParams(params.toString());
-      } else {
-        params.set('price_end', maxPriceParams ? maxPriceParams : '');
+      }
+      if(sortProductsByPrice && Number(maxPriceParams) > sortProductsByPrice[sortProductsByPrice.length - 1].price && maxPriceParams !== '') {
+        params.set('price_end', sortProductsByPrice[sortProductsByPrice.length - 1].price.toString());
         setSearchParams(params.toString());
       }
       if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams)) {
         params.set('price_start', sortProductsByPrice[0].price.toString());
         setSearchParams(params.toString());
-        if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price) {
+        if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price && maxPriceParams !== '') {
           params.set('price_end', sortProductsByPrice[0].price.toString());
         }
         setSearchParams(params.toString());

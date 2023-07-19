@@ -33,11 +33,21 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
   }, [gte, lte]);
 
   useEffect(() => {
+    if(!maxPriceParams) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('price_end', '');
+      setSearchParams(params.toString());
+    }
+    if(!minPriceParams) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('price_start', '');
+      setSearchParams(params.toString());
+    }
     if(products) {
       const sortedProducts = [...products].sort((a, b) => a.price - b.price);
       setSortProductsByPrice(sortedProducts);
     }
-  }, [products]);
+  }, [maxPriceParams, products, searchParams]);
 
   useEffect(() => {
     setMinPrice(Number(minPriceParams));
@@ -74,7 +84,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
   const handleMaxPriceBlur = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const params = new URLSearchParams(window.location.search);
     if(maxPriceParams === '') {
-      params.delete('price_end');
+      params.set('price_end', '');
       setSearchParams(params.toString());
     }
     if(sortProductsByPrice && Number(evt.target.value) > sortProductsByPrice[sortProductsByPrice.length - 1].price && maxPriceParams !== '') {
@@ -84,7 +94,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
       params.set('price_end', evt.target.value);
       setSearchParams(params.toString());
     }
-    if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams)) {
+    if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams) && maxPriceParams !== '') {
       params.set('price_start', sortProductsByPrice[0].price.toString());
       setSearchParams(params.toString());
       if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price && maxPriceParams !== '') {
@@ -116,7 +126,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
         setSearchParams(params.toString());
       }
       if(minPriceParams === '') {
-        params.delete('price_start');
+        params.set('price_start', '');
         setSearchParams(params.toString());
       }
     }
@@ -125,15 +135,16 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
   const handleMaxPriceKeyDown = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.code === 'Enter') {
       const params = new URLSearchParams(window.location.search);
-      if(maxPriceParams === '') {
-        params.delete('price_end');
+      if(maxPriceParams === '' || !maxPriceParams) {
+        console.log('Max price')
+        params.set('price_end', '');
         setSearchParams(params.toString());
       }
       if(sortProductsByPrice && Number(maxPriceParams) > sortProductsByPrice[sortProductsByPrice.length - 1].price && maxPriceParams !== '') {
         params.set('price_end', sortProductsByPrice[sortProductsByPrice.length - 1].price.toString());
         setSearchParams(params.toString());
       }
-      if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams)) {
+      if(minPrice && sortProductsByPrice && Number(maxPriceParams) < Number(minPriceParams) && maxPriceParams !== '') {
         params.set('price_start', sortProductsByPrice[0].price.toString());
         setSearchParams(params.toString());
         if(Number(maxPriceParams) < Number(minPriceParams) && Number(maxPriceParams) < sortProductsByPrice[0].price && maxPriceParams !== '') {

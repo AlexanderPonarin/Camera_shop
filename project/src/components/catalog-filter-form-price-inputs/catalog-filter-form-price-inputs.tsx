@@ -136,7 +136,6 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
     if (evt.code === 'Enter') {
       const params = new URLSearchParams(window.location.search);
       if(maxPriceParams === '' || !maxPriceParams) {
-        console.log('Max price')
         params.set('price_end', '');
         setSearchParams(params.toString());
       }

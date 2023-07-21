@@ -6,7 +6,11 @@ import { getAddItemSuccessModalStatus } from '../../../store/modal-view-process/
 import { setAddItemSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { Link } from 'react-router-dom';
 
-function AddProductSuccessModal(): JSX.Element {
+type AddProductSuccessModalProps = {
+  isProductScreenModal?: boolean;
+}
+
+function AddProductSuccessModal({isProductScreenModal}: AddProductSuccessModalProps): JSX.Element {
   const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement>(null);
   const addItemSuccessStatus = useAppSelector(getAddItemSuccessModalStatus);
@@ -22,17 +26,27 @@ function AddProductSuccessModal(): JSX.Element {
     >
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
-        <div className="modal__content">
+        <div
+          ref={modalRef}
+          className="modal__content"
+        >
           <p className="title title--h4">Товар успешно добавлен в корзину</p>
           <svg className="modal__icon" width="86" height="80" aria-hidden="true">
             <use xlinkHref="#icon-success"></use>
           </svg>
           <div className="modal__buttons">
-            <a
-              onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}
-              className="btn btn--transparent modal__btn"
-            >Продолжить покупки
-            </a>
+            {isProductScreenModal ?
+              <Link to={'/catalog'}
+                onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}
+                className="btn btn--transparent modal__btn"
+              >Продолжить покупки
+              </Link>
+              :
+              <a
+                onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}
+                className="btn btn--transparent modal__btn"
+              >Продолжить покупки
+              </a>}
             <Link to={'/basket'} >
               <button
                 onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}

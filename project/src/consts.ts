@@ -36,3 +36,9 @@ export enum sortOrder {
     Up = 'up',
     Down = 'down'
 }
+
+export enum Coupon {
+    '15procent' = 'camera-333',
+    '25procent' = 'camera-444',
+    '35procent' = 'camera-555'
+}

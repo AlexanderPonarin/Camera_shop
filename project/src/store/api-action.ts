@@ -5,10 +5,13 @@ import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
 import { Reviews } from '../types/reviews';
 import { ReviewForm } from '../types/review-form';
-import { setReviewModalSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
+import { setItemBasketSuccessModalViewStatus, setReviewModalSuccessViewStatus, setReviewModalViewStatus } from './modal-view-process/modal-view-process';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { DataReviesList } from '../types/data-reviews-list';
+import { PromoCode } from '../types/promoCode';
+import { setCouponBonus, setInvalidCouponStatus, setUserProducts, setValidCouponStatus } from './user-process/user-process';
+import { UserOrder } from '../types/user-order';
 
 export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     dispatch: AppDispatch;
@@ -76,7 +79,43 @@ export const sendReviewAction = createAsyncThunk<void, ReviewForm, {
         dispatch(setReviewModalSuccessViewStatus(true));
       } catch(error) {
         toast.warn('Не удалось отправить отзыв');
-
       }
     },
   );
+
+export const sendPromoCodeAction = createAsyncThunk<void, PromoCode, {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }>(
+    'user/promocode',
+    async ( code, {dispatch, extra: api}) => {
+      try {
+        const { data } = await api.post<number>('/coupons', code);
+        dispatch(setCouponBonus(data));
+        dispatch(setInvalidCouponStatus(false));
+        dispatch(setValidCouponStatus(true));
+      } catch {
+        dispatch(setValidCouponStatus(false));
+        dispatch(setInvalidCouponStatus(true));
+      }
+    });
+
+export const sendOrderAction = createAsyncThunk<void, UserOrder, {
+      dispatch: AppDispatch;
+      state: State;
+      extra: AxiosInstance;
+    }>(
+      'user/order',
+      async ( order, {dispatch, extra: api}) => {
+        console.log(order);
+
+        try {
+          const { data } = await api.post<string>('/orders', order);
+          console.log(data);
+          dispatch(setItemBasketSuccessModalViewStatus(true));
+          dispatch(setUserProducts([]));
+        } catch(e) {
+          console.log(e)
+        }
+      });

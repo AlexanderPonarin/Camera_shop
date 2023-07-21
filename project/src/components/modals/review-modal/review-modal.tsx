@@ -35,7 +35,6 @@ function ReviewModal({product}: ReviewModalProps): JSX.Element {
     }
   };
 
-
   const onChangeInputColorHandler = (status: boolean, error: FieldError | undefined, isTextaria?: boolean) => {
     if (status) {
       return isTextaria ? 'custom-textarea form-review__item' : 'custom-input form-review__item';

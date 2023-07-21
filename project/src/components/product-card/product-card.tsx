@@ -8,6 +8,7 @@ import { ProductTabsNameSpace } from '../../consts';
 import { getReviews } from '../../store/product-data/selectros';
 import { Reviews } from '../../types/reviews';
 import { getProductRating } from '../../utils/get-product-rating';
+import { getUserProducts } from '../../store/user-process/selectors';
 
 type ProductCardProps = {
   product: Product;
@@ -21,6 +22,9 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
   const reviews = useAppSelector(getReviews);
   const productReviews: Reviews = reviews ? reviews[product.id] : [];
   const productRating = getProductRating(productReviews);
+  const userProducts = useAppSelector(getUserProducts);
+  const isAddedProduct = userProducts.find((item) => item.product.id === product.id);
+
 
   return (
     <div
@@ -65,19 +69,28 @@ function ProductCard({product, cb, style}: ProductCardProps): JSX.Element {
           <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{product.reviewCount}</p>
         </div>
         <p className="product-card__title">{product.name}</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)} ₽
+        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)}
         </p>
       </div>
       <div className="product-card__buttons">
-        <button tabIndex={0}
-          onClick={() => {
-            cb(product);
-            dispatch(setAddItemModalViewStatus(true));
+        {!isAddedProduct ?
+          <button tabIndex={0}
+            onClick={() => {
+              cb(product);
+              dispatch(setAddItemModalViewStatus(true));
+            }}
+            className="btn btn--purple product-card__btn" type="button"
+          >Купить
+          </button>
+          :
+          <Link to={'/basket'}
+            className="btn btn--purple-border product-card__btn product-card__btn--in-cart"
+          >
+            <svg width="16" height="16" aria-hidden="true">
+              <use xlinkHref="#icon-basket"></use>
+            </svg>В корзине
+          </Link>}
 
-          }}
-          className="btn btn--purple product-card__btn" type="button"
-        >Купить
-        </button>
         <Link to={`/product/${product.id}/${ProductTabsNameSpace.Description}`}>
           <button tabIndex={-1}
             className="btn btn--transparent"

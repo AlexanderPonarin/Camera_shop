@@ -5,14 +5,15 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setUserProducts } from '../../store/user-process/user-process';
 import { getUserProducts } from '../../store/user-process/selectors';
 import { changeUserProductQuantity } from '../../utils/change-user-product-quantity';
-import { removeUserProduct } from '../../utils/remove-user-product';
+import { setBasketRemoveItemModalViewStatus } from '../../store/modal-view-process/modal-view-process';
 
 type BasketItemProps = {
     product: Product;
     userQuantity: number;
+    onProductToRemoveHandler: (product: Product) => void;
 }
 
-function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
+function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketItemProps): JSX.Element {
   const [productCount, setProductCount] = useState<number>(userQuantity);
   const [totalPrice, setTotalPrice] = useState<number>(product.price * userQuantity);
   const userProducts = useAppSelector(getUserProducts);
@@ -29,21 +30,33 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
 
 
   const onInputCounterChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setProductCount(Number(evt.target.value));
+    let inputValue = Number(evt.target.value);
+    if(Number(inputValue) > 99) {
+      inputValue = 99;
+    }
+    if(Number(inputValue) < 1) {
+      inputValue = 1;
+    }
+    setProductCount(inputValue);
   };
 
   const onIncreaseBtnClickHandler = () => {
-    setProductCount(productCount + 1);
-    setTotalPrice(product.price * (productCount + 1));
+    if(productCount >= 1 && productCount < 99) {
+      setProductCount(productCount + 1);
+      setTotalPrice(product.price * (productCount + 1));
+    }
   };
 
   const onDecreaseBtnClickHandler = () => {
-    setProductCount(productCount - 1);
-    setTotalPrice(product.price * (productCount - 1));
+    if(productCount > 1 && productCount <= 99) {
+      setProductCount(productCount - 1);
+      setTotalPrice(product.price * (productCount - 1));
+    }
   };
 
   const removeBtnClickHandler = () => {
-    dispatch(setUserProducts(removeUserProduct({userProducts, product})));
+    onProductToRemoveHandler(product);
+    dispatch(setBasketRemoveItemModalViewStatus(true));
   };
 
   return (
@@ -114,5 +127,3 @@ function BasketItem({product, userQuantity}: BasketItemProps): JSX.Element {
 }
 
 export default BasketItem;
-
-

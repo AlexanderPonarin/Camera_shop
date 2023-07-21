@@ -63,7 +63,6 @@ export const ProductData = createSlice({
         state.reviews = {...state.reviews, ...action.payload};
         state.isProductsDataLoading = false;
       });
-
   }
 });
 

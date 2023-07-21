@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/product-data/selectros';
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import UserOrderFailScreen from '../../pages/user-order-fail-screen/user-order-fail-screen';
 
 
 function App(): JSX.Element {
@@ -40,6 +41,10 @@ function App(): JSX.Element {
       <Route
         path={'product/:id/:tab'}
         element={<Product products={products} />}
+      />
+      <Route
+        path={'/failed'}
+        element={<UserOrderFailScreen />}
       />
       <Route
         path='*'

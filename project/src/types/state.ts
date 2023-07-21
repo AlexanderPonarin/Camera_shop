@@ -24,6 +24,9 @@ export type ModalViewProcess = {
 
 export type UserProcess = {
   products: UserProducts;
+  couponBonus: number;
+  validCouponStatus: boolean;
+  invalidCouponStatus: boolean;
 }
 
 export type State = ReturnType<typeof store.getState>;

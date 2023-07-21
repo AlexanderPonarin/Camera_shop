@@ -115,7 +115,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
                       <p className="visually-hidden">Рейтинг: {productRating}</p>
                       <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{productReviews?.length}</p>
                     </div>
-                    <p className="product__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)} ₽</p>
+                    <p className="product__price"><span className="visually-hidden">Цена:</span>{formateProductPrice(product.price)}</p>
                     <button
                       onClick={() => dispatch(setAddItemModalViewStatus(true))}
                       className="btn btn--purple" type="button"
@@ -140,7 +140,7 @@ function ProductScreen({product}: ProductScreenProps): JSX.Element {
         <ButtonUp />
         <AddProductModal product={productInAddModal} />
         <ReviewModalSuccess />
-        <AddProductSuccessModal />
+        <AddProductSuccessModal isProductScreenModal/>
         <Footer />
       </div>
     </>

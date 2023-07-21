@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../hooks';
-import { getUserProducts } from '../../store/user-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getCouponBonus, getInvalidCouponStatus, getUserProducts, getValidCouponStatus } from '../../store/user-process/selectors';
 import { formateProductPrice } from '../../utils/formate-product-price';
-
+import { useForm } from 'react-hook-form';
+import { PromoCode } from '../../types/promoCode';
+import { sendOrderAction, sendPromoCodeAction } from '../../store/api-action';
+import { UserOrder } from '../../types/user-order';
+import { Coupon } from '../../consts';
 
 function BasketSummary(): JSX.Element {
   const userProducts = useAppSelector(getUserProducts);
+  const bonus = useAppSelector(getCouponBonus);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [totalPriceWithBonus, setTotalPriceWithBonus] = useState<number>(0);
+  const [bonusPrice, setBonusPrice] = useState<number>(0);
+  const isValidCoupon = useAppSelector(getValidCouponStatus);
+  const isInvalidCoupon = useAppSelector(getInvalidCouponStatus);
+
+
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm<PromoCode>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if(userProducts) {
@@ -18,16 +31,67 @@ function BasketSummary(): JSX.Element {
     }
   },[userProducts]);
 
+  useEffect(() => {
+    if(bonus > 0) {
+      setBonusPrice(totalPrice - totalPriceWithBonus);
+    }
+    setTotalPriceWithBonus(Math.ceil(totalPrice * ((100 - bonus) / 100)));
+  },[bonus, totalPrice, totalPriceWithBonus]);
+
+
+  const onSubmit = (data: PromoCode) => {
+    dispatch(sendPromoCodeAction(data));
+    reset();
+  };
+
+  const validateCouponInputView = (validStatus: boolean, invalidStatus: boolean) => {
+    const classNameString = 'custom-input';
+    if(!validStatus && !invalidStatus) {
+      return classNameString;
+    }
+    if(validStatus && !invalidStatus) {
+      return `${classNameString} is-valid`;
+    }
+    if(invalidStatus && !validStatus) {
+      return `${classNameString} is-invalid`;
+    }
+  };
+
+  const onCheckoutBtnClickHandler = () => {
+    const order: UserOrder = {
+      camerasIds: userProducts.map((item) => item.product.id),
+      coupon: bonus > 0 ? Coupon[`${bonus.toString()}procent` as keyof typeof Coupon] : null
+    };
+    dispatch(sendOrderAction(order));
+  };
+
+
   return (
     <div className="basket__summary">
       <div className="basket__promo">
         <p className="title title--h4">Если у вас есть промокод на скидку, примените его в этом поле</p>
         <div className="basket-form">
-          <form action="#">
-            <div className="custom-input">
-              <label><span className="custom-input__label">Промокод</span>
-                <input type="text" name="promo" placeholder="Введите промокод"/>
+          <form
+            onSubmit={(event) =>
+              void handleSubmit(onSubmit)(event)}
+            action="#"
+          >
+            <div className={validateCouponInputView(isValidCoupon, isInvalidCoupon)}>
+              <label>
+                <span className="custom-input__label">
+                Промокод
+                  {errors.coupon &&
+                <svg width="9" height="9" aria-hidden="true">
+                  <use xlinkHref="#icon-snowflake"></use>
+                </svg>}
+                </span>
+                <input
+                  {...register('coupon',
+                    {validate: (value) => !value.includes(' '), required: true})}
+                  type="text" name="coupon" placeholder="Введите промокод"
+                />
               </label>
+
               <p className="custom-input__error">Промокод неверный</p>
               <p className="custom-input__success">Промокод принят!</p>
             </div>
@@ -42,13 +106,21 @@ function BasketSummary(): JSX.Element {
           <span className="basket__summary-value">{formateProductPrice(totalPrice) || '0 ₽'}</span>
         </p>
         <p className="basket__summary-item"><span className="basket__summary-text">Скидка:</span>
-          <span className="basket__summary-value basket__summary-value--bonus">0 ₽</span>
+          <span className={bonus > 0 && userProducts.length ?
+            'basket__summary-value basket__summary-value--bonus'
+            :
+            'basket__summary-value'}
+          >{(formateProductPrice(bonusPrice)) || '0 ₽'}
+          </span>
         </p>
         <p className="basket__summary-item">
           <span className="basket__summary-text basket__summary-text--total">К оплате:</span>
-          <span className="basket__summary-value basket__summary-value--total">111 390 ₽</span>
+          <span className="basket__summary-value basket__summary-value--total">{formateProductPrice(totalPriceWithBonus) || '0 ₽'}</span>
         </p>
-        <button className="btn btn--purple" type="submit">Оформить заказ
+        <button
+          onClick={onCheckoutBtnClickHandler}
+          className="btn btn--purple" type="submit"
+        >Оформить заказ
         </button>
       </div>
     </div>

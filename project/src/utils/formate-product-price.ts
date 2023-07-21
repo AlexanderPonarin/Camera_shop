@@ -8,7 +8,7 @@ export function formateProductPrice(price: number) {
       result = numStr[i] + result;
 
       if (j % 3 === 0 && i > 0) {
-        result = ` ${ result}`;
+        result = ` ${ result} ₽`;
       }
     }
 

@@ -1,13 +1,25 @@
+import { useState } from 'react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketSummary from '../../components/basket-summary/basket-summary';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import Logo from '../../components/logo/logo';
+import BasketRemoveProductModal from '../../components/modals/basket-remove-product-modal/basket-remove-product-modal';
 import { useAppSelector } from '../../hooks';
+import { getBasketRemoveItemModalStatus, getItemBasketSuccessModalStatus } from '../../store/modal-view-process/selectors';
 import { getUserProducts } from '../../store/user-process/selectors';
+import { Product } from '../../types/products';
+import ProductBasketSuccessModal from '../../components/modals/product-basket-success-modal/product-basket-success-modal';
 
 function BasketScreen(): JSX.Element {
   const userProducts = useAppSelector(getUserProducts);
+  const removeItemModalStatus = useAppSelector(getBasketRemoveItemModalStatus);
+  const sendOrderSuccessModalStatus = useAppSelector(getItemBasketSuccessModalStatus);
+  const [productToRemove, setProductToRemove] = useState<Product>({} as Product);
+
+  const setUserProducttoRemoveHandler = (product: Product) => {
+    setProductToRemove(product);
+  };
 
   return (
     <>
@@ -43,13 +55,21 @@ function BasketScreen(): JSX.Element {
                 <h1 className="title title--h2">Корзина</h1>
                 <ul className="basket__list">
                   {userProducts && userProducts.map((item) =>
-                    <BasketItem key={item.product.id} product={item.product} userQuantity={item.selectedQuantity} />) }
+                    (
+                      <BasketItem
+                        key={item.product.id}
+                        product={item.product}
+                        userQuantity={item.selectedQuantity}
+                        onProductToRemoveHandler={setUserProducttoRemoveHandler}
+                      />)) }
                 </ul>
                 <BasketSummary />
               </div>
             </section>
           </div>
         </main>
+        {removeItemModalStatus && <BasketRemoveProductModal product={productToRemove}/>}
+        {sendOrderSuccessModalStatus && <ProductBasketSuccessModal />}
         <Footer />
       </div>
     </>

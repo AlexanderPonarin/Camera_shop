@@ -27,6 +27,7 @@ export type UserProcess = {
   couponBonus: number;
   validCouponStatus: boolean;
   invalidCouponStatus: boolean;
+  isUserProcessLoading: boolean;
 }
 
 export type State = ReturnType<typeof store.getState>;

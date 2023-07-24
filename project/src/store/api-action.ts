@@ -12,6 +12,7 @@ import { DataReviesList } from '../types/data-reviews-list';
 import { PromoCode } from '../types/promoCode';
 import { setCouponBonus, setInvalidCouponStatus, setUserProducts, setValidCouponStatus } from './user-process/user-process';
 import { UserOrder } from '../types/user-order';
+import { redirectToRoute } from './actions';
 
 export const fetchProductsAction = createAsyncThunk<Products, undefined, {
     dispatch: AppDispatch;
@@ -83,7 +84,7 @@ export const sendReviewAction = createAsyncThunk<void, ReviewForm, {
     },
   );
 
-export const sendPromoCodeAction = createAsyncThunk<void, PromoCode, {
+export const sendPromoCodeAction = createAsyncThunk<number, PromoCode, {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
@@ -92,12 +93,13 @@ export const sendPromoCodeAction = createAsyncThunk<void, PromoCode, {
     async ( code, {dispatch, extra: api}) => {
       try {
         const { data } = await api.post<number>('/coupons', code);
-        dispatch(setCouponBonus(data));
         dispatch(setInvalidCouponStatus(false));
         dispatch(setValidCouponStatus(true));
-      } catch {
+        return data;
+      } catch(error) {
         dispatch(setValidCouponStatus(false));
         dispatch(setInvalidCouponStatus(true));
+        throw error;
       }
     });
 
@@ -106,16 +108,16 @@ export const sendOrderAction = createAsyncThunk<void, UserOrder, {
       state: State;
       extra: AxiosInstance;
     }>(
-      'user/order',
+      'data/order',
       async ( order, {dispatch, extra: api}) => {
-        console.log(order);
-
         try {
-          const { data } = await api.post<string>('/orders', order);
-          console.log(data);
+          await api.post<string>('/orders', order);
           dispatch(setItemBasketSuccessModalViewStatus(true));
           dispatch(setUserProducts([]));
+          dispatch(setCouponBonus(0));
+          dispatch(setValidCouponStatus(false));
+          dispatch(setInvalidCouponStatus(false));
         } catch(e) {
-          console.log(e)
+          dispatch(redirectToRoute('/failorder'));
         }
       });

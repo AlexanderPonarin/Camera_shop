@@ -68,8 +68,8 @@ function BasketScreen(): JSX.Element {
             </section>
           </div>
         </main>
-        {removeItemModalStatus && <BasketRemoveProductModal product={productToRemove}/>}
-        {sendOrderSuccessModalStatus && <ProductBasketSuccessModal />}
+        <BasketRemoveProductModal product={productToRemove}/>
+        <ProductBasketSuccessModal />
         <Footer />
       </div>
     </>

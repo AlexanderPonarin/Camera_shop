@@ -6,3 +6,4 @@ export const getUserProducts = ( state: State): UserProducts => state[NameSpace.
 export const getCouponBonus = ( state: State): number => state[NameSpace.User].couponBonus;
 export const getValidCouponStatus = ( state: State): boolean => state[NameSpace.User].validCouponStatus;
 export const getInvalidCouponStatus = ( state: State): boolean => state[NameSpace.User].invalidCouponStatus;
+export const getUserProcessLoadingStatus = ( state: State): boolean => state[NameSpace.User].isUserProcessLoading;

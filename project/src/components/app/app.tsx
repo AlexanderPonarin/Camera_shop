@@ -7,14 +7,16 @@ import { getProducts, getPromoProduct, getDataLoadingStatus } from '../../store/
 import Product from '../product/product';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import UserOrderFailScreen from '../../pages/user-order-fail-screen/user-order-fail-screen';
+import { getUserProcessLoadingStatus } from '../../store/user-process/selectors';
 
 
 function App(): JSX.Element {
   const isDataLoading = useSelector(getDataLoadingStatus);
   const products = useSelector(getProducts);
   const promoProduct = useSelector(getPromoProduct);
+  const isUserProcessLoading = useSelector(getUserProcessLoadingStatus);
 
-  if (isDataLoading) {
+  if (isDataLoading || isUserProcessLoading) {
     return (
       <LoadingScreen />
     );
@@ -43,7 +45,7 @@ function App(): JSX.Element {
         element={<Product products={products} />}
       />
       <Route
-        path={'/failed'}
+        path={'/failorder'}
         element={<UserOrderFailScreen />}
       />
       <Route

@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { setAddItemModalViewStatus, setReviewModalSuccessViewStatus, setReviewModalViewStatus } from '../store/modal-view-process/modal-view-process';
+import { useEffect, useState } from 'react';
+import { setAddItemModalViewStatus, setAddItemSuccessModalViewStatus, setBasketRemoveItemModalViewStatus, setItemBasketSuccessModalViewStatus, setReviewModalSuccessViewStatus, setReviewModalViewStatus } from '../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '.';
 
 type UseModalKeyboardEventsProps = {
@@ -14,6 +14,10 @@ export const useModalKeyboardEvents = ({ modalRef }: UseModalKeyboardEventsProps
       dispatch(setAddItemModalViewStatus(false));
       dispatch(setReviewModalViewStatus(false));
       dispatch(setReviewModalSuccessViewStatus(false));
+      dispatch(setAddItemSuccessModalViewStatus(false));
+      dispatch(setItemBasketSuccessModalViewStatus(false));
+      dispatch(setBasketRemoveItemModalViewStatus(false));
+
     }
     if (evt.key === 'Tab') {
       const focusableItems = modalRef.current?.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') || [];
@@ -28,7 +32,6 @@ export const useModalKeyboardEvents = ({ modalRef }: UseModalKeyboardEventsProps
         if (document.activeElement === lastItem) {
           firstItem.focus();
           evt.preventDefault();
-          modalRef.current?.focus();
         }
       }
     }

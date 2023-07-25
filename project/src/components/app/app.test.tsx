@@ -45,7 +45,7 @@ const store = mockStore({
     addItemModalViewStatus: false,
   },
   USER: {
-    isUserProcessLoading: true,
+    isUserProcessLoading: false,
     products: mockUserProducts
   }
 });
@@ -76,6 +76,12 @@ describe('Application Routing', () => {
     history.push('/basket');
     render(fakeApp);
     const basketTitle = screen.getAllByText(/Корзина/i);
+    expect(basketTitle[0]).toBeInTheDocument();
+  });
+  test('should render "UserOrderFailScreen" when user navigate to "failorder"', () => {
+    history.push('/failorder');
+    render(fakeApp);
+    const basketTitle = screen.getAllByText(/Ошибка/i);
     expect(basketTitle[0]).toBeInTheDocument();
   });
 });

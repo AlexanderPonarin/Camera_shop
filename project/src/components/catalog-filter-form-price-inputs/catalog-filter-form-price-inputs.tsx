@@ -47,7 +47,7 @@ function CataloFilterFormPriceInputs({lte, gte}: CataloFilterFormPriceInputsProp
       const sortedProducts = [...products].sort((a, b) => a.price - b.price);
       setSortProductsByPrice(sortedProducts);
     }
-  }, [maxPriceParams, products, searchParams]);
+  }, [products]);
 
   useEffect(() => {
     setMinPrice(Number(minPriceParams));

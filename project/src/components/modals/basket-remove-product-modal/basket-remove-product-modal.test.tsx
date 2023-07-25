@@ -1,4 +1,3 @@
-import AddProductSuccessModal from './basket-remove-product-modal';
 import { render, screen } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
@@ -16,7 +15,7 @@ const mockProduct = {
   price: 100,
 } as Product;
 
-const strore = mockStore({
+const store = mockStore({
   USER: {
     products: []
   },
@@ -27,7 +26,7 @@ const strore = mockStore({
 
 it('render BasketRemoveProductModal component correctly', () => {
   render(
-    <Provider store={strore}>
+    <Provider store={store}>
       <Router>
         <BasketRemoveProductModal product={mockProduct} />
       </Router>

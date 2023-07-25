@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { setAddItemModalViewStatus, setAddItemSuccessModalViewStatus, setBasketRemoveItemModalViewStatus, setItemBasketSuccessModalViewStatus, setReviewModalSuccessViewStatus, setReviewModalViewStatus } from '../store/modal-view-process/modal-view-process';
 import { useAppDispatch } from '.';
 

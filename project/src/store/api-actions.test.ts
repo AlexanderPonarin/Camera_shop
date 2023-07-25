@@ -1,4 +1,10 @@
-import { fetchProductsAction, fetchPromoProductAction, fetchSimilarProductsAction, fetchReviewsAction, sendReviewAction } from './api-action';
+import {
+  fetchProductsAction,
+  fetchPromoProductAction,
+  fetchSimilarProductsAction,
+  fetchReviewsAction,
+  sendReviewAction,
+  sendPromoCodeAction, } from './api-action';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import { createAPI } from '../services/api';
@@ -9,6 +15,7 @@ import { Products } from '../types/products';
 import { PromoProduct } from '../types/promo-product';
 import { Reviews } from '../types/reviews';
 import { ReviewForm } from '../types/review-form';
+
 
 const mockReviews: Reviews = [{
   id: '1',
@@ -97,7 +104,7 @@ describe('api-action', () => {
       fetchPromoProductAction.fulfilled.type,
     ]);
   });
-  it('should set reviews to payload when GET /cameras/1/reviews', async () => {
+  it('should set reviews to payload when GET /cameras/id/reviews', async () => {
     const store = mockStore();
     const id = 1;
     mockApi
@@ -133,5 +140,26 @@ describe('api-action', () => {
       sendReviewAction.fulfilled.type,
     ]);
   });
-});
 
+  it('should get bonus value when POST /coupons', async () => {
+    const store = mockStore();
+    const coupon = {
+      coupon: 'cameras-333'
+    };
+    mockApi
+      .onPost('/coupons', coupon)
+      .reply(200, 15);
+    expect(store.getActions()).toEqual([]);
+
+    await store.dispatch(sendPromoCodeAction(coupon));
+
+    const actions = store.getActions().map(({ type }) => type);
+
+    expect(actions).toEqual([
+      'user/promocode/pending',
+      'USER/setInvalidCouponStatus',
+      'USER/setValidCouponStatus',
+      'user/promocode/fulfilled',
+    ]);
+  });
+});

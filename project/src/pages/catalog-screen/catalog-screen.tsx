@@ -15,12 +15,10 @@ import { getSortProducts } from '../../utils/get-sort-products';
 import { getFilterProducts } from '../../utils/get-filter-products';
 import { ProductsFilterOption } from '../../types/products-filter-option';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getDataLoadingStatus, getReviews } from '../../store/product-data/selectros';
+import { getReviews } from '../../store/product-data/selectros';
 import { DataReviesList } from '../../types/data-reviews-list';
 import { fetchReviewsAction } from '../../store/api-action';
 import AddProductSuccessModal from '../../components/modals/add-product-success-modal/add-product-success-modal';
-import { useSelector } from 'react-redux/es/hooks/useSelector';
-import LoadingScreen from '../loading-screen/loading-screen';
 import { setIsProductsDataLoading } from '../../store/product-data/product-data';
 
 
@@ -45,19 +43,21 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
   const filteredProducts = getFilterProducts({products, filterOptions});
   const sortedProducts = getSortProducts({products: filteredProducts, reviews, type: sortType, order: sortOrder});
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const isDataLoading = useSelector(getDataLoadingStatus);
+  const [isLoadedProductIdList, setIsLoadedProductIdList] = useState<number[]>([]);
 
 
   useEffect(() => {
     if(currentProducts.length) {
       dispatch(setIsProductsDataLoading(true));
       for(let i = 0; i < currentProducts.length; i++) {
-        if(!reviews[currentProducts[i].id]) {
+        if(!reviews[currentProducts[i].id] && !isLoadedProductIdList.includes(currentProducts[i].id)) {
           dispatch(fetchReviewsAction(currentProducts[i].id));
+          setIsLoadedProductIdList((prevIsLoadedProductIdList) => [...prevIsLoadedProductIdList, currentProducts[i].id]);
         }
       }
       dispatch(setIsProductsDataLoading(false));
     }
+
   },[currentProducts]);
 
   useEffect(() => {
@@ -74,11 +74,6 @@ function CatalogScreen({products, promoProduct}: CatalogScreenProps): JSX.Elemen
     setCurrentPage(Number(pageParams));
   },[currentPage, pageParams, searchParams, setSearchParams, sortedProducts.length]);
 
-  if (isDataLoading) {
-    return (
-      <LoadingScreen />
-    );
-  }
 
   const sortTypeChangeHandler = (type: string) => {
     setSortType(type);

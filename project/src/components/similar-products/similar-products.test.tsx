@@ -5,12 +5,23 @@ import configureMockStore from 'redux-mock-store';
 import SimilarProducts from './similar-products';
 import { Product } from '../../types/products';
 import {BrowserRouter as Router } from 'react-router-dom';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
 
 
 describe('SimilarProducts', () => {
+
+  const mockUserProducts: UserProducts = [
+    { product: {
+      id: 1,
+      name: 'Sample Product 1',
+      description: 'Sample Description 1',
+      price: 100,
+    }},
+  ] as unknown as UserProducts;
+
   const similarProducts = [
     {
       id: 2,
@@ -25,6 +36,9 @@ describe('SimilarProducts', () => {
   ];
 
   let store = mockStore({
+    USER: {
+      products: mockUserProducts
+    },
     DATA: {
       activeProductVenderCode: '',
       similarProducts: similarProducts,
@@ -41,6 +55,9 @@ describe('SimilarProducts', () => {
 
   beforeEach(() => {
     store = mockStore({
+      USER: {
+        products: mockUserProducts
+      },
       DATA: {
         activeProductVenderCode: '',
         similarProducts: similarProducts,

@@ -84,7 +84,6 @@ exports[`AddProductModal should match snapshot 1`] = `
               Цена:
             </span>
             10
-             ₽
           </p>
         </div>
       </div>
@@ -93,7 +92,7 @@ exports[`AddProductModal should match snapshot 1`] = `
       >
         <button
           class="btn btn--purple modal__btn modal__btn--fit-width"
-          tabindex="0"
+          tabindex="-2"
           type="button"
         >
           <svg

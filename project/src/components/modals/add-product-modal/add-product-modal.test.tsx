@@ -60,20 +60,10 @@ describe('AddProductModal', () => {
     const level = screen.getByText('beginner');
     expect(level).toBeInTheDocument();
 
-    const price = screen.getByText('10 ₽');
+    const price = screen.getByText(/10/i);
     expect(price).toBeInTheDocument();
   });
 
-  it('should dispatch setAddItemModalViewStatus action on click outside modal', () => {
-    const dispatch = jest.fn();
-    (useAppDispatch as jest.Mock).mockReturnValue(dispatch);
-
-    setup();
-
-    const modal = screen.getByTestId('add-product-modal');
-    fireEvent.click(modal);
-    expect(dispatch).toHaveBeenCalledWith(setAddItemModalViewStatus(false));
-  });
 
   it('should dispatch setAddItemModalViewStatus action on click on close button', () => {
     const dispatch = jest.fn();

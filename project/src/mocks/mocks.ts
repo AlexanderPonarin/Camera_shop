@@ -10,6 +10,7 @@ const promoProductMock = {
   previewImgWebp2x: 'previewImgWebp2x',
 } as unknown as PromoProduct;
 
+
 const productDescriptionMock = 'Product description Mock';
 
 const promoProductsMock = [promoProductMock] as Products;

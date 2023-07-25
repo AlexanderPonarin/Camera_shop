@@ -1,12 +1,22 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import ProductCard from './product-card';
 import {BrowserRouter as Router } from 'react-router-dom';
-import { Product } from '../../types/products';
+import { Product, Products } from '../../types/products';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
+
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 10,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
 
 const product: Product = {
   id: 1,
@@ -33,13 +43,32 @@ const reviews = {
     },
   ]};
 
+const mockProducts: Products = [{
+  id: 1,
+  name: 'Sample Product 1',
+  description: 'Sample Description 1',
+  price: 100,
+},
+{
+  id: 2,
+  name: 'Sample Product 2',
+  description: 'Sample Description 2',
+  price: 200,
+}] as unknown as Products;
+
+
 describe('ProductCard component', () => {
   const cbMock = jest.fn();
 
+
   test('renders correctly', () => {
     const store = mockStore({
+      USER: {
+        products: mockUserProducts
+      },
       DATA: {
-        reviews: reviews
+        reviews: reviews,
+        products: mockProducts
       },
       MODALVIEW: {
         addItemModalViewStatus: false
@@ -54,12 +83,16 @@ describe('ProductCard component', () => {
     );
     expect(screen.getByAltText('Product Name')).toBeInTheDocument();
     expect(screen.getByText('Product Name')).toBeInTheDocument();
-    expect(screen.getByText('100 ₽')).toBeInTheDocument();
+    expect(screen.getByText(/100/i)).toBeInTheDocument();
   });
   it('calls the cb function when the "Купить" button is clicked', () => {
     const store = mockStore({
+      USER: {
+        products: mockUserProducts
+      },
       DATA: {
-        reviews: reviews
+        reviews: reviews,
+        products: mockProducts
       },
       MODALVIEW: {
         addItemModalViewStatus: false

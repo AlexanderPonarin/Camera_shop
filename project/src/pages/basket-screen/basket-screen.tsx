@@ -6,15 +6,12 @@ import Header from '../../components/header/header';
 import Logo from '../../components/logo/logo';
 import BasketRemoveProductModal from '../../components/modals/basket-remove-product-modal/basket-remove-product-modal';
 import { useAppSelector } from '../../hooks';
-import { getBasketRemoveItemModalStatus, getItemBasketSuccessModalStatus } from '../../store/modal-view-process/selectors';
 import { getUserProducts } from '../../store/user-process/selectors';
 import { Product } from '../../types/products';
 import ProductBasketSuccessModal from '../../components/modals/product-basket-success-modal/product-basket-success-modal';
 
 function BasketScreen(): JSX.Element {
   const userProducts = useAppSelector(getUserProducts);
-  const removeItemModalStatus = useAppSelector(getBasketRemoveItemModalStatus);
-  const sendOrderSuccessModalStatus = useAppSelector(getItemBasketSuccessModalStatus);
   const [productToRemove, setProductToRemove] = useState<Product>({} as Product);
 
   const setUserProducttoRemoveHandler = (product: Product) => {

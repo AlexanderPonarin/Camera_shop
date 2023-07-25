@@ -5,9 +5,19 @@ import {BrowserRouter as Router } from 'react-router-dom';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
 import { Products } from '../../types/products';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
+
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 1,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
 
 const mockProducts: Products = [{
   id: 1,
@@ -21,6 +31,9 @@ const mockProducts: Products = [{
 
 
 const store = mockStore({
+  USER: {
+    products: mockUserProducts
+  },
   DATA: {
     products: mockProducts,
   },});

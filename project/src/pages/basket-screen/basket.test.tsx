@@ -5,6 +5,7 @@ import {BrowserRouter as Router } from 'react-router-dom';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
 import { Products } from '../../types/products';
+import { UserProducts } from '../../types/user-products';
 
 const mockStore = configureMockStore();
 const products: Products = [
@@ -18,8 +19,26 @@ const products: Products = [
     reviewCount: 5,}
 ] as Products;
 
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 1,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
+
+
 const store = mockStore({
-  DATA: products
+  MODALVIEW: {
+    basketRemoveItemModalViewStatus: false
+  },
+  USER: {
+    products: mockUserProducts,
+  },
+  DATA: {
+    products: products
+  }
 });
 
 describe('BasketScreen', () => {

@@ -29,7 +29,6 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
   return (
     <FocusLock disabled={!addItemModalViewStatus}>
       <div
-        ref={modalRef}
         data-testid="add-product-modal"
         className={addItemModalViewStatus ? 'modal is-active' : 'modal'}
       >
@@ -40,6 +39,7 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
           >
           </div>
           <div
+            ref={modalRef}
             className="modal__content"
           >
             <p className="title title--h4">Добавить товар в корзину</p>

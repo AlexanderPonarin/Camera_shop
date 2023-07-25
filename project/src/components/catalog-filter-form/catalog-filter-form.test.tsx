@@ -7,7 +7,6 @@ import {BrowserRouter as Router } from 'react-router-dom';
 import {Products } from '../../types/products';
 
 const mockStore = configureMockStore();
-const store = mockStore();
 const onFilterChangedHandler = jest.fn();
 const products: Products = [
   { id: 1,
@@ -19,6 +18,12 @@ const products: Products = [
     previewImgWebp2x: 'product@2x.webp',
     reviewCount: 5,}
 ] as Products;
+
+const store = mockStore({
+  DATA: {
+    products: products
+  }
+});
 
 describe('Catalog filter form component', () => {
   test('renders a price filter fieldset', () => {

@@ -4,10 +4,24 @@ import Product from './product';
 import { Products } from '../../types/products';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
+
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 1,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
+
 const store = mockStore({
+  USER: {
+    products: mockUserProducts
+  },
   MODALVIEW: {
     addItemModalViewStatus: false
   },

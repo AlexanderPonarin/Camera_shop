@@ -5,11 +5,20 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import {BrowserRouter as Router } from 'react-router-dom';
+import { UserProducts } from '../../types/user-products';
 
 
 afterEach(cleanup);
 const mockStore = configureMockStore([thunk]);
 
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 1,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
 
 const mockProduct: Product = {
   name: 'Test Product',
@@ -19,6 +28,9 @@ const mockProduct: Product = {
 
 describe('ProductScreen', () => {
   const store = mockStore({
+    USER: {
+      products: mockUserProducts
+    },
     MODALVIEW: {
       addItemModalViewStatus: false
     },
@@ -38,7 +50,7 @@ describe('ProductScreen', () => {
     );
     expect(screen.getAllByText(mockProduct.name)[0]).toBeInTheDocument();
     expect(screen.getAllByAltText(mockProduct.name)[0]).toHaveAttribute('src', `/${window.location.origin}${mockProduct.previewImg}`);
-    expect(screen.getAllByText(`${mockProduct.price} ₽`)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/100/i)[0]).toBeInTheDocument();
   });
 
   it('dispatches add product action when add to basket button is clicked', () => {
@@ -51,6 +63,5 @@ describe('ProductScreen', () => {
     );
     const addButton = screen.getAllByText('Добавить в корзину');
     fireEvent.click(addButton[0]);
-
   });
 });

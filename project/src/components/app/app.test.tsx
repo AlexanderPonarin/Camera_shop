@@ -6,9 +6,19 @@ import HistoryRouter from '../history-route/history-route';
 import App from './app';
 import { Products } from '../../types/products';
 import { PromoProduct } from '../../types/promo-product';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
+
+const mockUserProducts: UserProducts = [
+  { product: {
+    id: 1,
+    name: 'Sample Product 1',
+    description: 'Sample Description 1',
+    price: 100,
+  }},
+] as unknown as UserProducts;
 
 const mockProducts: Products = [{
   id: 1,
@@ -32,7 +42,11 @@ const store = mockStore({
     promoProduct: mockPromoProduct
   },
   MODALVIEW: {
-    addItemModalViewStatus: false
+    addItemModalViewStatus: false,
+  },
+  USER: {
+    isUserProcessLoading: true,
+    products: mockUserProducts
   }
 });
 

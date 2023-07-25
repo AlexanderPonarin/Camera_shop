@@ -6,9 +6,11 @@ import {BrowserRouter as Router } from 'react-router-dom';
 import { PromoProduct } from '../../types/promo-product';
 import configureMockStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import { UserProducts } from '../../types/user-products';
 
 
 const mockStore = configureMockStore();
+
 
 const reviews = {
   1:[
@@ -36,16 +38,17 @@ const reviews = {
     },
   ]};
 
-const store = mockStore({
-  DATA: {
-    reviews: reviews
-  },
-  MODALVIEW: {
-    addProductModalViewStatus: false
-  }
-});
 
 describe('CatalogScreen', () => {
+  const mockUserProducts: UserProducts = [
+    { product: {
+      id: 1,
+      name: 'Sample Product 1',
+      description: 'Sample Description 1',
+      price: 100,
+    }},
+  ] as unknown as UserProducts;
+
   const mockProducts: Products = [{
     id: 1,
     name: 'Sample Product 1',
@@ -66,6 +69,20 @@ describe('CatalogScreen', () => {
     price: 100,
     reviewCount: 5,
   } as unknown as PromoProduct;
+
+  const store = mockStore({
+    DATA: {
+      reviews: reviews,
+      products: mockProducts
+    },
+    USER: {
+      products: mockUserProducts
+    },
+    MODALVIEW: {
+      addProductModalViewStatus: false
+    }
+  });
+
   it('renders catalog screen component', () => {
     render(
       <Provider store={store}>

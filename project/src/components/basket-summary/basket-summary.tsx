@@ -35,7 +35,8 @@ function BasketSummary(): JSX.Element {
     if(bonus > 0) {
       setBonusPrice(totalPrice - totalPriceWithBonus);
     }
-    setTotalPriceWithBonus(Math.ceil(totalPrice * ((100 - bonus) / 100)));
+    const discount = Math.ceil(totalPrice / 100 * bonus);
+    setTotalPriceWithBonus(Math.ceil(totalPrice - discount));
   },[bonus, totalPrice, totalPriceWithBonus]);
 
 

@@ -82,7 +82,7 @@ function BasketRemoveProductModal({product}: BasketRemoveProductModalProps): JSX
               </button>
               <a
                 onClick={() => dispatch(setBasketRemoveItemModalViewStatus(false))}
-                className="btn btn--transparent modal__btn modal__btn--half-width" href="#"
+                className="btn btn--transparent modal__btn modal__btn--half-width" href="/"
               >Продолжить покупки
               </a>
             </div>

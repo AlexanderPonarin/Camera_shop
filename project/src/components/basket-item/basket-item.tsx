@@ -18,6 +18,8 @@ function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketIte
   const [totalPrice, setTotalPrice] = useState<number>(product.price * userQuantity);
   const userProducts = useAppSelector(getUserProducts);
   const dispatch = useAppDispatch();
+  const maxProductCount = 99;
+  const minProductCount = 1;
 
   useEffect(() => {
     dispatch(setUserProducts(changeUserProductQuantity({userProducts, product, quantity: productCount})));
@@ -31,24 +33,24 @@ function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketIte
 
   const onInputCounterChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = Number(evt.target.value);
-    if(Number(inputValue) > 99) {
-      inputValue = 99;
+    if(Number(inputValue) > maxProductCount) {
+      inputValue = maxProductCount;
     }
-    if(Number(inputValue) < 1) {
-      inputValue = 1;
+    if(Number(inputValue) < minProductCount) {
+      inputValue = minProductCount;
     }
     setProductCount(inputValue);
   };
 
   const onIncreaseBtnClickHandler = () => {
-    if(productCount >= 1 && productCount < 99) {
+    if(productCount >= minProductCount && productCount < maxProductCount) {
       setProductCount(productCount + 1);
       setTotalPrice(product.price * (productCount + 1));
     }
   };
 
   const onDecreaseBtnClickHandler = () => {
-    if(productCount > 1 && productCount <= 99) {
+    if(productCount > 1 && productCount <= maxProductCount) {
       setProductCount(productCount - 1);
       setTotalPrice(product.price * (productCount - 1));
     }

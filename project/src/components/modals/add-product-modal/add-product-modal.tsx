@@ -22,7 +22,6 @@ function AddProductModal({product}: AddProductModalProps): JSX.Element {
   const addItemModalViewStatus = useAppSelector(getAddItemModalStatus);
   const userProducts = useAppSelector(getUserProducts);
 
-
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
 

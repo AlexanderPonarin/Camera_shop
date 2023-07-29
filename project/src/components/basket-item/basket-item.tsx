@@ -30,9 +30,12 @@ function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketIte
     setTotalPrice(productCount * product.price);
   },[product.price, productCount]);
 
+  function replaceNonDigits(str: string) {
+    return str.replace(/\D/g, '');
+  }
 
   const onInputCounterChangeHandler = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = Number(evt.target.value);
+    let inputValue = Number(replaceNonDigits(evt.target.value));
     if(Number(inputValue) > maxProductCount) {
       inputValue = maxProductCount;
     }
@@ -93,6 +96,7 @@ function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketIte
         <button
           onClick={onDecreaseBtnClickHandler}
           className="btn-icon btn-icon--prev" aria-label="уменьшить количество товара"
+          disabled={productCount === minProductCount}
         >
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>
@@ -102,11 +106,12 @@ function BasketItem({product, userQuantity, onProductToRemoveHandler}: BasketIte
         <input
           onChange={(evt) => onInputCounterChangeHandler(evt)}
           value={productCount}
-          type="number" id="counter1" min="1" max="99" aria-label="количество товара"
+          type="text" id="counter1" min="1" max="99" aria-label="количество товара"
         />
         <button
           onClick={onIncreaseBtnClickHandler}
           className="btn-icon btn-icon--next" aria-label="увеличить количество товара"
+          disabled={productCount === maxProductCount}
         >
           <svg width="7" height="12" aria-hidden="true">
             <use xlinkHref="#icon-arrow"></use>

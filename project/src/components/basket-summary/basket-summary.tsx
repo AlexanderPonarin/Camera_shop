@@ -7,6 +7,9 @@ import { PromoCode } from '../../types/promoCode';
 import { sendOrderAction, sendPromoCodeAction } from '../../store/api-action';
 import { UserOrder } from '../../types/user-order';
 import { Coupon } from '../../consts';
+import { setInvalidCouponStatus } from '../../store/user-process/user-process';
+import { setValidCouponStatus } from '../../store/user-process/user-process';
+
 
 function BasketSummary(): JSX.Element {
   const userProducts = useAppSelector(getUserProducts);
@@ -16,9 +19,10 @@ function BasketSummary(): JSX.Element {
   const [bonusPrice, setBonusPrice] = useState<number>(0);
   const isValidCoupon = useAppSelector(getValidCouponStatus);
   const isInvalidCoupon = useAppSelector(getInvalidCouponStatus);
+  const [couponValue, setCouponValue] = useState<string>('');
 
 
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm<PromoCode>();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<PromoCode>();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,8 +45,15 @@ function BasketSummary(): JSX.Element {
 
 
   const onSubmit = (data: PromoCode) => {
-    dispatch(sendPromoCodeAction(data));
-    reset();
+    if (data.coupon.includes(' ')) {
+      dispatch(setValidCouponStatus(false));
+      dispatch(setInvalidCouponStatus(true));
+    } else {
+      setCouponValue(data.coupon);
+      dispatch(sendPromoCodeAction(data));
+      reset();
+      setCouponValue('');
+    }
   };
 
   const validateCouponInputView = (validStatus: boolean, invalidStatus: boolean) => {
@@ -64,6 +75,12 @@ function BasketSummary(): JSX.Element {
       coupon: bonus > 0 ? Coupon[`${bonus.toString()}procent` as keyof typeof Coupon] : null
     };
     dispatch(sendOrderAction(order));
+  };
+
+  const onUseCouponBtnClickHandler = () => {
+    if (couponValue.includes(' ')) {
+      dispatch(setInvalidCouponStatus(true));
+    }
   };
 
 
@@ -88,7 +105,7 @@ function BasketSummary(): JSX.Element {
                 </span>
                 <input
                   {...register('coupon',
-                    {validate: (value) => !value.includes(' '), required: true})}
+                    {required: true})}
                   type="text" name="coupon" placeholder="Введите промокод"
                 />
               </label>
@@ -96,7 +113,10 @@ function BasketSummary(): JSX.Element {
               <p className="custom-input__error">Промокод неверный</p>
               <p className="custom-input__success">Промокод принят!</p>
             </div>
-            <button className="btn" type="submit">Применить
+            <button
+              onClick={onUseCouponBtnClickHandler}
+              className="btn" type="submit"
+            >Применить
             </button>
           </form>
         </div>

@@ -24,11 +24,16 @@ export const createAPI = (): AxiosInstance => {
   api.interceptors.request.use(
     (config: AxiosRequestConfig) => config,
   );
+
   api.interceptors.response.use(
     (response) => response,
     (error: AxiosError<{error: string}>) => {
       if (error.response && shouldDisplayError(error.response)) {
-        toast.warn(error.message);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if(error.response.request.responseURL !==
+          'https://camera-shop.accelerator.pages.academy/coupons') {
+          toast.warn(error.message);
+        };
       }
 
       throw error;

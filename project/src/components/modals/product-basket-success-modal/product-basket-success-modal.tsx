@@ -36,16 +36,18 @@ function ProductBasketSuccessModal(): JSX.Element {
               <use xlinkHref="#icon-review-success"></use>
             </svg>
             <div className="modal__buttons">
-              <Link
-                tabIndex={-1}
-                to={'/catalog'}
+              <button
+                onClick={() => dispatch(setItemBasketSuccessModalViewStatus(false))}
+                className="btn btn--purple modal__btn modal__btn--fit-width" type="button"
               >
-                <button
-                  onClick={() => dispatch(setItemBasketSuccessModalViewStatus(false))}
-                  className="btn btn--purple modal__btn modal__btn--fit-width" type="button"
-                >Вернуться к покупкам
-                </button>
-              </Link>
+                <Link
+                  tabIndex={-1}
+                  to={'/catalog'}
+                >
+                  Вернуться к покупкам
+                </Link>
+
+              </button>
             </div>
             <button
               onClick={() => dispatch(setItemBasketSuccessModalViewStatus(false))}

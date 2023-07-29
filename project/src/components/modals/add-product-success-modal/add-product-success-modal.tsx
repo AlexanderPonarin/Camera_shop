@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, KeyboardEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../../hooks/use-scroll-lock';
@@ -20,6 +20,11 @@ function AddProductSuccessModal({isProductScreenModal}: AddProductSuccessModalPr
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
 
+  const onKeyDownPressHandler = (evt: KeyboardEvent<HTMLAnchorElement>) => {
+    if (evt.code === 'Enter') {
+      dispatch(setAddItemSuccessModalViewStatus(false));
+    }
+  };
 
   return (
     <FocusLock disabled={!addItemSuccessStatus}>
@@ -53,10 +58,11 @@ function AddProductSuccessModal({isProductScreenModal}: AddProductSuccessModalPr
                   onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}
                   className="btn btn--transparent modal__btn"
                   tabIndex={0}
+                  onKeyDown={onKeyDownPressHandler}
                 >Продолжить покупки
                 </a>}
               <Link
-                tabIndex={-1}
+                tabIndex={0}
                 to={'/basket'}
               >
                 <button

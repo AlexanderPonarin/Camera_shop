@@ -43,6 +43,7 @@ function ProductBasketSuccessModal(): JSX.Element {
                 <Link
                   tabIndex={-1}
                   to={'/catalog'}
+                  style={{ color: 'white' }}
                 >
                   Вернуться к покупкам
                 </Link>

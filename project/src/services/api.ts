@@ -33,7 +33,7 @@ export const createAPI = (): AxiosInstance => {
         if(error.response.request.responseURL !==
           'https://camera-shop.accelerator.pages.academy/coupons') {
           toast.warn(error.message);
-        };
+        }
       }
 
       throw error;

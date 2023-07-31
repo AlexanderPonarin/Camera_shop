@@ -71,6 +71,9 @@ function AddProductSuccessModal({isProductScreenModal}: AddProductSuccessModalPr
                 tabIndex={0}
               >
                 <Link
+                  onClick={() =>
+                  {dispatch(setAddItemSuccessModalViewStatus(false));
+                  }}
                   style={{color: 'white'}}
                   tabIndex={-1}
                   to={'/basket'}

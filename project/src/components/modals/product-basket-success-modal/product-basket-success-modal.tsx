@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useModalKeyboardEvents } from '../../../hooks/use-modal-keyboard-events';
 import useScrollLock from '../../../hooks/use-scroll-lock';
 import { Link } from 'react-router-dom';
-import { setItemBasketSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
+import { setAddItemSuccessModalViewStatus, setItemBasketSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { getItemBasketSuccessModalStatus } from '../../../store/modal-view-process/selectors';
 import FocusLock from 'react-focus-lock';
 import { redirectToRoute } from '../../../store/actions';
@@ -41,6 +41,7 @@ function ProductBasketSuccessModal(): JSX.Element {
               <button
                 onClick={() => {
                   dispatch(setItemBasketSuccessModalViewStatus(false));
+                  dispatch(setAddItemSuccessModalViewStatus(false));
                   dispatch(redirectToRoute('/catalog'));
                 }}
                 className="btn btn--purple modal__btn modal__btn--fit-width" type="button"

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { setItemBasketSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { getItemBasketSuccessModalStatus } from '../../../store/modal-view-process/selectors';
 import FocusLock from 'react-focus-lock';
+import { redirectToRoute } from '../../../store/actions';
 
 
 function ProductBasketSuccessModal(): JSX.Element {
@@ -15,6 +16,7 @@ function ProductBasketSuccessModal(): JSX.Element {
 
   useScrollLock();
   useModalKeyboardEvents({ modalRef });
+
 
   return (
     <FocusLock disabled={!basketSuccessModalStatus}>
@@ -37,7 +39,10 @@ function ProductBasketSuccessModal(): JSX.Element {
             </svg>
             <div className="modal__buttons">
               <button
-                onClick={() => dispatch(setItemBasketSuccessModalViewStatus(false))}
+                onClick={() => {
+                  dispatch(setItemBasketSuccessModalViewStatus(false));
+                  dispatch(redirectToRoute('/catalog'));
+                }}
                 className="btn btn--purple modal__btn modal__btn--fit-width" type="button"
               >
                 <Link

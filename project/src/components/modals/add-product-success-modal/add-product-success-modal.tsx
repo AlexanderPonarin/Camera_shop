@@ -6,6 +6,7 @@ import { getAddItemSuccessModalStatus } from '../../../store/modal-view-process/
 import { setAddItemSuccessModalViewStatus } from '../../../store/modal-view-process/modal-view-process';
 import { Link } from 'react-router-dom';
 import FocusLock from 'react-focus-lock';
+import { redirectToRoute } from '../../../store/actions';
 
 
 type AddProductSuccessModalProps = {
@@ -61,17 +62,22 @@ function AddProductSuccessModal({isProductScreenModal}: AddProductSuccessModalPr
                   onKeyDown={onKeyDownPressHandler}
                 >Продолжить покупки
                 </a>}
-              <Link
+              <button
+                onClick={() =>
+                {dispatch(setAddItemSuccessModalViewStatus(false));
+                  dispatch(redirectToRoute('/basket'));
+                }}
+                className="btn btn--purple modal__btn modal__btn--fit-width"
                 tabIndex={0}
-                to={'/basket'}
               >
-                <button
-                  onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}
-                  className="btn btn--purple modal__btn modal__btn--fit-width"
-                  tabIndex={0}
-                >Перейти в корзину
-                </button>
-              </Link>
+                <Link
+                  style={{color: 'white'}}
+                  tabIndex={-1}
+                  to={'/basket'}
+                >
+                  Перейти в корзину
+                </Link>
+              </button>
             </div>
             <button
               onClick={() => dispatch(setAddItemSuccessModalViewStatus(false))}

@@ -29,6 +29,7 @@ function BasketRemoveProductModal({product}: BasketRemoveProductModalProps): JSX
     dispatch(setBasketRemoveItemModalViewStatus(false));
   };
 
+
   return (
     <FocusLock disabled={!removeModalStatus}>
       <div
@@ -80,11 +81,12 @@ function BasketRemoveProductModal({product}: BasketRemoveProductModalProps): JSX
               >
               Удалить
               </button>
-              <a
+              <button
+                tabIndex={0}
                 onClick={() => dispatch(setBasketRemoveItemModalViewStatus(false))}
                 className="btn btn--transparent modal__btn modal__btn--half-width"
               >Продолжить покупки
-              </a>
+              </button>
             </div>
             <button
               onClick={() => dispatch(setBasketRemoveItemModalViewStatus(false))}
